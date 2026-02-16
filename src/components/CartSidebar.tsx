@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
-import Image from "next/image";
 import { Minus, Plus, Trash2, ShoppingCart } from "lucide-react";
+import GooglePayButton from '@google-pay/button-react';
 
 interface CartSidebarProps {
   open: boolean;
@@ -75,7 +75,6 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                 <Button className="w-full">
                   Proceder al Pago
                 </Button>
-                {/* Google Pay Button Placeholder */}
                 <div className="relative flex items-center justify-center my-2">
                     <div className="absolute inset-0 flex items-center">
                         <span className="w-full border-t"></span>
@@ -84,11 +83,49 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                         <span className="bg-background px-2 text-muted-foreground">O</span>
                     </div>
                 </div>
-                <Button variant="outline" className="w-full">
-                    <Image src="https://www.gstatic.com/instantbuy/svg/dark_gpay.svg" alt="Google Pay" width={60} height={24} />
-                </Button>
+                <GooglePayButton
+                  environment="TEST"
+                  paymentRequest={{
+                    apiVersion: 2,
+                    apiVersionMinor: 0,
+                    allowedPaymentMethods: [
+                      {
+                        type: 'CARD',
+                        parameters: {
+                          allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
+                          allowedCardNetworks: ['MASTERCARD', 'VISA'],
+                        },
+                        tokenizationSpecification: {
+                          type: 'PAYMENT_GATEWAY',
+                          parameters: {
+                            gateway: 'example',
+                            gatewayMerchantId: 'exampleGatewayMerchantId',
+                          },
+                        },
+                      },
+                    ],
+                    merchantInfo: {
+                      merchantId: '12345678901234567890',
+                      merchantName: 'Bonanza Arte & Bienestar',
+                    },
+                    transactionInfo: {
+                      totalPriceStatus: 'FINAL',
+                      totalPriceLabel: 'Total',
+                      totalPrice: totalPrice.toFixed(2),
+                      currencyCode: 'MXN',
+                      countryCode: 'MX',
+                    },
+                  }}
+                  onLoadPaymentData={paymentRequest => {
+                    console.log('Pago de Google Pay exitoso (en modo de prueba):', paymentRequest);
+                    // Aquí es donde enviarías la información a tu backend para procesar el pago.
+                  }}
+                  buttonType="pay"
+                  buttonColor="black"
+                  className="w-full"
+                />
                  <p className="text-xs text-muted-foreground text-center pt-2">
-                  La integración de Google Pay requiere configuración adicional en el backend. Este es un botón de marcador de posición.
+                  La integración de Google Pay es para fines de demostración. Se requiere configuración de backend para procesar pagos reales.
                 </p>
               </div>
             </SheetFooter>
