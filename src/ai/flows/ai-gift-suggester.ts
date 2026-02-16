@@ -1,8 +1,8 @@
 'use server';
 /**
- * @fileOverview An AI assistant that recommends luxury products based on recipient and occasion details.
+ * @fileOverview An AI assistant that recommends wellness treatments as gifts based on recipient and occasion details.
  *
- * - recommendLuxuryGift - A function that handles the luxury gift recommendation process.
+ * - recommendLuxuryGift - A function that handles the gift recommendation process.
  * - LuxuryGiftSuggesterInput - The input type for the recommendLuxuryGift function.
  * - LuxuryGiftSuggesterOutput - The return type for the recommendLuxuryGift function.
  */
@@ -21,11 +21,11 @@ export type LuxuryGiftSuggesterInput = z.infer<typeof LuxuryGiftSuggesterInputSc
 
 const LuxuryGiftSuggesterOutputSchema = z.object({
   recommendations: z.array(z.object({
-    productName: z.string().describe('The name of the recommended luxury product.'),
-    category: z.string().describe('The category of the product (e.g., Perfume, Skincare, Makeup, Accessory).'),
-    description: z.string().describe('A brief description of the product and its key features.'),
-    reason: z.string().describe('The reason this product is recommended based on the provided recipient and occasion details.'),
-  })).describe('A list of luxury product recommendations.'),
+    productName: z.string().describe('The name of the recommended wellness service.'),
+    category: z.string().describe('The category of the service (e.g., Masaje, Terapia, Facial).'),
+    description: z.string().describe('A brief description of the service and its key benefits.'),
+    reason: z.string().describe('The reason this service is recommended based on the provided recipient and occasion details.'),
+  })).describe('A list of wellness service recommendations.'),
   overallSummary: z.string().describe('An overall summary of the gift suggestions and why they are suitable.'),
 });
 export type LuxuryGiftSuggesterOutput = z.infer<typeof LuxuryGiftSuggesterOutputSchema>;
@@ -38,20 +38,30 @@ const prompt = ai.definePrompt({
   name: 'luxuryGiftSuggesterPrompt',
   input: { schema: LuxuryGiftSuggesterInputSchema },
   output: { schema: LuxuryGiftSuggesterOutputSchema },
-  prompt: `You are an expert luxury gift recommender for Bonanza Parfum, a high-end brand specializing in perfumes, makeup, skincare, and exclusive experiences.
-Your goal is to suggest thoughtful and suitable luxury products from Bonanza Parfum based on the provided information about the gift recipient and the occasion.
-Consider the brand's aesthetic (elegant, sophisticated, high-quality) in your recommendations.
+  prompt: `You are an expert gift recommender for "Bonanza Arte & Bienestar", a sanctuary for holistic well-being specializing in personalized massages and sound healing therapies.
+Your goal is to suggest thoughtful and suitable treatments as gifts based on the provided information about the gift recipient and the occasion.
+Consider the brand's aesthetic (holistic, serene, restorative, high-quality).
 
-Provide at least 3 distinct product recommendations. For each recommendation, include the product name, its category, a brief description, and a clear reason why it is suitable based on the input.
+Here is the menu of services we offer at Bonanza:
+- Purificación Sutil (Drenaje): Gentle movements to reduce inflammation and promote lightness.
+- Fluidez Esencial (Sueco): Soft, continuous strokes to release tension and induce deep calm.
+- Liberación de Tensión (Tejido Profundo): Deep technique for rigid areas to relax and revitalize muscles.
+- Re-inicia tu Mente (Cráneo Facial): A profound treatment to dissolve deep-seated tension, promoting rest and renewal.
+- Despertar Vital (Quiromasaje): Intuitive hands releasing crystallized emotions in the back and shoulders.
+- Moldea tu figura (Reductivo): Intense massage to activate the body and help with fluid retention.
+- Terapia de Sound Healing: A bath of harmonic sounds with Tibetan bowls to balance energy centers and reduce stress.
+
+Provide at least 3 distinct service recommendations. For each recommendation, the productName must be one of the service titles from the menu.
+Include the category, a brief description of the service, and a clear reason why it is a suitable gift based on the input.
 Finally, provide an overall summary of your suggestions.
 
 Recipient Personality: {{{recipientPersonality}}}
-{{#if preferredScents}}Preferred Scents: {{{preferredScents}}}{{/if}}
+{{#if preferredScents}}Preferred Scents: {{{preferredScents}}} (Note: we use aromatherapy, this can be relevant){{/if}}
 Occasion: {{{occasion}}}
 {{#if budget}}Budget: {{{budget}}}{{/if}}
 {{#if additionalInfo}}Additional Information: {{{additionalInfo}}}{{/if}}
 
-Focus on recommending products that truly align with the luxury and personalized feel of Bonanza Parfum.
+Focus on recommending services that provide a truly restorative and personalized experience.
 `,
 });
 
