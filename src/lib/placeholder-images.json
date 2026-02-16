@@ -26,9 +26,9 @@
     },
     {
       "id": "about-us",
-      "description": "Woman meditating in a lush green outdoor setting.",
-      "imageUrl": "https://images.unsplash.com/photo-1591291621265-b3a8a448419b?auto=format&fit=crop&w=600&h=800&q=80",
-      "imageHint": "outdoor meditation"
+      "description": "A person meditating on a beach during a beautiful sunset.",
+      "imageUrl": "https://images.unsplash.com/photo-1544164559-90f0e0c572e6?auto=format&fit=crop&w=600&h=800&q=80",
+      "imageHint": "beach meditation"
     }
   ]
 }
