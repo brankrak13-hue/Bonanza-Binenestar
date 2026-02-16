@@ -21,7 +21,7 @@ export default function Home() {
       />
       <Benefits />
       <div id="services" className="py-16 sm:py-24 bg-white">
-        <div className="space-y-16 sm:space-y-24">
+        <div className="space-y-12 sm:space-y-16">
           <ProductShowcase
             subtitle="TÉCNICAS ANCESTRALES"
             title="Masajes Holísticos"

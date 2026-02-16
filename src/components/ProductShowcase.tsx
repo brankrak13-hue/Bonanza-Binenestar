@@ -25,7 +25,7 @@ export default function ProductShowcase({
   reverse = false,
 }: ProductShowcaseProps) {
   return (
-    <section id={id} className="py-16 sm:py-24 bg-white">
+    <section id={id}>
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
         <div
           className={cn(
@@ -38,7 +38,7 @@ export default function ProductShowcase({
               reverse ? 'md:order-2' : 'md:order-1'
             )}
           >
-            <div className="hover-zoom aspect-w-4 aspect-h-3">
+            <div className="hover-zoom aspect-[4/3]">
               <Image
                 src={image.imageUrl}
                 alt={image.description}

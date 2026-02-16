@@ -8,7 +8,7 @@ export default function About() {
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
           <div className="animate-fadeIn">
-            <div className="hover-zoom aspect-w-3 aspect-h-4 rounded-lg overflow-hidden">
+            <div className="hover-zoom aspect-[3/4] rounded-lg overflow-hidden">
               <Image
                 src={image.imageUrl}
                 alt={image.description}

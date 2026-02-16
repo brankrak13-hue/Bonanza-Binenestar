@@ -16,7 +16,7 @@ type ProductCardProps = {
 export default function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="group relative overflow-hidden rounded-lg bg-white shadow-sm transition-shadow duration-300 hover:shadow-xl">
-      <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden">
+      <div className="aspect-square w-full overflow-hidden">
         <Image
           src={product.image.imageUrl}
           alt={product.image.description}
