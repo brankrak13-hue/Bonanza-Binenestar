@@ -32,7 +32,7 @@ export default function Header() {
         </div>
       )}
 
-      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b">
+      <header className="sticky top-0 z-30 bg-background/80 backdrop-blur-md border-b">
         <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-24">
             
@@ -84,34 +84,39 @@ export default function Header() {
             </div>
           </div>
         </div>
-
-        {/* Mobile Menu */}
-        <div className={`fixed inset-0 z-50 transform ${isMenuOpen ? "translate-x-0" : "-translate-x-full"} transition-transform duration-300 ease-in-out lg:hidden`}>
-          <div className="fixed inset-0 bg-black/30" onClick={() => setIsMenuOpen(false)}></div>
-          <div className="relative w-4/5 max-w-xs h-full bg-background shadow-xl p-6">
-            <button
-              type="button"
-              className="absolute top-5 right-5 p-2 text-gray-700 hover:text-black"
-              onClick={() => setIsMenuOpen(false)}
-              aria-label="Cerrar menú"
-            >
-              <X className="w-6 h-6" />
-            </button>
-            <nav className="flex flex-col space-y-6 mt-16">
-              {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="px-4 py-2 text-base tracking-wider font-medium text-gray-800 hover:bg-gray-50 rounded-md"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </nav>
-          </div>
-        </div>
       </header>
+
+      {/* Mobile Menu Overlay */}
+      <div 
+        className={`fixed inset-0 z-40 bg-black/50 transition-opacity lg:hidden ${isMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        onClick={() => setIsMenuOpen(false)}
+      ></div>
+
+      {/* Mobile Menu Drawer */}
+      <div className={`fixed inset-y-0 left-0 z-50 w-3/4 max-w-xs transform bg-[#F3EFE8] shadow-xl transition-transform duration-300 ease-in-out lg:hidden ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} h-screen`}>
+        <div className="p-6 h-full flex flex-col">
+          <button
+            type="button"
+            className="absolute top-5 right-5 p-2 text-gray-700 hover:text-black"
+            onClick={() => setIsMenuOpen(false)}
+            aria-label="Cerrar menú"
+          >
+            <X className="w-6 h-6" />
+          </button>
+          <nav className="flex flex-col gap-6 mt-16">
+            {navItems.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className="px-4 py-2 text-base tracking-wider font-medium text-gray-800 hover:bg-gray-50 rounded-md"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </nav>
+        </div>
+      </div>
     </>
   );
 }
