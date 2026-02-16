@@ -17,6 +17,7 @@ export default function Header() {
   const navItems = [
     { name: "INICIO", href: "/" },
     { name: "SERVICIOS", href: "/servicios" },
+    { name: "ASESOR IA", href: "/agente-virtual" },
     { name: "SOBRE NOSOTROS", href: "/#about" },
     { name: "CONTACTO", href: "/#contact" },
   ];
