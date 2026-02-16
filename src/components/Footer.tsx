@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { Flower2 as Lotus } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
+import { LotusIcon } from "@/components/icons/LotusIcon";
 
 const footerLinks = {
     'Navegación': [
@@ -70,7 +70,7 @@ export default function Footer() {
                 <div className="mt-16 pt-8 border-t flex flex-col sm:flex-row justify-between items-center text-sm text-muted-foreground">
                     <div className="flex items-center space-x-2">
                         <Link href="/" className="flex items-center gap-2 text-foreground">
-                            <Lotus className="w-5 h-5 text-primary" />
+                            <LotusIcon className="w-5 h-5 text-primary" />
                             <span className="font-headline text-xl font-semibold">BONANZA</span>
                         </Link>
                         {year && <p>&copy; {year} Bonanza Arte & Bienestar. Todos los derechos reservados.</p>}

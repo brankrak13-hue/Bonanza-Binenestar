@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Search, ShoppingBag, User, Menu, X, Flower2 as Lotus } from "lucide-react";
+import { Search, ShoppingBag, User, Menu, X } from "lucide-react";
+import { LotusIcon } from "@/components/icons/LotusIcon";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -49,7 +50,7 @@ export default function Header() {
             <div className="flex-1 flex justify-center lg:justify-start">
                 <Link href="/" className="flex flex-col items-center group -my-4">
                     <div className="flex items-center">
-                        <Lotus className="w-8 h-8 text-primary transition-transform group-hover:rotate-12" />
+                        <LotusIcon className="w-8 h-8 text-primary transition-transform group-hover:rotate-12" />
                         <span className="font-headline text-4xl font-bold tracking-wider text-foreground ml-2">BONANZA</span>
                     </div>
                     <span className="text-xs font-medium tracking-[0.2em] text-foreground/80 -mt-1">ARTE & BIENESTAR</span>
