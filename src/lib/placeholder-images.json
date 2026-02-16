@@ -1,112 +1,34 @@
 {
   "placeholderImages": [
     {
-      "id": "hero-1",
-      "description": "A woman holding a perfume bottle.",
-      "imageUrl": "https://images.unsplash.com/photo-1541643600914-78b084683601?w=1920&q=80",
-      "imageHint": "woman perfume"
+      "id": "hero-wellness",
+      "description": "Zen stones stacked on a blurred background, representing balance and tranquility.",
+      "imageUrl": "https://images.unsplash.com/photo-1595433261422-cd66de8368a3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx6ZW4lMjBiYWxhbmNlfGVufDB8fHx8MTc3MTI1NzU3NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "zen balance"
     },
     {
-      "id": "hero-2",
-      "description": "A bronzer powder product.",
-      "imageUrl": "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1920&q=80",
-      "imageHint": "bronzer powder"
+      "id": "facial-massage",
+      "description": "A woman receiving a relaxing facial massage.",
+      "imageUrl": "https://images.unsplash.com/photo-1598901986949-f593ff2a31a6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxmYWNpYWwlMjBtYXNzYWdlfGVufDB8fHx8MTc3MTI1NzI0Mnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "facial massage"
     },
     {
-      "id": "hero-3",
-      "description": "Cherry blossom perfume bottle.",
-      "imageUrl": "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=1920&q=80",
-      "imageHint": "cherry blossom"
-    },
-    {
-      "id": "abeille-royale-eye-treatment",
-      "description": "Abeille Royale eye cream product shot.",
-      "imageUrl": "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=1920&q=80",
-      "imageHint": "eye cream"
-    },
-    {
-      "id": "customizable-scented-candle",
-      "description": "Luxury scented candle with customizable options.",
-      "imageUrl": "https://images.unsplash.com/photo-1602028915047-37269d1a73f7?w=1920&q=80",
-      "imageHint": "luxury candle"
-    },
-    {
-      "id": "terracotta-light",
-      "description": "Terracotta Light bronzing powder in limited edition packaging.",
-      "imageUrl": "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1920&q=80",
-      "imageHint": "bronzer powder"
-    },
-    {
-      "id": "orchidee-imperiale",
-      "description": "Orchidee Imperiale luxury anti-aging cream.",
-      "imageUrl": "https://images.unsplash.com/photo-1612817288484-6f916006741a?w=1920&q=80",
-      "imageHint": "luxury cream"
-    },
-    {
-      "id": "cherry-blossom-product",
-      "description": "Cherry Blossom perfume in an exceptional creation bottle.",
-      "imageUrl": "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=1920&q=80",
-      "imageHint": "perfume floral"
-    },
-    {
-      "id": "category-perfume",
-      "description": "A collection of perfume bottles.",
-      "imageUrl": "https://images.unsplash.com/photo-1769038933775-305885b212c1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxwZXJmdW1lJTIwY29sbGVjdGlvbnxlbnwwfHx8fDE3NzEyNTY5MjB8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "perfume collection"
-    },
-    {
-      "id": "category-makeup",
-      "description": "A flatlay of various makeup products.",
-      "imageUrl": "https://images.unsplash.com/photo-1609451043305-745f798b51a3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtYWtldXAlMjBmbGF0bGF5fGVufDB8fHx8MTc3MTI1NTk2N3ww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "makeup flatlay"
-    },
-    {
-      "id": "category-skincare",
-      "description": "A set of skincare products on a clean background.",
-      "imageUrl": "https://images.unsplash.com/photo-1567721913486-6585f069b332?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxza2luY2FyZSUyMHByb2R1Y3RzfGVufDB8fHx8MTc3MTE0MjkzNnww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "skincare products"
-    },
-    {
-      "id": "category-spas",
-      "description": "The interior of a luxurious spa.",
-      "imageUrl": "https://images.unsplash.com/photo-1583416750470-965b2707b355?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxzcGElMjBpbnRlcmlvcnxlbnwwfHx8fDE3NzEyMjc0NzZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "spa interior"
+      "id": "sound-healing",
+      "description": "Tibetan singing bowls used for a sound healing session.",
+      "imageUrl": "https://images.unsplash.com/photo-1619968747226-67769140323a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzaW5naW5nJTIwYm93bHxlbnwwfHx8fDE3NzEyNTcyNDJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "singing bowl"
     },
     {
       "id": "exclusive-experience",
-      "description": "A person receiving a spa treatment.",
-      "imageUrl": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600&q=80",
-      "imageHint": "spa treatment"
+      "description": "A serene spa environment with candles and towels.",
+      "imageUrl": "https://images.unsplash.com/photo-1733653024328-9d3f37fdfb73?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8c3BhJTIwYW1iaWFuY2V8ZW58MHx8fHwxNzcxMjU3NTc0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "spa ambiance"
     },
     {
-      "id": "carousel-product-1",
-      "description": "A stylish perfume bottle.",
-      "imageUrl": "https://images.unsplash.com/photo-1541643600914-78b084683601?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxwZXJmdW1lJTIwYm90dGxlfGVufDB8fHx8MTc3MTI1NTk2N3ww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "perfume bottle"
-    },
-    {
-      "id": "carousel-product-2",
-      "description": "Red lipstick tube.",
-      "imageUrl": "https://images.unsplash.com/photo-1587303876752-91efb6315dcc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxyZWQlMjBsaXBzdGlja3xlbnwwfHx8fDE3NzEyNTY5MTl8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "red lipstick"
-    },
-    {
-      "id": "carousel-product-3",
-      "description": "Skincare serum bottle.",
-      "imageUrl": "https://images.unsplash.com/photo-1605204350321-cfd0ac0702e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxza2luY2FyZSUyMHNlcnVtfGVufDB8fHx8MTc3MTI1NjkxOXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "skincare serum"
-    },
-    {
-      "id": "carousel-product-4",
-      "description": "Eyeshadow palette.",
-      "imageUrl": "https://images.unsplash.com/photo-1533562530973-424ab36f1448?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxleWVzaGFkb3clMjBwYWxldHRlfGVufDB8fHx8MTc3MTE1MTQ3MHww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "eyeshadow palette"
-    },
-    {
-      "id": "carousel-product-5",
-      "description": "Face cream jar.",
-      "imageUrl": "https://images.unsplash.com/photo-1585945037805-5fd82c2e60b1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxmYWNlJTIwY3JlYW18ZW58MHx8fHwxNzcxMjU1OTY3fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "face cream"
+      "id": "about-us",
+      "description": "Portrait of a wellness expert.",
+      "imageUrl": "https://images.unsplash.com/photo-1758691463384-771db2f192b3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8d2VsbG5lc3MlMjBleHBlcnR8ZW58MHx8fHwxNzcxMjU3NTc0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "wellness expert"
     }
   ]
 }

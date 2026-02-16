@@ -1,73 +1,45 @@
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
-import ProductShowcase from '@/components/ProductShowcase';
-import ProductCarousel from '@/components/ProductCarousel';
-import Categories from '@/components/Categories';
-import ExclusiveExperience from '@/components/ExclusiveExperience';
 import Benefits from '@/components/Benefits';
 import Footer from '@/components/Footer';
-
+import ProductShowcase from '@/components/ProductShowcase';
 import { getPlaceholderImage } from '@/lib/images';
+import About from '@/components/About';
+import Contact from '@/components/Contact';
 
 export default function Home() {
   return (
-    <main className="min-h-screen">
+    <main id="home" className="min-h-screen bg-background">
       <Header />
-
-      <HeroSection />
-
-      <ProductShowcase
-        id="skincare"
-        subtitle="NUEVA TECNOLOGIA CON MULTIPLES PATENTES"
-        title="EL TRATAMIENTO DE OJOS REPARADOR DE JUVENTUD"
-        description="Descubre el poder de la miel y la jalea real en nuestro nuevo tratamiento avanzado para el contorno de ojos, que reduce visiblemente las arrugas y las ojeras."
-        image={getPlaceholderImage('abeille-royale-eye-treatment')}
-        buttonText="Descubrir"
+      <HeroSection
+        title="Eleva tu Bienestar"
+        subtitle="BONANZA ARTE & BIENESTAR"
+        description="Descubre un santuario de paz interior a través de nuestros masajes faciales y terapias de sound healing."
+        buttonText="Agenda tu Cita"
+        image={getPlaceholderImage('hero-wellness')}
       />
-
-      <ProductShowcase
-        subtitle="L'ART & LA MATIERE"
-        title="LA VELA PERFUMADA PERSONALIZABLE"
-        description="Crea un ambiente único con nuestra colección de velas perfumadas. Elige tu fragancia y personaliza el estuche para un objeto de arte en tu hogar."
-        image={getPlaceholderImage('customizable-scented-candle')}
-        buttonText="Personalizar"
-        reverse
-      />
-
-      <ProductShowcase
-        id="makeup"
-        subtitle="EDICIÓN LIMITADA"
-        title="TERRACOTTA LIGHT"
-        description="La icónica luz de terracota en una nueva edición limitada. Un velo de sol para un brillo saludable y natural durante todo el año."
-        image={getPlaceholderImage('terracotta-light')}
-        buttonText="Comprar ahora"
-      />
-
-      <ProductCarousel />
-
-      <ProductShowcase
-        subtitle="ORCHIDÉE IMPÉRIALE"
-        title="LA NUEVA CREMA LIGERA DE LONGEVIDAD"
-        description="El poder de la orquídea en una nueva textura ligera. Una crema excepcional que combate los signos del envejecimiento y revela una piel radiante."
-        image={getPlaceholderImage('orchidee-imperiale')}
-        buttonText="Ver la colección"
-        reverse
-      />
-
-      <ProductShowcase
-        subtitle="CREACIONES DE EXCEPCIÓN"
-        title="CHERRY BLOSSOM"
-        description="Una celebración de la primavera en una botella. La delicada fragancia del cerezo en flor capturada en una edición poética y limitada."
-        image={getPlaceholderImage('cherry-blossom-product')}
-        buttonText="Explorar"
-      />
-
-      <Categories />
-
-      <ExclusiveExperience />
-
       <Benefits />
-
+      <div id="services" className="py-16 sm:py-24 bg-white">
+        <div className="space-y-16 sm:space-y-24">
+          <ProductShowcase
+            subtitle="Técnicas Ancestrales"
+            title="Masajes Faciales Holísticos"
+            description="Rejuvenece tu piel y libera tensiones con nuestros masajes faciales personalizados. Utilizamos técnicas que combinan drenaje linfático, reflexología y aromaterapia para una piel radiante y una relajación profunda."
+            image={getPlaceholderImage('facial-massage')}
+            buttonText="Ver Tratamientos"
+          />
+          <ProductShowcase
+            subtitle="Vibraciones que Sanan"
+            title="Terapia de Sound Healing"
+            description="Sumérgete en un baño de sonidos armónicos con cuencos tibetanos y otros instrumentos. El sound healing equilibra tus centros energéticos, reduce el estrés y te guía hacia un estado de meditación profunda."
+            image={getPlaceholderImage('sound-healing')}
+            buttonText="Explorar Sesiones"
+            reverse
+          />
+        </div>
+      </div>
+      <About />
+      <Contact />
       <Footer />
     </main>
   );
