@@ -10,10 +10,10 @@ export default function Header() {
   const [isBannerVisible, setIsBannerVisible] = useState(true);
 
   const navItems = [
-    { name: "INICIO", href: "#home" },
-    { name: "SERVICIOS", href: "#services" },
-    { name: "SOBRE NOSOTROS", href: "#about" },
-    { name: "CONTACTO", href: "#contact" },
+    { name: "INICIO", href: "/" },
+    { name: "SERVICIOS", href: "/servicios" },
+    { name: "SOBRE NOSOTROS", href: "/#about" },
+    { name: "CONTACTO", href: "/#contact" },
   ];
 
   return (

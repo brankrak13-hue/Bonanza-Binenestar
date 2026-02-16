@@ -16,6 +16,7 @@ export default function Home() {
         subtitle="BONANZA ARTE & BIENESTAR"
         description="Descubre un santuario de paz interior a través de nuestros masajes faciales y terapias de sound healing."
         buttonText="Agenda tu Cita"
+        buttonLink="#contact"
         image={getPlaceholderImage('hero-wellness')}
       />
       <Benefits />
@@ -27,6 +28,7 @@ export default function Home() {
             description="Rejuvenece tu piel y libera tensiones con nuestros masajes faciales personalizados. Utilizamos técnicas que combinan drenaje linfático, reflexología y aromaterapia para una piel radiante y una relajación profunda."
             image={getPlaceholderImage('facial-massage')}
             buttonText="Ver Tratamientos"
+            buttonLink="/servicios"
           />
           <ProductShowcase
             subtitle="Vibraciones que Sanan"

@@ -10,12 +10,12 @@ import { Instagram } from "lucide-react";
 const footerLinks = {
     'Navegación': [
         { title: 'Inicio', href: '#home' },
-        { title: 'Servicios', href: '#services' },
+        { title: 'Servicios', href: '/servicios' },
         { title: 'Sobre Nosotros', href: '#about' },
         { title: 'Contacto', href: '#contact' },
     ],
     'Servicios': [
-        { title: 'Masaje Facial', href: '#' },
+        { title: 'Masaje Facial', href: '/servicios' },
         { title: 'Sound Healing', href: '#' },
         { title: 'Paquetes', href: '#' },
         { title: 'Tarjetas de Regalo', href: '#' },
@@ -38,7 +38,7 @@ export default function Footer() {
     }, []);
 
     return (
-        <footer id="contact" className="bg-secondary border-t">
+        <footer className="bg-secondary border-t">
             <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
                     <div className="lg:col-span-1">

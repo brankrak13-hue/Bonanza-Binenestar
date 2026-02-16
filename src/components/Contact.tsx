@@ -2,10 +2,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Instagram, MapPin, Phone } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function Contact() {
   return (
-    <section className="bg-secondary py-16 sm:py-24">
+    <section id="contact" className="bg-secondary py-16 sm:py-24">
       <div className="max-w-screen-md mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-semibold text-foreground">Agenda Tu Experiencia</h2>
@@ -41,6 +43,29 @@ export default function Contact() {
             </Button>
           </div>
         </form>
+
+        <div className="mt-16 pt-12 border-t border-border text-center">
+            <h3 className="text-2xl font-semibold text-foreground mb-4">Agenda directamente</h3>
+            <p className="text-muted-foreground mb-6 max-w-lg mx-auto">
+                Escanea el código QR con tu celular o haz{' '}
+                <a href="https://scanned.page/p/G9vdm4" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80 transition-colors">
+                    clic aquí
+                </a> 
+                {' '}para ver nuestra disponibilidad y reservar tu cita.
+            </p>
+            <div className="flex justify-center">
+                <a href="https://scanned.page/p/G9vdm4" target="_blank" rel="noopener noreferrer">
+                    <Image
+                      src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://scanned.page/p/G9vdm4"
+                      alt="Código QR para agendar cita"
+                      width={180}
+                      height={180}
+                      className="rounded-lg shadow-lg"
+                    />
+                </a>
+            </div>
+        </div>
+
       </div>
     </section>
   );

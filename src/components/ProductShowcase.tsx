@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import type { ImagePlaceholder } from '@/lib/images';
+import Link from 'next/link';
 
 type ProductShowcaseProps = {
   id?: string;
@@ -9,6 +10,7 @@ type ProductShowcaseProps = {
   description: string;
   image: ImagePlaceholder;
   buttonText: string;
+  buttonLink?: string;
   reverse?: boolean;
 };
 
@@ -19,6 +21,7 @@ export default function ProductShowcase({
   description,
   image,
   buttonText,
+  buttonLink,
   reverse = false,
 }: ProductShowcaseProps) {
   return (
@@ -70,12 +73,22 @@ export default function ProductShowcase({
             >
               {description}
             </p>
-            <button
-              className="btn-primary mt-8 animate-slideIn"
-              style={{ animationDelay: '400ms' }}
-            >
-              {buttonText}
-            </button>
+            {buttonLink ? (
+              <Link
+                href={buttonLink}
+                className="btn-primary mt-8 animate-slideIn"
+                style={{ animationDelay: '400ms' }}
+              >
+                {buttonText}
+              </Link>
+            ) : (
+              <button
+                className="btn-primary mt-8 animate-slideIn"
+                style={{ animationDelay: '400ms' }}
+              >
+                {buttonText}
+              </button>
+            )}
           </div>
         </div>
       </div>

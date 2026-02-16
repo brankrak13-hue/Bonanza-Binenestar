@@ -2,16 +2,18 @@
 
 import Image from "next/image";
 import type { ImagePlaceholder } from "@/lib/images";
+import Link from "next/link";
 
 type HeroSectionProps = {
   title: string;
   subtitle: string;
   description: string;
   buttonText: string;
+  buttonLink: string;
   image: ImagePlaceholder;
 };
 
-export default function HeroSection({ title, subtitle, description, buttonText, image }: HeroSectionProps) {
+export default function HeroSection({ title, subtitle, description, buttonText, buttonLink, image }: HeroSectionProps) {
   return (
     <section className="relative w-full h-[calc(100vh-120px)] min-h-[500px] sm:min-h-[600px] flex items-center justify-center">
       <div className="absolute inset-0 overflow-hidden">
@@ -35,9 +37,9 @@ export default function HeroSection({ title, subtitle, description, buttonText, 
         <p className="text-lg text-gray-200 leading-relaxed mb-8 animate-fadeIn" style={{ animationDelay: '600ms' }}>
           {description}
         </p>
-        <button className="btn-outline mt-6 animate-fadeIn" style={{ animationDelay: '800ms' }}>
+        <Link href={buttonLink} className="btn-outline mt-6 animate-fadeIn" style={{ animationDelay: '800ms' }}>
             {buttonText}
-        </button>
+        </Link>
       </div>
     </section>
   );
