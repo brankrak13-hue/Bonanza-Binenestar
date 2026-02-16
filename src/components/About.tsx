@@ -4,16 +4,16 @@ import { getPlaceholderImage } from "@/lib/images";
 export default function About() {
   const image = getPlaceholderImage("about-us");
   return (
-    <section id="about" className="bg-white py-16 sm:py-24">
+    <section id="about" className="bg-white py-12 sm:py-16">
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
           <div className="animate-fadeIn">
-            <div className="hover-zoom aspect-[3/4] rounded-lg overflow-hidden">
+            <div className="hover-zoom aspect-[4/3] rounded-lg overflow-hidden">
               <Image
                 src={image.imageUrl}
                 alt={image.description}
-                width={600}
-                height={800}
+                width={800}
+                height={600}
                 className="object-cover w-full h-full"
                 data-ai-hint={image.imageHint}
               />
