@@ -76,14 +76,14 @@ export default function ProductShowcase({
             {buttonLink ? (
               <Link
                 href={buttonLink}
-                className="btn-primary mt-8 animate-slideIn"
+                className="btn-primary mt-10 animate-slideIn"
                 style={{ animationDelay: '400ms' }}
               >
                 {buttonText}
               </Link>
             ) : (
               <button
-                className="btn-primary mt-8 animate-slideIn"
+                className="btn-primary mt-10 animate-slideIn"
                 style={{ animationDelay: '400ms' }}
               >
                 {buttonText}
