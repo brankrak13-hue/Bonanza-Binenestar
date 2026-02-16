@@ -24,8 +24,8 @@ export default function Home() {
         <div className="space-y-16 sm:space-y-24">
           <ProductShowcase
             subtitle="TÉCNICAS ANCESTRALES"
-            title="El Arte de Restaurar"
-            description="Manos intuitivas que liberan emociones cristalizadas en el cuerpo. Desde la fluidez del masaje sueco hasta la profundidad del tejido profundo, transformamos el dolor en relajación absoluta, permitiéndote soltar la carga y volver a tu centro."
+            title="Masajes Holísticos"
+            description="Rejuvenece tu piel y libera tensiones con nuestros masajes faciales personalizados. Utilizamos técnicas que combinan drenaje linfático, reflexología y aromaterapia para una piel radiante y una relajación profunda."
             image={getPlaceholderImage('facial-massage')}
             buttonText="Ver Menú"
             buttonLink="/servicios"
