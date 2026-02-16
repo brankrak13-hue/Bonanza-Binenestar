@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from "react";
 import {
   Sheet,
   SheetContent,
@@ -10,8 +11,9 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
-import { Minus, Plus, Trash2, ShoppingCart } from "lucide-react";
+import { Minus, Plus, Trash2, ShoppingCart, Loader2 } from "lucide-react";
 import GooglePayButton from '@google-pay/button-react';
+import { useToast } from "@/hooks/use-toast";
 
 interface CartSidebarProps {
   open: boolean;
@@ -19,7 +21,45 @@ interface CartSidebarProps {
 }
 
 export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
-  const { cartItems, removeFromCart, updateQuantity, totalPrice, cartCount } = useCart();
+  const { cartItems, removeFromCart, updateQuantity, totalPrice, cartCount, clearCart } = useCart();
+  const [processingPayment, setProcessingPayment] = useState(false);
+  const { toast } = useToast();
+
+  const handlePayment = async (paymentRequest: google.payments.api.PaymentData) => {
+    if (totalPrice === 0) return;
+    setProcessingPayment(true);
+    try {
+      const response = await fetch('/api/process-payment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(paymentRequest),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        toast({
+          title: "¡Pago exitoso!",
+          description: "Tu compra ha sido procesada correctamente (simulación).",
+        });
+        clearCart();
+        onOpenChange(false);
+      } else {
+        throw new Error(result.message || 'Hubo un error al procesar el pago.');
+      }
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Error en el pago",
+        description: error.message || 'No se pudo completar la transacción. Por favor, intenta de nuevo.',
+      });
+    } finally {
+      setProcessingPayment(false);
+    }
+  };
+
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -72,7 +112,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                 <p className="text-xs text-muted-foreground">
                   Los impuestos y costos de envío se calculan al finalizar la compra.
                 </p>
-                <Button className="w-full">
+                <Button className="w-full" disabled={processingPayment}>
                   Proceder al Pago
                 </Button>
                 <div className="relative flex items-center justify-center my-2">
@@ -116,17 +156,21 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                       countryCode: 'MX',
                     },
                   }}
-                  onLoadPaymentData={paymentRequest => {
-                    console.log('Pago de Google Pay exitoso (en modo de prueba):', paymentRequest);
-                    // Aquí es donde enviarías la información a tu backend para procesar el pago.
-                  }}
+                  onLoadPaymentData={handlePayment}
                   buttonType="pay"
                   buttonColor="black"
                   className="w-full"
+                  disabled={processingPayment || cartCount === 0}
                 />
-                 <p className="text-xs text-muted-foreground text-center pt-2">
-                  La integración de Google Pay es para fines de demostración. Se requiere configuración de backend para procesar pagos reales.
-                </p>
+                 {processingPayment ? (
+                    <p className="text-xs text-muted-foreground text-center pt-2 flex items-center justify-center gap-2">
+                        <Loader2 className="h-4 w-4 animate-spin" /> Procesando pago...
+                    </p>
+                 ) : (
+                    <p className="text-xs text-muted-foreground text-center pt-2">
+                      La integración de Google Pay es para fines de demostración. Se requiere configuración de backend para procesar pagos reales.
+                    </p>
+                 )}
               </div>
             </SheetFooter>
           </>
