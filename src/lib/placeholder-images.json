@@ -26,9 +26,9 @@
     },
     {
       "id": "about-us",
-      "description": "A woman meditating on a beach, embodying peace and wellness.",
-      "imageUrl": "https://images.unsplash.com/photo-1506126613408-4e652a27b2de?auto=format&fit=crop&w=600&h=800&q=80",
-      "imageHint": "beach meditation"
+      "description": "Woman meditating in a lush green outdoor setting.",
+      "imageUrl": "https://images.unsplash.com/photo-1591291621265-b3a8a448419b?auto=format&fit=crop&w=600&h=800&q=80",
+      "imageHint": "outdoor meditation"
     }
   ]
 }
