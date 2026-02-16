@@ -24,10 +24,10 @@ export default function Home() {
         <div className="space-y-16 sm:space-y-24">
           <ProductShowcase
             subtitle="Técnicas Ancestrales"
-            title="Masajes Faciales Holísticos"
+            title="Masajes Holísticos"
             description="Rejuvenece tu piel y libera tensiones con nuestros masajes faciales personalizados. Utilizamos técnicas que combinan drenaje linfático, reflexología y aromaterapia para una piel radiante y una relajación profunda."
             image={getPlaceholderImage('facial-massage')}
-            buttonText="Ver Tratamientos"
+            buttonText="Ver Menú"
             buttonLink="/servicios"
           />
           <ProductShowcase
