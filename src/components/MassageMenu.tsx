@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Card,
   CardContent,
@@ -5,6 +7,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useCart } from "@/context/CartContext";
+import { Plus } from "lucide-react";
 
 const massages = [
     {
@@ -63,6 +68,8 @@ const massages = [
 
 
 export default function MassageMenu() {
+    const { addToCart } = useCart();
+
     return (
         <section id="massage-menu" className="py-16 sm:py-24 bg-white">
             <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -81,13 +88,26 @@ export default function MassageMenu() {
                             </CardHeader>
                             <CardContent className="flex-grow flex flex-col justify-between">
                                 <CardDescription className="mb-4 text-foreground/80">{massage.description}</CardDescription>
-                                <div className="border-t border-border pt-4">
-                                    {massage.prices.map((p, i) => (
-                                        <div key={i} className="flex justify-between items-center py-1">
-                                            <span className="text-muted-foreground">{p.duration} min</span>
-                                            <span className="font-semibold text-foreground">${p.price.toLocaleString()}</span>
-                                        </div>
-                                    ))}
+                                <div className="border-t border-border pt-4 mt-auto">
+                                    <p className="font-semibold text-sm mb-2 text-foreground">Selecciona una opción:</p>
+                                    <div className="space-y-2">
+                                        {massage.prices.map((p, i) => (
+                                            <div key={i} className="flex justify-between items-center py-1">
+                                                <div>
+                                                    <span className="text-muted-foreground">{p.duration} min</span>
+                                                    <span className="font-semibold text-foreground ml-4">${p.price.toLocaleString()}</span>
+                                                </div>
+                                                <Button 
+                                                    size="sm" 
+                                                    variant="ghost" 
+                                                    className="px-2 py-1 h-auto"
+                                                    onClick={() => addToCart({ title: massage.title, subtitle: massage.subtitle, price: p.price, duration: p.duration })}>
+                                                    <Plus className="h-4 w-4 mr-1" />
+                                                    Añadir
+                                                </Button>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             </CardContent>
                         </Card>

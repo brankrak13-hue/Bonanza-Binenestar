@@ -4,10 +4,15 @@ import { useState } from "react";
 import Link from "next/link";
 import { Search, ShoppingBag, User, Menu, X } from "lucide-react";
 import { LotusIcon } from "@/components/icons/LotusIcon";
+import { useCart } from "@/context/CartContext";
+import CartSidebar from "@/components/CartSidebar";
+import { Badge } from "@/components/ui/badge";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isBannerVisible, setIsBannerVisible] = useState(true);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { cartCount } = useCart();
 
   const navItems = [
     { name: "INICIO", href: "/" },
@@ -74,8 +79,13 @@ export default function Header() {
                 <Search className="w-5 h-5" />
               </button>
 
-              <button type="button" className="p-2 text-foreground/80 hover:text-foreground transition-colors relative">
+              <button type="button" className="p-2 text-foreground/80 hover:text-foreground transition-colors relative" onClick={() => setIsCartOpen(true)}>
                 <ShoppingBag className="w-5 h-5" />
+                {cartCount > 0 && (
+                  <Badge variant="destructive" className="absolute -top-1 -right-2 h-5 w-5 p-0 flex items-center justify-center text-xs">
+                    {cartCount}
+                  </Badge>
+                )}
               </button>
 
               <button type="button" className="p-2 text-foreground/80 hover:text-foreground transition-colors">
@@ -117,6 +127,7 @@ export default function Header() {
           </nav>
         </div>
       </div>
+      <CartSidebar open={isCartOpen} onOpenChange={setIsCartOpen} />
     </>
   );
 }
