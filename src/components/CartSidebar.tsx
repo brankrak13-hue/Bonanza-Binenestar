@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from "react";
+import dynamic from 'next/dynamic';
 import {
   Sheet,
   SheetContent,
@@ -12,8 +13,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
 import { Minus, Plus, Trash2, ShoppingCart, Loader2 } from "lucide-react";
-import GooglePayButton from '@google-pay/button-react';
 import { useToast } from "@/hooks/use-toast";
+
+const GooglePayButton = dynamic(
+  () => import('@google-pay/button-react'),
+  { 
+    ssr: false,
+    loading: () => <div className="w-full h-10 rounded-md animate-pulse bg-muted" />
+  }
+);
+
 
 interface CartSidebarProps {
   open: boolean;
