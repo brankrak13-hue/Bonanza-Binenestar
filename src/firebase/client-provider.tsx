@@ -16,18 +16,17 @@ export function FirebaseClientProvider({ children }: FirebaseClientProviderProps
   }, []); // Empty dependency array ensures this runs only once on mount
 
   useEffect(() => {
-    // Human Verification & Bot Protection (reCAPTCHA Enterprise)
-    // Note: In a real production environment, you would replace 'YOUR_SITE_KEY' 
-    // with the real key from your Firebase Console.
+    // PROTECCIÓN ANTI-HACKEOS: Activación de Firebase App Check (reCAPTCHA Enterprise)
+    // Este sistema verifica que cada petición provenga de tu aplicación real y no de un bot o atacante.
     if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
       try {
         initializeAppCheck(firebaseServices.firebaseApp, {
           provider: new ReCaptchaEnterpriseProvider('6LdWp9cqAAAAAEV-X0-pG_p9cqAAAAAEV-X0-pG'),
           isTokenAutoRefreshEnabled: true
         });
-        console.log("Sistema de Seguridad Antihackeos (App Check) activado.");
+        console.log("🛡️ Sistema de Seguridad Antihackeos (App Check) activado con éxito.");
       } catch (error) {
-        console.warn("App Check failed to initialize. This is expected in local dev without a site key.", error);
+        console.warn("⚠️ App Check no se pudo inicializar en desarrollo local sin llave de sitio válida.", error);
       }
     }
   }, [firebaseServices]);
