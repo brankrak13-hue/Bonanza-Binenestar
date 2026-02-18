@@ -1,0 +1,190 @@
+rules_version = '2';
+
+/**
+ * BONANZA STORE - CLOUD FIRESTORE SECURITY RULES
+ *
+ * Core Philosophy:
+ * This ruleset implements a dual-layer security model: Strict Ownership for user-sensitive data 
+ * and Administrator-Controlled Content for the public storefront. It leverages Firebase Auth 
+ * UIDs as the primary anchor for authorization.
+ *
+ * Data Structure:
+ * - /userProfiles/{uid}: User-specific root. All private data (addresses, orders) is nested 
+ *   hierarchically under the owner's profile to enforce clear access boundaries.
+ * - /products, /categories, /promotionalContent: Publicly accessible top-level collections 
+ *   representing the store's inventory and marketing material.
+ * - /roles_admin: A dedicated collection used for Role-Based Access Control (RBAC) via 
+ *   "Existence over Content."
+ *
+ * Key Security Decisions:
+ * 1. Path-Based Authorization: By nesting sensitive data under the User ID, we ensure that 
+ *    access is naturally limited to the owner, minimizing the need for complex database lookups.
+ * 2. Denormalization for Performance: Critical authorization fields (like userProfileId and 
+ *    productId) are expected within documents to allow for fast, local rule evaluation.
+ * 3. Structural Segregation: Administrative actions (like managing subscribers or contact forms) 
+ *    are segregated from public interactions, following the principle of least privilege.
+ * 4. Prototyping Flexibility: These rules enforce 'who' can access the data but remain 
+ *    flexible on 'what' the data looks like, facilitating rapid feature development.
+ */
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // --- GLOBAL HELPER FUNCTIONS ---
+
+    /** @description Checks if the request is from an authenticated user. */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /** @description Checks if the authenticated user matches the provided ID. */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /** @description Checks if the authenticated user owns the document and it exists. */
+    function isExistingOwner(userId) {
+      return isOwner(userId) && resource != null;
+    }
+
+    /** @description Checks if the authenticated user has an entry in the admin roles collection. */
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+    }
+
+    // --- COLLECTION RULES ---
+
+    /**
+     * @description Rules for the admin roles collection. Used for 'Existence over Content' RBAC.
+     * @path /roles_admin/{adminId}
+     * @allow (get) Any authenticated admin can check their own or others' admin status.
+     * @deny (write) Prevent non-admins from promoting themselves.
+     * @principle Role-Based Access Control via existence check.
+     */
+    match /roles_admin/{adminId} {
+      allow read: if isAdmin();
+      allow write: if isAdmin();
+    }
+
+    /**
+     * @description User profiles containing personal info and preferences.
+     * @path /userProfiles/{userProfileId}
+     * @allow (create) User creating their own profile where ID matches Auth UID.
+     * @deny (update) Trying to change the 'externalAuthUserId' link to another user.
+     * @principle Enforces path-based document ownership.
+     */
+    match /userProfiles/{userProfileId} {
+      allow get, list: if isOwner(userProfileId) || isAdmin();
+      allow create: if isOwner(userProfileId) && request.resource.data.externalAuthUserId == userProfileId;
+      allow update: if isExistingOwner(userProfileId) && request.resource.data.externalAuthUserId == resource.data.externalAuthUserId;
+      allow delete: if isExistingOwner(userProfileId) || isAdmin();
+    }
+
+    /**
+     * @description User-specific addresses for shipping and billing.
+     * @path /userProfiles/{userProfileId}/addresses/{addressId}
+     * @allow (list) Owner listing their own addresses.
+     * @deny (create) Mismatched userProfileId in data vs. path.
+     * @principle Nested path ownership and relational integrity.
+     */
+    match /userProfiles/{userProfileId}/addresses/{addressId} {
+      allow get, list: if isOwner(userProfileId) || isAdmin();
+      allow create: if isOwner(userProfileId) && request.resource.data.userProfileId == userProfileId;
+      allow update: if isExistingOwner(userProfileId) && request.resource.data.userProfileId == resource.data.userProfileId;
+      allow delete: if isExistingOwner(userProfileId) || isAdmin();
+    }
+
+    /**
+     * @description Customer purchase orders.
+     * @path /userProfiles/{userProfileId}/orders/{orderId}
+     * @allow (get) Owner viewing their order details.
+     * @deny (update) Changing the owner of an existing order.
+     * @principle Immutable ownership and path-based restriction.
+     */
+    match /userProfiles/{userProfileId}/orders/{orderId} {
+      allow get, list: if isOwner(userProfileId) || isAdmin();
+      allow create: if isOwner(userProfileId) && request.resource.data.userProfileId == userProfileId;
+      allow update: if (isExistingOwner(userProfileId) || isAdmin()) && request.resource.data.userProfileId == resource.data.userProfileId;
+      allow delete: if isAdmin();
+      
+      /**
+       * @description Individual line items within an order.
+       * @path /userProfiles/{userProfileId}/orders/{orderId}/orderItems/{orderItemId}
+       * @allow (create) Owner adding an item to their own order.
+       * @principle Grandparent-based ownership verification.
+       */
+      match /orderItems/{orderItemId} {
+        allow get, list: if isOwner(userProfileId) || isAdmin();
+        allow create: if isOwner(userProfileId) && request.resource.data.orderId == orderId;
+        allow update: if (isExistingOwner(userProfileId) || isAdmin()) && request.resource.data.orderId == resource.data.orderId;
+        allow delete: if isAdmin();
+      }
+    }
+
+    /**
+     * @description Public store catalog (Products, Categories, Promotional Content, Experiences).
+     * @path /products/{id}, /categories/{id}, etc.
+     * @allow (get, list) Public access for all visitors.
+     * @deny (write) Non-admin users attempting to modify the catalog.
+     * @principle Public Read / Admin Write (Structural Segregation).
+     */
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if isAdmin();
+      
+      /**
+       * @description Reviews for products. Publicly visible only if approved.
+       * @path /products/{productId}/reviews/{reviewId}
+       * @allow (create) Authenticated user writing a review for themselves.
+       * @deny (list) Unauthenticated user seeing unapproved reviews.
+       * @principle Conditional visibility and owner-based writes.
+       */
+      match /reviews/{reviewId} {
+        allow get: if resource.data.isApproved == true || isOwner(resource.data.userProfileId) || isAdmin();
+        allow list: if resource.data.isApproved == true || isAdmin();
+        allow create: if isSignedIn() && request.resource.data.userProfileId == request.auth.uid && request.resource.data.productId == productId;
+        allow update: if (isExistingOwner(resource.data.userProfileId) || isAdmin());
+        allow delete: if (isExistingOwner(resource.data.userProfileId) || isAdmin());
+      }
+    }
+
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /promotionalContent/{contentId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /exclusiveExperiences/{experienceId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    /**
+     * @description Newsletter subscriptions. Users can subscribe, but only admins manage the list.
+     * @path /newsletterSubscribers/{subscriberId}
+     * @allow (create) Anyone submitting their email.
+     * @deny (get, list) Non-admins attempting to view the subscriber list.
+     * @principle Restricted Management (Public Create / Admin Restricted).
+     */
+    match /newsletterSubscribers/{subscriberId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+
+    /**
+     * @description Contact form submissions.
+     * @path /contactSubmissions/{submissionId}
+     * @allow (create) Anyone sending a message to the store.
+     * @deny (list) Public users browsing contact history.
+     * @principle Restricted Management (Public Create / Admin Restricted).
+     */
+    match /contactSubmissions/{submissionId} {
+      allow create: if true;
+      allow read, update, delete: if isAdmin();
+    }
+  }
+}

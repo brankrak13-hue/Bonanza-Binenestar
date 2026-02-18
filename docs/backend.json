@@ -1,0 +1,952 @@
+{
+  "entities": {
+    "UserProfile": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UserProfile",
+      "type": "object",
+      "description": "Represents a customer's profile, linked to an external authentication system. This entity stores personal information and preferences, ensuring data requiring secure access is clearly defined.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the UserProfile entity."
+        },
+        "externalAuthUserId": {
+          "type": "string",
+          "description": "Reference to the unique identifier from the external authentication system, linking this profile to an authenticated user. (Relationship: ExternalAuthSystem 1:1 UserProfile)"
+        },
+        "firstName": {
+          "type": "string",
+          "description": "The first name of the user."
+        },
+        "lastName": {
+          "type": "string",
+          "description": "The last name of the user."
+        },
+        "email": {
+          "type": "string",
+          "description": "The email address of the user for communication purposes. This is not used for authentication.",
+          "format": "email"
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "The contact phone number of the user."
+        },
+        "defaultShippingAddressId": {
+          "type": "string",
+          "description": "Reference to the user's preferred default shipping address. (Relationship: UserProfile 1:N Address)"
+        },
+        "defaultBillingAddressId": {
+          "type": "string",
+          "description": "Reference to the user's preferred default billing address. (Relationship: UserProfile 1:N Address)"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the user profile was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the user profile was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "externalAuthUserId",
+        "firstName",
+        "lastName",
+        "email",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Address": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Address",
+      "type": "object",
+      "description": "Represents a physical address associated with a user profile, used for shipping and billing purposes. Access to this data requires user authorization.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Address entity."
+        },
+        "userProfileId": {
+          "type": "string",
+          "description": "Reference to the user profile this address belongs to, ensuring ownership and access control. (Relationship: UserProfile 1:N Address)"
+        },
+        "addressLine1": {
+          "type": "string",
+          "description": "The first line of the street address."
+        },
+        "addressLine2": {
+          "type": "string",
+          "description": "The second line of the street address (e.g., apartment number, suite)."
+        },
+        "city": {
+          "type": "string",
+          "description": "The city of the address."
+        },
+        "stateProvince": {
+          "type": "string",
+          "description": "The state or province of the address."
+        },
+        "postalCode": {
+          "type": "string",
+          "description": "The postal or ZIP code of the address."
+        },
+        "country": {
+          "type": "string",
+          "description": "The country of the address."
+        },
+        "addressType": {
+          "type": "string",
+          "description": "The type of address (e.g., 'shipping', 'billing', 'both')."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the address was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the address was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userProfileId",
+        "addressLine1",
+        "city",
+        "stateProvince",
+        "postalCode",
+        "country",
+        "addressType",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Order": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Order",
+      "type": "object",
+      "description": "Represents a customer's purchase transaction, containing details about the order. Access to order history and details is sensitive and requires authorization.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Order entity."
+        },
+        "userProfileId": {
+          "type": "string",
+          "description": "Reference to the user profile who placed the order, establishing customer ownership. (Relationship: UserProfile 1:N Order)"
+        },
+        "orderDate": {
+          "type": "string",
+          "description": "The date and time when the order was placed.",
+          "format": "date-time"
+        },
+        "totalAmount": {
+          "type": "number",
+          "description": "The total monetary amount of the order, including shipping and taxes."
+        },
+        "status": {
+          "type": "string",
+          "description": "The current status of the order (e.g., 'pending', 'processing', 'shipped', 'delivered', 'cancelled')."
+        },
+        "shippingAddressId": {
+          "type": "string",
+          "description": "Reference to the shipping address used for this order. This stores the specific address chosen at the time of order. (Relationship: Order 1:1 Address)"
+        },
+        "billingAddressId": {
+          "type": "string",
+          "description": "Reference to the billing address used for this order. This stores the specific address chosen at the time of order. (Relationship: Order 1:1 Address)"
+        },
+        "paymentStatus": {
+          "type": "string",
+          "description": "The status of the payment for this order (e.g., 'paid', 'refunded', 'failed')."
+        },
+        "trackingNumber": {
+          "type": "string",
+          "description": "The tracking number provided by the shipping carrier for the order shipment."
+        },
+        "shippingCarrier": {
+          "type": "string",
+          "description": "The name of the shipping carrier used for the order."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the order record was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the order record was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userProfileId",
+        "orderDate",
+        "totalAmount",
+        "status",
+        "shippingAddressId",
+        "billingAddressId",
+        "paymentStatus",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "OrderItem": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "OrderItem",
+      "type": "object",
+      "description": "Represents an individual product item within a specific order. This details what was purchased.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the OrderItem entity."
+        },
+        "orderId": {
+          "type": "string",
+          "description": "Reference to the order this item belongs to. (Relationship: Order 1:N OrderItem)"
+        },
+        "productId": {
+          "type": "string",
+          "description": "Reference to the product that was purchased. (Relationship: Product 1:N OrderItem)"
+        },
+        "quantity": {
+          "type": "number",
+          "description": "The quantity of the product ordered."
+        },
+        "priceAtPurchase": {
+          "type": "number",
+          "description": "The price of a single unit of the product at the time of purchase, for historical accuracy."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the order item record was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the order item record was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "orderId",
+        "productId",
+        "quantity",
+        "priceAtPurchase",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Product": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Product",
+      "type": "object",
+      "description": "Represents a single product available for sale in the Bonanza store. Product data forms a core part of the application's content.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Product entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the product."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of the product."
+        },
+        "price": {
+          "type": "number",
+          "description": "The current selling price of the product."
+        },
+        "stockQuantity": {
+          "type": "number",
+          "description": "The number of units of this product currently in stock."
+        },
+        "imageUrls": {
+          "type": "array",
+          "description": "An array of URLs pointing to high-quality images of the product. These images may be enhanced using Generative AI.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "categoryIds": {
+          "type": "array",
+          "description": "References to categories this product belongs to. (Relationship: Product N:N Category)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "weight": {
+          "type": "number",
+          "description": "The weight of the product in a standard unit (e.g., grams, ounces)."
+        },
+        "dimensions": {
+          "type": "string",
+          "description": "The physical dimensions of the product, e.g., '10x5x2 cm'."
+        },
+        "sku": {
+          "type": "string",
+          "description": "The Stock Keeping Unit, a unique identifier for internal inventory management."
+        },
+        "isFeatured": {
+          "type": "boolean",
+          "description": "A flag indicating if the product should be prominently featured on the website."
+        },
+        "isActive": {
+          "type": "boolean",
+          "description": "A flag indicating if the product is currently active and available for sale."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the product record was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the product record was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "description",
+        "price",
+        "stockQuantity",
+        "imageUrls",
+        "categoryIds",
+        "sku",
+        "isActive",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Category": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Category",
+      "type": "object",
+      "description": "Represents a classification or grouping for products, such as 'Perfume' or 'Maquillaje', enabling organized navigation.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Category entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the category (e.g., 'Perfume', 'Maquillaje', 'Spas')."
+        },
+        "description": {
+          "type": "string",
+          "description": "A brief description of the category."
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "URL to an image representing the category for visual display.",
+          "format": "uri"
+        },
+        "parentCategoryId": {
+          "type": "string",
+          "description": "Reference to the parent category for hierarchical categorization (e.g., 'Tratamiento' might be a parent to 'Abeille Royale'). (Relationship: Category 1:N Category - self-referencing)"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the category record was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the category record was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "description",
+        "imageUrl",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ProductReview": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ProductReview",
+      "type": "object",
+      "description": "Represents a customer's review for a specific product, including a rating and comment. Reviews often require moderation, making this entity part of content security.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the ProductReview entity."
+        },
+        "productId": {
+          "type": "string",
+          "description": "Reference to the product being reviewed. (Relationship: Product 1:N ProductReview)"
+        },
+        "userProfileId": {
+          "type": "string",
+          "description": "Reference to the user profile who submitted the review. (Relationship: UserProfile 1:N ProductReview)"
+        },
+        "rating": {
+          "type": "number",
+          "description": "The rating given by the user, typically on a scale of 1 to 5."
+        },
+        "comment": {
+          "type": "string",
+          "description": "The textual comment or feedback provided by the user."
+        },
+        "reviewDate": {
+          "type": "string",
+          "description": "The date and time when the review was submitted.",
+          "format": "date-time"
+        },
+        "isApproved": {
+          "type": "boolean",
+          "description": "A flag indicating if the review has been approved by a moderator for public display."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the review record was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the review record was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "productId",
+        "userProfileId",
+        "rating",
+        "comment",
+        "reviewDate",
+        "isApproved",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "PromotionalContent": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "PromotionalContent",
+      "type": "object",
+      "description": "Represents various types of promotional content displayed on the website, such as hero banners, product showcases, or carousels. This enables dynamic updates of marketing material.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the PromotionalContent entity."
+        },
+        "title": {
+          "type": "string",
+          "description": "The main title of the promotional content."
+        },
+        "subtitle": {
+          "type": "string",
+          "description": "A secondary title or brief descriptor for the content."
+        },
+        "description": {
+          "type": "string",
+          "description": "A more detailed description or body text for the promotional content."
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "URL to the primary image associated with the promotional content.",
+          "format": "uri"
+        },
+        "callToActionText": {
+          "type": "string",
+          "description": "The text for the call-to-action button (e.g., 'Shop Now', 'Discover More')."
+        },
+        "callToActionUrl": {
+          "type": "string",
+          "description": "The URL to which the call-to-action button links.",
+          "format": "uri"
+        },
+        "displayLocation": {
+          "type": "string",
+          "description": "Indicates where on the website this content should be displayed (e.g., 'hero_section', 'top_banner', 'product_showcase_abeille_royale', 'product_carousel')."
+        },
+        "startDate": {
+          "type": "string",
+          "description": "The date and time when the promotional content becomes active.",
+          "format": "date-time"
+        },
+        "endDate": {
+          "type": "string",
+          "description": "The date and time when the promotional content expires.",
+          "format": "date-time"
+        },
+        "isActive": {
+          "type": "boolean",
+          "description": "A flag indicating if the promotional content is currently active and visible on the website."
+        },
+        "orderIndex": {
+          "type": "number",
+          "description": "An integer defining the display order of the content, especially within carousels or lists."
+        },
+        "theme": {
+          "type": "string",
+          "description": "The visual theme associated with the content, e.g., 'light', 'dark', which influences styling."
+        },
+        "productIds": {
+          "type": "array",
+          "description": "References to products featured in this promotional content, if applicable (e.g., for a product carousel). (Relationship: PromotionalContent N:N Product)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "gradient": {
+          "type": "string",
+          "description": "CSS gradient string for background styling, often used in dynamic hero sections."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the promotional content record was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the promotional content record was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "imageUrl",
+        "callToActionText",
+        "callToActionUrl",
+        "displayLocation",
+        "startDate",
+        "endDate",
+        "isActive",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "NewsletterSubscriber": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "NewsletterSubscriber",
+      "type": "object",
+      "description": "Represents a user who has subscribed to receive email newsletters and marketing communications. Email addresses are sensitive data requiring secure handling.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the NewsletterSubscriber entity."
+        },
+        "email": {
+          "type": "string",
+          "description": "The email address of the subscriber.",
+          "format": "email"
+        },
+        "subscriptionDate": {
+          "type": "string",
+          "description": "The date and time when the user subscribed.",
+          "format": "date-time"
+        },
+        "isConfirmed": {
+          "type": "boolean",
+          "description": "A flag indicating if the subscription has been confirmed (e.g., via a double opt-in process)."
+        },
+        "unsubscribeDate": {
+          "type": "string",
+          "description": "The date and time when the user unsubscribed from the newsletter.",
+          "format": "date-time"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the subscriber record was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the subscriber record was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "email",
+        "subscriptionDate",
+        "isConfirmed",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ContactSubmission": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ContactSubmission",
+      "type": "object",
+      "description": "Represents a message submitted through the website's contact form. This data may contain user queries or feedback, requiring proper handling and access control.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the ContactSubmission entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the person submitting the contact form."
+        },
+        "email": {
+          "type": "string",
+          "description": "The email address of the person submitting the contact form.",
+          "format": "email"
+        },
+        "subject": {
+          "type": "string",
+          "description": "The subject line of the contact message."
+        },
+        "message": {
+          "type": "string",
+          "description": "The full content of the message submitted."
+        },
+        "submissionDate": {
+          "type": "string",
+          "description": "The date and time when the contact message was submitted.",
+          "format": "date-time"
+        },
+        "status": {
+          "type": "string",
+          "description": "The current status of the contact request (e.g., 'new', 'in_progress', 'resolved')."
+        },
+        "assignedTo": {
+          "type": "string",
+          "description": "Reference to an internal agent or team responsible for handling this submission."
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the contact submission record was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the contact submission record was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "email",
+        "subject",
+        "message",
+        "submissionDate",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ExclusiveExperience": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ExclusiveExperience",
+      "type": "object",
+      "description": "Represents unique services, spa treatments, or special events offered by Bonanza. This content requires management and potential booking functionality.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the ExclusiveExperience entity."
+        },
+        "title": {
+          "type": "string",
+          "description": "The title or name of the exclusive experience (e.g., 'Spas', 'Servicios')."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of what the experience entails."
+        },
+        "shortDescription": {
+          "type": "string",
+          "description": "A brief summary of the experience, suitable for listings or previews."
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "URL to an image representing the exclusive experience.",
+          "format": "uri"
+        },
+        "callToActionText": {
+          "type": "string",
+          "description": "The text for the call-to-action button related to the experience (e.g., 'Book Now', 'Learn More')."
+        },
+        "callToActionUrl": {
+          "type": "string",
+          "description": "The URL to which the call-to-action button for the experience links.",
+          "format": "uri"
+        },
+        "price": {
+          "type": "number",
+          "description": "The cost of the exclusive experience, if applicable."
+        },
+        "duration": {
+          "type": "string",
+          "description": "The typical duration of the experience (e.g., '60 minutes', 'Full day')."
+        },
+        "location": {
+          "type": "string",
+          "description": "The physical or virtual location where the experience takes place (e.g., 'Online', 'Paris Boutique')."
+        },
+        "isAvailable": {
+          "type": "boolean",
+          "description": "A flag indicating if the experience is currently available for booking or participation."
+        },
+        "bookingLink": {
+          "type": "string",
+          "description": "A direct link to book the experience, if separate from the main callToActionUrl.",
+          "format": "uri"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp when the exclusive experience record was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp when the exclusive experience record was last updated.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "description",
+        "shortDescription",
+        "imageUrl",
+        "callToActionText",
+        "callToActionUrl",
+        "isAvailable",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/userProfiles/{userProfileId}",
+        "definition": {
+          "entityName": "UserProfile",
+          "schema": {
+            "$ref": "#/backend/entities/UserProfile"
+          },
+          "description": "Stores individual user profiles. Access is restricted to the owner (`request.auth.uid` must match `{userProfileId}`). The `externalAuthUserId` field matches `{userProfileId}` from the path, ensuring Authorization Independence.",
+          "params": [
+            {
+              "name": "userProfileId",
+              "description": "The unique identifier of the user profile, matching `request.auth.uid`."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/userProfiles/{userProfileId}/addresses/{addressId}",
+        "definition": {
+          "entityName": "Address",
+          "schema": {
+            "$ref": "#/backend/entities/Address"
+          },
+          "description": "Stores physical addresses for a specific user. Access is restricted to the owner (`request.auth.uid` must match the parent `{userProfileId}`). The `userProfileId` field is denormalized in each document to match the parent path's `{userProfileId}`, ensuring Authorization Independence.",
+          "params": [
+            {
+              "name": "userProfileId",
+              "description": "The unique identifier of the user profile, matching `request.auth.uid`."
+            },
+            {
+              "name": "addressId",
+              "description": "The unique identifier of the address."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/userProfiles/{userProfileId}/orders/{orderId}",
+        "definition": {
+          "entityName": "Order",
+          "schema": {
+            "$ref": "#/backend/entities/Order"
+          },
+          "description": "Stores purchase orders for a specific user. Access is restricted to the owner (`request.auth.uid` must match the parent `{userProfileId}`). The `userProfileId` field is denormalized in each document to match the parent path's `{userProfileId}`, ensuring Authorization Independence and supporting QAPs for list operations.",
+          "params": [
+            {
+              "name": "userProfileId",
+              "description": "The unique identifier of the user profile, matching `request.auth.uid`."
+            },
+            {
+              "name": "orderId",
+              "description": "The unique identifier of the order."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/userProfiles/{userProfileId}/orders/{orderId}/orderItems/{orderItemId}",
+        "definition": {
+          "entityName": "OrderItem",
+          "schema": {
+            "$ref": "#/backend/entities/OrderItem"
+          },
+          "description": "Stores individual items within a specific order. Access is restricted to the owner of the parent order (`request.auth.uid` must match the grandparent `{userProfileId}`). The `orderId` field is denormalized to match the parent path's `{orderId}`. For full Authorization Independence, `userProfileId` should ideally also be denormalized into this document.",
+          "params": [
+            {
+              "name": "userProfileId",
+              "description": "The unique identifier of the user profile, matching `request.auth.uid`."
+            },
+            {
+              "name": "orderId",
+              "description": "The unique identifier of the parent order."
+            },
+            {
+              "name": "orderItemId",
+              "description": "The unique identifier of the order item."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/products/{productId}",
+        "definition": {
+          "entityName": "Product",
+          "schema": {
+            "$ref": "#/backend/entities/Product"
+          },
+          "description": "Contains details of all available products. Publicly readable by anyone. Writes are restricted to administrators. This collection has a homogeneous security posture (public read / admin write).",
+          "params": [
+            {
+              "name": "productId",
+              "description": "The unique identifier of the product."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/categories/{categoryId}",
+        "definition": {
+          "entityName": "Category",
+          "schema": {
+            "$ref": "#/backend/entities/Category"
+          },
+          "description": "Defines product categories for navigation. Publicly readable by anyone. Writes are restricted to administrators. This collection has a homogeneous security posture (public read / admin write).",
+          "params": [
+            {
+              "name": "categoryId",
+              "description": "The unique identifier of the category."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/products/{productId}/reviews/{reviewId}",
+        "definition": {
+          "entityName": "ProductReview",
+          "schema": {
+            "$ref": "#/backend/entities/ProductReview"
+          },
+          "description": "Stores reviews for products. Publicly readable only if `isApproved` is true. Writable only by the `userProfileId` specified in the document (which must match `request.auth.uid`) or by administrators. The `productId` and `userProfileId` fields are denormalized for Authorization Independence and QAPs.",
+          "params": [
+            {
+              "name": "productId",
+              "description": "The unique identifier of the product being reviewed."
+            },
+            {
+              "name": "reviewId",
+              "description": "The unique identifier of the review."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/promotionalContent/{contentId}",
+        "definition": {
+          "entityName": "PromotionalContent",
+          "schema": {
+            "$ref": "#/backend/entities/PromotionalContent"
+          },
+          "description": "Manages various promotional banners and content sections. Publicly readable by anyone. Writes are restricted to administrators. This collection has a homogeneous security posture (public read / admin write).",
+          "params": [
+            {
+              "name": "contentId",
+              "description": "The unique identifier for the promotional content."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/newsletterSubscribers/{subscriberId}",
+        "definition": {
+          "entityName": "NewsletterSubscriber",
+          "schema": {
+            "$ref": "#/backend/entities/NewsletterSubscriber"
+          },
+          "description": "Stores email subscriptions for newsletters. Users can only create new subscriptions. Reads, updates, and deletes are restricted to administrators. Supports Structural Segregation by intent.",
+          "params": [
+            {
+              "name": "subscriberId",
+              "description": "The unique identifier for the newsletter subscriber (e.g., hash of email or a unique ID)."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/contactSubmissions/{submissionId}",
+        "definition": {
+          "entityName": "ContactSubmission",
+          "schema": {
+            "$ref": "#/backend/entities/ContactSubmission"
+          },
+          "description": "Records messages submitted through the contact form. Anyone (authenticated or unauthenticated) can create a submission. Reads, updates, and deletes are restricted to administrators. Supports Structural Segregation by intent.",
+          "params": [
+            {
+              "name": "submissionId",
+              "description": "The unique identifier for the contact submission."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/exclusiveExperiences/{experienceId}",
+        "definition": {
+          "entityName": "ExclusiveExperience",
+          "schema": {
+            "$ref": "#/backend/entities/ExclusiveExperience"
+          },
+          "description": "Details unique services and events. Publicly readable by anyone. Writes are restricted to administrators. This collection has a homogeneous security posture (public read / admin write).",
+          "params": [
+            {
+              "name": "experienceId",
+              "description": "The unique identifier for the exclusive experience."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/roles_admin/{adminId}",
+        "definition": {
+          "entityName": "UserProfile",
+          "schema": {
+            "$ref": "#/backend/entities/UserProfile"
+          },
+          "description": "This collection determines administrative roles using 'Existence over Content'. If a document exists at `/roles_admin/{request.auth.uid}`, the user is an admin. Documents typically contain minimal data, serving solely for role checking. Access to this collection is restricted to administrators.",
+          "params": [
+            {
+              "name": "adminId",
+              "description": "The unique identifier of the user who has administrator privileges (must match `request.auth.uid`)."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed following the core principles of Authorization Independence, Structural Segregation, and consistent Access Modeling to ensure robust, debuggable, and scalable security rules.  \n\n**Authorization Independence:**\n*   For all user-specific and user-owned data (UserProfile, Address, Order, OrderItem), the `userProfileId` is either directly embedded in the collection path (e.g., `/userProfiles/{userProfileId}`) or explicitly denormalized within the document itself and also mirrored in a parent path segment (e.g., `/userProfiles/{userProfileId}/addresses/{addressId}` where `address.userProfileId` must match `{userProfileId}`). This eliminates the need for expensive and complex `get()` calls in security rules to verify ownership, enabling atomic operations and simplifying debugging. Specifically for `OrderItem`, while its schema only contains `orderId`, for full authorization independence, `userProfileId` would ideally also be present in each `OrderItem` document to directly link it to the owner without traversing up to the `Order` document via `get()`. However, the current nested path structure (`/userProfiles/{userProfileId}/orders/{orderId}/orderItems/{orderItemId}`) still allows rules to efficiently check `request.auth.uid == userProfileId` from the path for ownership.\n*   For `ProductReview`, the `userProfileId` field is included in the document, allowing direct ownership verification (`resource.data.userProfileId == request.auth.uid`) without `get()` calls.\n\n**Structural Segregation (Homogeneous Security Posture):**\n*   Publicly viewable content (Products, Categories, Promotional Content, Exclusive Experiences) is stored in top-level collections (e.g., `/products`, `/categories`), ensuring all documents within these collections share a common 'public read' security posture. This simplifies rules significantly as there's no need for complex conditional logic based on document content for public access.\n*   User-private data is segregated into subcollections under a user-specific path (`/userProfiles/{userProfileId}/addresses`, `/userProfiles/{userProfileId}/orders`). All documents within these subcollections intrinsically belong to the `{userProfileId}` in the path.\n*   Admin-managed data (Newsletter Subscribers, Contact Submissions) are in dedicated collections. While users can *create* new `NewsletterSubscriber` and `ContactSubmission` entries, only administrators have read/update/delete access, clearly segregating management responsibilities.\n*   An explicit `/roles_admin/{uid}` collection is used for global administrator roles, leveraging 'Existence over Content' for role-based access control without custom claims.\n\n**QAPs (Rules are not Filters):**\n*   For public collections (`/products`, `/categories`, etc.), `list` operations are inherently secure as all documents are publicly readable. Rules grant `read` access broadly.\n*   For user-owned collections (`/userProfiles/{userProfileId}/addresses`, `/userProfiles/{userProfileId}/orders`), the path-based ownership (`{userProfileId} == request.auth.uid`) automatically enforces QAPs. A `list` operation will only return documents whose parent path matches the authenticated user's ID, effectively pre-filtering the results by the security rules.\n*   For `ProductReview` (`/products/{productId}/reviews`), rules will enforce `allow read: if resource.data.isApproved == true;` for public visibility. This ensures that `list` queries will only ever return approved reviews, upholding QAPs by not exposing unapproved content that a user is unauthorized to see, even if they explicitly query for it. Any unapproved reviews will simply not be returned by a `list` query for non-admin users, making the rules effectively filter without being actual database filters.\n\nThis structure prioritizes explicit access control, minimizes rule complexity, and enhances the overall security and maintainability of the application."
+  }
+}
