@@ -1,5 +1,7 @@
+
 "use client";
 
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -9,7 +11,8 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
-import { Plus, Clock, Sparkles } from "lucide-react";
+import { Plus, Clock, Sparkles, Check } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const massages = [
     {
@@ -66,9 +69,16 @@ const massages = [
     }
 ];
 
-
 export default function MassageMenu() {
     const { addToCart } = useCart();
+    const [addedId, setAddedId] = useState<string | null>(null);
+
+    const handleAddToCart = (item: any) => {
+        const uniqueId = `${item.title}-${item.duration}`;
+        addToCart(item);
+        setAddedId(uniqueId);
+        setTimeout(() => setAddedId(null), 2000);
+    };
 
     return (
         <section id="massage-menu" className="py-20 sm:py-32 bg-white overflow-hidden">
@@ -78,7 +88,7 @@ export default function MassageMenu() {
                         <Sparkles className="w-3.5 h-3.5" />
                         Bienestar Premium
                     </div>
-                    <h1 className="text-5xl sm:text-7xl font-bold text-gray-900 mb-8">Menú de Experiencias</h1>
+                    <h1 className="text-5xl sm:text-7xl font-bold text-gray-900 mb-8 font-headline">Menú de Experiencias</h1>
                     <p className="mt-4 text-gray-500 max-w-2xl mx-auto text-lg leading-relaxed">
                         Cada tratamiento es un ritual personalizado diseñado para restaurar tu armonía interior. Descubre el arte del bienestar en cada toque.
                     </p>
@@ -95,34 +105,52 @@ export default function MassageMenu() {
                                 <div className="flex justify-between items-start mb-2">
                                     <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary/70">{massage.subtitle}</p>
                                 </div>
-                                <CardTitle className="text-3xl font-bold text-gray-900 group-hover:text-primary transition-colors duration-500">{massage.title}</CardTitle>
+                                <CardTitle className="text-3xl font-bold text-gray-900 group-hover:text-primary transition-colors duration-500 font-headline">{massage.title}</CardTitle>
                             </CardHeader>
                             <CardContent className="flex-grow flex flex-col justify-between">
                                 <CardDescription className="mb-8 text-gray-600 text-base leading-relaxed">{massage.description}</CardDescription>
                                 
                                 <div className="space-y-3">
-                                    {massage.prices.map((p, i) => (
-                                        <div 
-                                            key={i} 
-                                            className="flex justify-between items-center p-4 rounded-2xl bg-white/50 border border-transparent hover:border-primary/20 hover:bg-white transition-all duration-300 group/item"
-                                        >
-                                            <div className="flex items-center gap-3">
-                                                <Clock className="w-4 h-4 text-primary/60" />
-                                                <span className="text-sm font-semibold text-gray-500 uppercase tracking-widest">{p.duration} min</span>
+                                    {massage.prices.map((p, i) => {
+                                        const uniqueId = `${massage.title}-${p.duration}`;
+                                        const isAdded = addedId === uniqueId;
+                                        
+                                        return (
+                                            <div 
+                                                key={i} 
+                                                className={cn(
+                                                    "flex justify-between items-center p-4 rounded-2xl bg-white/50 border transition-all duration-300 group/item",
+                                                    isAdded ? "border-accent bg-white" : "border-transparent hover:border-primary/20 hover:bg-white"
+                                                )}
+                                            >
+                                                <div className="flex items-center gap-3">
+                                                    <Clock className="w-4 h-4 text-primary/60" />
+                                                    <span className="text-sm font-semibold text-gray-500 uppercase tracking-widest">{p.duration} min</span>
+                                                </div>
+                                                <div className="flex items-center gap-4">
+                                                    <span className="font-bold text-2xl text-primary font-headline">${p.price.toLocaleString()}</span>
+                                                    <Button 
+                                                        size="sm" 
+                                                        variant="ghost" 
+                                                        className={cn(
+                                                            "rounded-full w-10 h-10 p-0 transition-all duration-500 active:scale-95",
+                                                            isAdded 
+                                                                ? "bg-accent text-white scale-110" 
+                                                                : "bg-primary text-white hover:bg-accent"
+                                                        )}
+                                                        onClick={() => handleAddToCart({ title: massage.title, subtitle: massage.subtitle, price: p.price, duration: p.duration })}
+                                                    >
+                                                        {isAdded ? (
+                                                            <Check className="h-5 w-5 animate-scaleIn" />
+                                                        ) : (
+                                                            <Plus className="h-5 w-5" />
+                                                        )}
+                                                        <span className="sr-only">Añadir</span>
+                                                    </Button>
+                                                </div>
                                             </div>
-                                            <div className="flex items-center gap-4">
-                                                <span className="font-bold text-lg text-gray-900">${p.price.toLocaleString()}</span>
-                                                <Button 
-                                                    size="sm" 
-                                                    variant="ghost" 
-                                                    className="rounded-full w-9 h-9 p-0 hover:bg-primary hover:text-white transition-all duration-500"
-                                                    onClick={() => addToCart({ title: massage.title, subtitle: massage.subtitle, price: p.price, duration: p.duration })}>
-                                                    <Plus className="h-5 w-5" />
-                                                    <span className="sr-only">Añadir</span>
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    ))}
+                                        );
+                                    })}
                                 </div>
                             </CardContent>
                         </Card>
