@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -94,23 +93,23 @@ export default function MassageMenu() {
                     </p>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
                     {massages.map((massage, index) => (
                         <Card 
                             key={index} 
-                            className="group flex flex-col bg-secondary/30 border-none shadow-none hover-lift animate-fadeIn opacity-0"
+                            className="group flex flex-col bg-secondary/20 border-none shadow-none hover-lift animate-fadeIn opacity-0 rounded-[2rem] overflow-hidden"
                             style={{ animationDelay: `${400 + index * 100}ms` }}
                         >
-                            <CardHeader className="pb-4">
+                            <CardHeader className="pb-4 pt-8 px-8">
                                 <div className="flex justify-between items-start mb-2">
-                                    <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary/70">{massage.subtitle}</p>
+                                    <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary/60">{massage.subtitle}</p>
                                 </div>
-                                <CardTitle className="text-3xl font-bold text-gray-900 group-hover:text-primary transition-colors duration-500 font-headline">{massage.title}</CardTitle>
+                                <CardTitle className="text-3xl font-bold text-gray-900 group-hover:text-primary transition-colors duration-500 font-headline leading-tight">{massage.title}</CardTitle>
                             </CardHeader>
-                            <CardContent className="flex-grow flex flex-col justify-between">
+                            <CardContent className="flex-grow flex flex-col justify-between px-8 pb-8">
                                 <CardDescription className="mb-8 text-gray-600 text-base leading-relaxed">{massage.description}</CardDescription>
                                 
-                                <div className="space-y-3">
+                                <div className="space-y-4">
                                     {massage.prices.map((p, i) => {
                                         const uniqueId = `${massage.title}-${p.duration}`;
                                         const isAdded = addedId === uniqueId;
@@ -119,33 +118,40 @@ export default function MassageMenu() {
                                             <div 
                                                 key={i} 
                                                 className={cn(
-                                                    "flex justify-between items-center p-4 rounded-2xl bg-white/50 border transition-all duration-300 group/item",
-                                                    isAdded ? "border-accent bg-white" : "border-transparent hover:border-primary/20 hover:bg-white"
+                                                    "flex justify-between items-center p-5 rounded-3xl bg-white/80 border transition-all duration-500 group/item relative overflow-hidden",
+                                                    isAdded 
+                                                        ? "border-accent shadow-[0_0_20px_rgba(201,168,76,0.2)]" 
+                                                        : "border-transparent hover:border-primary/20 hover:shadow-xl hover:-translate-y-1"
                                                 )}
                                             >
-                                                <div className="flex items-center gap-3">
-                                                    <Clock className="w-4 h-4 text-primary/60" />
-                                                    <span className="text-sm font-semibold text-gray-500 uppercase tracking-widest">{p.duration} min</span>
+                                                <div className="flex items-center gap-3 z-10">
+                                                    <Clock className="w-4 h-4 text-primary/50 group-hover/item:text-primary transition-colors" />
+                                                    <span className="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] group-hover/item:text-gray-600 transition-colors">{p.duration} min</span>
                                                 </div>
-                                                <div className="flex items-center gap-4">
-                                                    <span className="font-bold text-2xl text-primary font-headline">${p.price.toLocaleString()}</span>
+                                                <div className="flex items-center gap-4 z-10">
+                                                    <span className="font-bold text-2xl text-primary font-headline tracking-tight">${p.price.toLocaleString()}</span>
                                                     <Button 
-                                                        size="sm" 
+                                                        size="icon" 
                                                         variant="ghost" 
                                                         className={cn(
-                                                            "rounded-full w-10 h-10 p-0 transition-all duration-500 active:scale-95",
+                                                            "rounded-full w-12 h-12 p-0 transition-all duration-500 active:scale-90 shadow-lg relative group/btn",
                                                             isAdded 
-                                                                ? "bg-accent text-white scale-110" 
-                                                                : "bg-primary text-white hover:bg-accent"
+                                                                ? "bg-accent text-white scale-110 rotate-[360deg]" 
+                                                                : "bg-primary text-white hover:bg-accent hover:shadow-accent/40"
                                                         )}
                                                         onClick={() => handleAddToCart({ title: massage.title, subtitle: massage.subtitle, price: p.price, duration: p.duration })}
                                                     >
-                                                        {isAdded ? (
-                                                            <Check className="h-5 w-5 animate-scaleIn" />
-                                                        ) : (
-                                                            <Plus className="h-5 w-5" />
+                                                        <div className="relative w-full h-full flex items-center justify-center">
+                                                            {isAdded ? (
+                                                                <Check className="h-6 w-6 animate-scaleIn" />
+                                                            ) : (
+                                                                <Plus className="h-6 w-6 transition-transform duration-700 group-hover/btn:rotate-180" />
+                                                            )}
+                                                        </div>
+                                                        {/* Efecto de pulso sutil cuando no está añadido */}
+                                                        {!isAdded && (
+                                                            <span className="absolute inset-0 rounded-full bg-primary/20 animate-ping opacity-0 group-hover/btn:opacity-100 duration-1000"></span>
                                                         )}
-                                                        <span className="sr-only">Añadir</span>
                                                     </Button>
                                                 </div>
                                             </div>
