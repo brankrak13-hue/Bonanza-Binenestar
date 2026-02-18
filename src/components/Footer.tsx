@@ -10,13 +10,13 @@ import { Instagram } from "lucide-react";
 const footerLinks = {
     'Navegación': [
         { title: 'Inicio', href: '#home' },
-        { title: 'Servicios', href: '/servicios' },
+        { title: 'Servicios', href: '/#services' },
         { title: 'Sobre Nosotros', href: '#about' },
         { title: 'Contacto', href: '#contact' },
     ],
     'Servicios': [
         { title: 'Masaje Facial', href: '/servicios' },
-        { title: 'Sound Healing', href: '#' },
+        { title: 'Sound Healing', href: '/#contact' },
         { title: 'Paquetes', href: '#' },
         { title: 'Tarjetas de Regalo', href: '#' },
     ],
