@@ -4,7 +4,7 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Instagram, MapPin, Phone, Calendar as CalendarIcon, MessageCircle, Clock } from "lucide-react";
+import { Instagram, MapPin, Phone, Calendar as CalendarIcon, MessageCircle, Clock, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -107,7 +107,11 @@ export default function Contact() {
             <Textarea placeholder="Cuéntanos un poco sobre lo que buscas..." className="bg-secondary/20 border-transparent focus:bg-white min-h-[120px] rounded-xl" />
           </div>
 
-          <div className="text-center pt-4">
+          <div className="flex flex-col items-center gap-4 pt-4">
+            <div className="flex items-center gap-2 text-xs text-gray-400 bg-gray-50 px-4 py-2 rounded-full border border-gray-100">
+              <ShieldCheck className="w-4 h-4 text-primary" />
+              Protección Humana Antihackeos Activa (App Check)
+            </div>
             <Button type="submit" size="lg" className="btn-primary w-full sm:w-auto px-12 h-14">
               Solicitar Disponibilidad
             </Button>
