@@ -8,14 +8,24 @@ import { Instagram, MapPin, Phone, Calendar as CalendarIcon, MessageCircle, Cloc
 import Image from "next/image";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
 export default function Contact() {
   const [date, setDate] = React.useState<Date>();
+  const [isCalendarOpen, setIsCalendarOpen] = React.useState(false);
+  const [selectedTime, setSelectedTime] = React.useState<string>("7:30 AM");
 
   const whatsappLink = "https://wa.me/529843143457?text=Hola,%20quisiera%20reservar%20una%20sesión%20de%20Sound%20Healing%20o%20Masaje.";
+
+  const handleDateSelect = (d: Date | undefined) => {
+    setDate(d);
+    // El Popover se cerrará automáticamente con su animación de salida al cambiar este estado
+    setIsCalendarOpen(false);
+  };
 
   return (
     <section id="contact" className="bg-secondary/30 py-16 sm:py-24">
@@ -36,7 +46,7 @@ export default function Contact() {
                     </div>
                     <div>
                         <h3 className="font-bold text-gray-900 uppercase tracking-widest text-sm">Sesiones de Sound Healing</h3>
-                        <p className="text-gray-500 text-sm">Todos los días a las <span className="text-primary font-bold">7:30 AM</span> y <span className="text-primary font-bold">8:00 PM</span></p>
+                        <p className="text-gray-500 text-sm">Sesiones todos los días a las <span className="text-primary font-bold">7:30 AM</span> y <span className="text-primary font-bold">8:00 PM</span></p>
                     </div>
                 </div>
                 <Button asChild className="btn-primary h-12 rounded-full px-8 bg-accent hover:bg-accent/90">
@@ -63,7 +73,7 @@ export default function Contact() {
             </a>
         </div>
 
-        <form className="space-y-6 bg-white p-8 sm:p-10 rounded-[2.5rem] shadow-xl border border-white/20 animate-fadeIn" style={{ animationDelay: '200ms' }}>
+        <form className="space-y-8 bg-white p-8 sm:p-10 rounded-[2.5rem] shadow-xl border border-white/20 animate-fadeIn" style={{ animationDelay: '200ms' }}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="space-y-2">
                 <label className="text-[10px] uppercase tracking-widest font-bold text-gray-400 ml-1">Tu Nombre</label>
@@ -75,31 +85,51 @@ export default function Contact() {
             </div>
           </div>
           
-          <div className="space-y-2">
-            <label className="text-[10px] uppercase tracking-widest font-bold text-gray-400 ml-1">¿Cuándo quieres visitarnos?</label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant={"outline"}
-                  className={cn(
-                    "w-full justify-start text-left font-normal bg-secondary/20 border-transparent h-12 rounded-xl",
-                    !date && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {date ? format(date, "PPP", { locale: es }) : <span>Selecciona una fecha</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  onSelect={setDate}
-                  initialFocus
-                  locale={es}
-                />
-              </PopoverContent>
-            </Popover>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-2">
+              <label className="text-[10px] uppercase tracking-widest font-bold text-gray-400 ml-1">¿Cuándo quieres visitarnos?</label>
+              <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className={cn(
+                      "w-full justify-start text-left font-normal bg-secondary/20 border-transparent h-12 rounded-xl",
+                      !date && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {date ? format(date, "PPP", { locale: es }) : <span>Selecciona una fecha</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={handleDateSelect}
+                    initialFocus
+                    locale={es}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            <div className="space-y-4">
+              <label className="text-[10px] uppercase tracking-widest font-bold text-gray-400 ml-1">Horario Preferido</label>
+              <RadioGroup 
+                value={selectedTime} 
+                onValueChange={setSelectedTime} 
+                className="grid grid-cols-2 gap-4"
+              >
+                <div className="flex items-center space-x-2 bg-secondary/20 p-3 rounded-xl border border-transparent hover:border-primary/20 transition-all cursor-pointer">
+                  <RadioGroupItem value="7:30 AM" id="morning" />
+                  <Label htmlFor="morning" className="text-xs font-semibold cursor-pointer">7:30 AM</Label>
+                </div>
+                <div className="flex items-center space-x-2 bg-secondary/20 p-3 rounded-xl border border-transparent hover:border-primary/20 transition-all cursor-pointer">
+                  <RadioGroupItem value="8:00 PM" id="evening" />
+                  <Label htmlFor="evening" className="text-xs font-semibold cursor-pointer">8:00 PM</Label>
+                </div>
+              </RadioGroup>
+            </div>
           </div>
 
           <div className="space-y-2">
