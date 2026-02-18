@@ -12,8 +12,10 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
-import { Minus, Plus, Trash2, ShoppingCart, Loader2 } from "lucide-react";
+import { Minus, Plus, Trash2, ShoppingCart, Loader2, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useUser } from "@/firebase";
+import AuthModal from "@/components/AuthModal";
 
 const GooglePayButton = dynamic(
   () => import('@google-pay/button-react'),
@@ -23,7 +25,6 @@ const GooglePayButton = dynamic(
   }
 );
 
-
 interface CartSidebarProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -32,6 +33,8 @@ interface CartSidebarProps {
 export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
   const { cartItems, removeFromCart, updateQuantity, totalPrice, cartCount, clearCart } = useCart();
   const [processingPayment, setProcessingPayment] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const { user } = useUser();
   const { toast } = useToast();
 
   const handlePayment = async (paymentRequest: google.payments.api.PaymentData) => {
@@ -43,7 +46,10 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(paymentRequest),
+        body: JSON.stringify({
+          ...paymentRequest,
+          userId: user?.uid || 'guest',
+        }),
       });
 
       const result = await response.json();
@@ -71,120 +77,126 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
 
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="flex flex-col">
-        <SheetHeader>
-          <SheetTitle>Tu Carrito ({cartCount})</SheetTitle>
-        </SheetHeader>
-        {cartItems.length === 0 ? (
-          <div className="flex-grow flex flex-col items-center justify-center text-center">
-             <ShoppingCart className="w-16 h-16 text-muted-foreground mb-4"/>
-            <p className="text-xl font-semibold">Tu carrito está vacío</p>
-            <p className="text-muted-foreground">Agrega servicios para verlos aquí.</p>
-            <SheetClose asChild>
-                <Button variant="outline" className="mt-6">Seguir comprando</Button>
-            </SheetClose>
-          </div>
-        ) : (
-          <>
-            <div className="flex-grow overflow-y-auto -mx-6 px-6">
-              <div className="space-y-4">
-                {cartItems.map(item => (
-                  <div key={item.id} className="flex items-start justify-between gap-4">
-                    <div className="flex-grow">
-                      <p className="font-semibold">{item.title}</p>
-                      <p className="text-sm text-muted-foreground">{item.subtitle} - {item.duration} min</p>
-                      <p className="text-sm font-semibold text-primary">${item.price.toLocaleString()}</p>
-                       <div className="flex items-center gap-2 mt-2">
-                        <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => updateQuantity(item.id, item.quantity - 1)}>
-                          <Minus className="h-3 w-3" />
-                        </Button>
-                        <span className="w-6 text-center">{item.quantity}</span>
-                        <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => updateQuantity(item.id, item.quantity + 1)}>
-                          <Plus className="h-3 w-3" />
+    <>
+      <Sheet open={open} onOpenChange={onOpenChange}>
+        <SheetContent className="flex flex-col">
+          <SheetHeader>
+            <SheetTitle>Tu Carrito ({cartCount})</SheetTitle>
+          </SheetHeader>
+          {cartItems.length === 0 ? (
+            <div className="flex-grow flex flex-col items-center justify-center text-center">
+               <ShoppingCart className="w-16 h-16 text-muted-foreground mb-4"/>
+              <p className="text-xl font-semibold">Tu carrito está vacío</p>
+              <p className="text-muted-foreground">Agrega servicios para verlos aquí.</p>
+              <SheetClose asChild>
+                  <Button variant="outline" className="mt-6">Seguir comprando</Button>
+              </SheetClose>
+            </div>
+          ) : (
+            <>
+              <div className="flex-grow overflow-y-auto -mx-6 px-6">
+                {!user && (
+                  <div className="mb-6 p-4 bg-primary/5 border border-primary/20 rounded-lg">
+                    <div className="flex items-start gap-3">
+                      <User className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-sm font-medium">¿Quieres guardar tu historial?</p>
+                        <p className="text-xs text-muted-foreground mb-2">Inicia sesión para registrar tus servicios y acumular beneficios.</p>
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="h-7 text-xs"
+                          onClick={() => setIsAuthModalOpen(true)}
+                        >
+                          Iniciar Sesión
                         </Button>
                       </div>
                     </div>
-                    <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-destructive h-8 w-8" onClick={() => removeFromCart(item.id)}>
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
                   </div>
-                ))}
+                )}
+                
+                <div className="space-y-4">
+                  {cartItems.map(item => (
+                    <div key={item.id} className="flex items-start justify-between gap-4">
+                      <div className="flex-grow">
+                        <p className="font-semibold">{item.title}</p>
+                        <p className="text-sm text-muted-foreground">{item.subtitle} - {item.duration} min</p>
+                        <p className="text-sm font-semibold text-primary">${item.price.toLocaleString()}</p>
+                         <div className="flex items-center gap-2 mt-2">
+                          <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => updateQuantity(item.id, item.quantity - 1)}>
+                            <Minus className="h-3 w-3" />
+                          </Button>
+                          <span className="w-6 text-center">{item.quantity}</span>
+                          <Button variant="outline" size="icon" className="h-6 w-6" onClick={() => updateQuantity(item.id, item.quantity + 1)}>
+                            <Plus className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      </div>
+                      <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-destructive h-8 w-8" onClick={() => removeFromCart(item.id)}>
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-            <SheetFooter className="mt-auto pt-6 border-t">
-              <div className="w-full space-y-4">
-                <div className="flex justify-between font-semibold">
-                  <span>Subtotal</span>
-                  <span>${totalPrice.toLocaleString()}</span>
-                </div>
-                <p className="text-xs text-muted-foreground">
-                  Los impuestos y costos de envío se calculan al finalizar la compra.
-                </p>
-                <Button className="w-full" disabled={processingPayment}>
-                  Proceder al Pago
-                </Button>
-                <div className="relative flex items-center justify-center my-2">
-                    <div className="absolute inset-0 flex items-center">
-                        <span className="w-full border-t"></span>
-                    </div>
-                    <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-background px-2 text-muted-foreground">O</span>
-                    </div>
-                </div>
-                <GooglePayButton
-                  environment="TEST"
-                  paymentRequest={{
-                    apiVersion: 2,
-                    apiVersionMinor: 0,
-                    allowedPaymentMethods: [
-                      {
-                        type: 'CARD',
-                        parameters: {
-                          allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
-                          allowedCardNetworks: ['MASTERCARD', 'VISA'],
-                        },
-                        tokenizationSpecification: {
-                          type: 'PAYMENT_GATEWAY',
+              <SheetFooter className="mt-auto pt-6 border-t">
+                <div className="w-full space-y-4">
+                  <div className="flex justify-between font-semibold">
+                    <span>Subtotal</span>
+                    <span>${totalPrice.toLocaleString()}</span>
+                  </div>
+                  
+                  <GooglePayButton
+                    environment="TEST"
+                    paymentRequest={{
+                      apiVersion: 2,
+                      apiVersionMinor: 0,
+                      allowedPaymentMethods: [
+                        {
+                          type: 'CARD',
                           parameters: {
-                            gateway: 'example',
-                            gatewayMerchantId: 'exampleGatewayMerchantId',
+                            allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
+                            allowedCardNetworks: ['MASTERCARD', 'VISA'],
+                          },
+                          tokenizationSpecification: {
+                            type: 'PAYMENT_GATEWAY',
+                            parameters: {
+                              gateway: 'example',
+                              gatewayMerchantId: 'exampleGatewayMerchantId',
+                            },
                           },
                         },
+                      ],
+                      merchantInfo: {
+                        merchantId: '12345678901234567890',
+                        merchantName: 'Bonanza Arte & Bienestar',
                       },
-                    ],
-                    merchantInfo: {
-                      merchantId: '12345678901234567890',
-                      merchantName: 'Bonanza Arte & Bienestar',
-                    },
-                    transactionInfo: {
-                      totalPriceStatus: 'FINAL',
-                      totalPriceLabel: 'Total',
-                      totalPrice: totalPrice.toFixed(2),
-                      currencyCode: 'MXN',
-                      countryCode: 'MX',
-                    },
-                  }}
-                  onLoadPaymentData={handlePayment}
-                  buttonType="pay"
-                  buttonColor="black"
-                  className="w-full"
-                  disabled={processingPayment || cartCount === 0}
-                />
-                 {processingPayment ? (
-                    <p className="text-xs text-muted-foreground text-center pt-2 flex items-center justify-center gap-2">
-                        <Loader2 className="h-4 w-4 animate-spin" /> Procesando pago...
-                    </p>
-                 ) : (
-                    <p className="text-xs text-muted-foreground text-center pt-2">
-                      La integración de Google Pay es para fines de demostración. Se requiere configuración de backend para procesar pagos reales.
-                    </p>
-                 )}
-              </div>
-            </SheetFooter>
-          </>
-        )}
-      </SheetContent>
-    </Sheet>
+                      transactionInfo: {
+                        totalPriceStatus: 'FINAL',
+                        totalPriceLabel: 'Total',
+                        totalPrice: totalPrice.toFixed(2),
+                        currencyCode: 'MXN',
+                        countryCode: 'MX',
+                      },
+                    }}
+                    onLoadPaymentData={handlePayment}
+                    buttonType="pay"
+                    buttonColor="black"
+                    className="w-full"
+                    disabled={processingPayment || cartCount === 0}
+                  />
+                   {processingPayment && (
+                      <p className="text-xs text-muted-foreground text-center pt-2 flex items-center justify-center gap-2">
+                          <Loader2 className="h-4 w-4 animate-spin" /> Procesando pago...
+                      </p>
+                   )}
+                </div>
+              </SheetFooter>
+            </>
+          )}
+        </SheetContent>
+      </Sheet>
+      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
+    </>
   );
 }

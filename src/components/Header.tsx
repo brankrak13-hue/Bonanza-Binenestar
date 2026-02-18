@@ -2,17 +2,33 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Search, ShoppingBag, User, Menu, X } from "lucide-react";
+import { Search, ShoppingBag, User, Menu, X, LogOut } from "lucide-react";
 import { LotusIcon } from "@/components/icons/LotusIcon";
 import { useCart } from "@/context/CartContext";
 import CartSidebar from "@/components/CartSidebar";
+import AuthModal from "@/components/AuthModal";
 import { Badge } from "@/components/ui/badge";
+import { useUser, useAuth } from "@/firebase";
+import { signOut } from "firebase/auth";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isBannerVisible, setIsBannerVisible] = useState(true);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const { cartCount } = useCart();
+  const { user, isUserLoading } = useUser();
+  const auth = useAuth();
+  const { toast } = useToast();
 
   const navItems = [
     { name: "INICIO", href: "/" },
@@ -21,6 +37,15 @@ export default function Header() {
     { name: "SOBRE NOSOTROS", href: "/#about" },
     { name: "CONTACTO", href: "/#contact" },
   ];
+
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      toast({ title: "Sesión cerrada", description: "Vuelve pronto." });
+    } catch (error) {
+      toast({ variant: "destructive", title: "Error", description: "No se pudo cerrar la sesión." });
+    }
+  };
 
   return (
     <>
@@ -89,9 +114,42 @@ export default function Header() {
                 )}
               </button>
 
-              <button type="button" className="p-2 text-foreground/80 hover:text-foreground transition-colors">
-                <User className="w-5 h-5" />
-              </button>
+              {user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button type="button" className="p-2 text-primary hover:text-primary/80 transition-colors">
+                      <User className="w-5 h-5" />
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>
+                      <p className="text-sm font-medium">Hola, {user.displayName || 'Cliente'}</p>
+                      <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href="/perfil" className="cursor-pointer">Mi Perfil</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/pedidos" className="cursor-pointer">Mis Citas</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleSignOut} className="text-destructive cursor-pointer">
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Cerrar Sesión
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <button 
+                  type="button" 
+                  className="p-2 text-foreground/80 hover:text-foreground transition-colors"
+                  onClick={() => setIsAuthModalOpen(true)}
+                  disabled={isUserLoading}
+                >
+                  <User className="w-5 h-5" />
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -128,7 +186,9 @@ export default function Header() {
           </nav>
         </div>
       </div>
+      
       <CartSidebar open={isCartOpen} onOpenChange={setIsCartOpen} />
+      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
     </>
   );
 }
