@@ -106,12 +106,12 @@ export default function MassageMenu() {
                                 </div>
                                 <CardTitle className="text-3xl font-bold text-gray-900 group-hover:text-primary transition-colors duration-500 font-headline leading-tight">{massage.title}</CardTitle>
                             </CardHeader>
-                            <CardContent className="flex flex-col px-8 pb-8">
-                                <CardDescription className="mb-2 text-gray-600 text-base leading-relaxed">
+                            <CardContent className="flex-grow flex flex-col px-8 pb-8">
+                                <CardDescription className="flex-grow mb-6 text-gray-600 text-base leading-relaxed">
                                     {massage.description}
                                 </CardDescription>
                                 
-                                <div className="space-y-4 mt-2">
+                                <div className="space-y-4 mt-auto">
                                     {massage.prices.map((p, i) => {
                                         const uniqueId = `${massage.title}-${p.duration}`;
                                         const isAdded = addedId === uniqueId;
