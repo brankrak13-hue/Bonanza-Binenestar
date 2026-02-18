@@ -33,9 +33,10 @@ export default function Home() {
           <ProductShowcase
             subtitle="Vibraciones que Sanan"
             title="Terapia de Sound Healing"
-            description="Sumérgete en un baño de sonidos armónicos con cuencos tibetanos y otros instrumentos. El sound healing equilibra tus centros energéticos, reduce el estrés y te guía hacia un estado de meditación profunda."
+            description="Sumérgete en un baño de sonidos armónicos con cuencos tibetanos y otros instrumentos. Sesiones disponibles todos los días a las 7:30 AM y 8:00 PM para un equilibrio total."
             image={getPlaceholderImage('sound-healing')}
-            buttonText="Explorar Sesiones"
+            buttonText="Reservar Sesión"
+            buttonLink="#contact"
             reverse
           />
         </div>
