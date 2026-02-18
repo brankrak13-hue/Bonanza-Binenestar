@@ -21,8 +21,8 @@ const footerLinks = {
         { title: 'Tarjetas de Regalo', href: '#' },
     ],
     'Legal': [
-        { title: 'Términos y Condiciones', href: '#' },
-        { title: 'Política de Privacidad', href: '#' },
+        { title: 'Términos y Condiciones', href: '/terminos' },
+        { title: 'Política de Privacidad', href: '/privacidad' },
     ]
 };
 
