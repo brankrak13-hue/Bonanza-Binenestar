@@ -82,7 +82,7 @@ export default function MassageMenu() {
     return (
         <section id="massage-menu" className="py-20 sm:py-32 bg-white overflow-hidden">
             <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-20 animate-fadeIn opacity-0" style={{ animationDelay: '200ms' }}>
+                <div className="text-center mb-16 animate-fadeIn opacity-0" style={{ animationDelay: '200ms' }}>
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/5 text-primary text-xs font-bold tracking-[0.2em] uppercase mb-6">
                         <Sparkles className="w-3.5 h-3.5" />
                         Bienestar Premium
@@ -106,10 +106,10 @@ export default function MassageMenu() {
                                 </div>
                                 <CardTitle className="text-3xl font-bold text-gray-900 group-hover:text-primary transition-colors duration-500 font-headline leading-tight">{massage.title}</CardTitle>
                             </CardHeader>
-                            <CardContent className="flex-grow flex flex-col justify-between px-8 pb-8">
-                                <CardDescription className="mb-8 text-gray-600 text-base leading-relaxed">{massage.description}</CardDescription>
+                            <CardContent className="flex-grow flex flex-col px-8 pb-8">
+                                <CardDescription className="mb-5 text-gray-600 text-base leading-relaxed">{massage.description}</CardDescription>
                                 
-                                <div className="space-y-4">
+                                <div className="space-y-4 mt-auto">
                                     {massage.prices.map((p, i) => {
                                         const uniqueId = `${massage.title}-${p.duration}`;
                                         const isAdded = addedId === uniqueId;
@@ -148,7 +148,6 @@ export default function MassageMenu() {
                                                                 <Plus className="h-6 w-6 transition-transform duration-700 group-hover/btn:rotate-180" />
                                                             )}
                                                         </div>
-                                                        {/* Efecto de pulso sutil cuando no está añadido */}
                                                         {!isAdded && (
                                                             <span className="absolute inset-0 rounded-full bg-primary/20 animate-ping opacity-0 group-hover/btn:opacity-100 duration-1000"></span>
                                                         )}
