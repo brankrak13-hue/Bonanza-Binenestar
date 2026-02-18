@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from "next/image";
@@ -23,7 +22,7 @@ export default function HeroSection({ title, subtitle, description, buttonText, 
           alt={image.description}
           fill
           priority
-          className="object-cover transition-transform duration-[15000ms] ease-out scale-110 hover:scale-100"
+          className="object-cover animate-hero-zoom scale-110 hover:scale-100"
           data-ai-hint={image.imageHint}
         />
         <div className="absolute inset-0 bg-black/40 backdrop-grayscale-[0.2]" />
