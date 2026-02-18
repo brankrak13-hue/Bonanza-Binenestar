@@ -42,20 +42,20 @@ const massages = [
         ]
     },
     {
-        title: "Re-inicia tu Mente",
-        subtitle: "Cráneo Facial",
-        description: "Un tratamiento que llega a lo más profundo del cuerpo, ayudando a disolver tensiones arraigadas y devolviendo una sensación de descanso interno y renovación.",
-        prices: [
-            { price: 700, duration: 60 }
-        ]
-    },
-    {
         title: "Despertar Vital",
         subtitle: "Quiromasaje",
         description: "Manos intuitivas que liberan emociones cristalizadas en la espalda y hombros, transformando el dolor en relajación por liberar la carga.",
         prices: [
             { price: 800, duration: 60 },
             { price: 1000, duration: 90 }
+        ]
+    },
+    {
+        title: "Re-inicia tu Mente",
+        subtitle: "Cráneo Facial",
+        description: "Un tratamiento que llega a lo más profundo del cuerpo, ayudando a disolver tensiones arraigadas y devolviendo una sensación de descanso interno y renovación.",
+        prices: [
+            { price: 700, duration: 60 }
         ]
     },
     {
@@ -107,7 +107,9 @@ export default function MassageMenu() {
                                 <CardTitle className="text-3xl font-bold text-gray-900 group-hover:text-primary transition-colors duration-500 font-headline leading-tight">{massage.title}</CardTitle>
                             </CardHeader>
                             <CardContent className="flex flex-col px-8 pb-8">
-                                <CardDescription className="mb-2 text-gray-600 text-base leading-relaxed">{massage.description}</CardDescription>
+                                <CardDescription className="mb-2 text-gray-600 text-base leading-relaxed">
+                                    {massage.description}
+                                </CardDescription>
                                 
                                 <div className="space-y-4 mt-2">
                                     {massage.prices.map((p, i) => {
