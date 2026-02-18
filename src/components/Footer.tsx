@@ -15,10 +15,10 @@ const footerLinks = {
         { title: 'Contacto', href: '#contact' },
     ],
     'Servicios': [
+        { title: 'Masajes', href: '/servicios' },
         { title: 'Masaje Facial', href: '/servicios' },
         { title: 'Sound Healing', href: '/#contact' },
         { title: 'Paquetes', href: '#' },
-        { title: 'Tarjetas de Regalo', href: '#' },
     ],
     'Legal': [
         { title: 'Términos y Condiciones', href: '/terminos' },
