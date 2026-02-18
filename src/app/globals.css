@@ -23,7 +23,7 @@
     --border: 165 10% 89.8%;
     --input: 165 10% 89.8%;
     --ring: 165 60% 40%;
-    --radius: 0.5rem;
+    --radius: 0.75rem;
   }
   .dark {
     --background: 165 15% 5%;
@@ -53,64 +53,80 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground overflow-x-hidden;
   }
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    @apply font-headline;
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-headline tracking-tight;
   }
   /* Custom scrollbar */
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
   }
   ::-webkit-scrollbar-track {
     background: hsl(var(--secondary));
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-primary/50 rounded-md;
+    @apply bg-primary/30 rounded-full transition-colors;
   }
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-primary;
+    @apply bg-primary/60;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-primary text-primary-foreground border border-transparent px-8 py-3 text-sm tracking-widest uppercase font-medium transition-all duration-300 hover:bg-primary/90;
+    @apply bg-primary text-primary-foreground border border-transparent px-8 py-3 text-sm tracking-[0.15em] uppercase font-semibold transition-all duration-500 rounded-full shadow-md hover:bg-primary/90 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0;
   }
   .btn-outline {
-    @apply bg-transparent text-white border border-white px-8 py-3 text-sm tracking-widest uppercase font-medium transition-all duration-300 hover:bg-white hover:text-black;
+    @apply bg-transparent text-white border-2 border-white/80 px-8 py-3 text-sm tracking-[0.15em] uppercase font-semibold transition-all duration-500 rounded-full hover:bg-white hover:text-black hover:border-white hover:shadow-2xl hover:-translate-y-0.5;
+  }
+  .section-reveal {
+    @apply opacity-0 translate-y-8 animate-fadeIn;
   }
 }
 
 @layer utilities {
   .nav-link {
-    @apply relative;
+    @apply relative transition-colors duration-300;
   }
   .nav-link::after {
     content: '';
-    @apply absolute -bottom-1 left-0 w-0 h-px bg-foreground transition-all duration-300;
+    @apply absolute -bottom-1 left-1/2 w-0 h-0.5 bg-primary transition-all duration-500 -translate-x-1/2 rounded-full;
   }
   .nav-link:hover::after {
     @apply w-full;
   }
-  .category-overlay {
-    @apply absolute inset-0 bg-black/40 transition-all duration-300;
+  .glass-card {
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl;
   }
-  .category-card:hover .category-overlay {
-    @apply bg-black/20;
+  .hover-lift {
+    @apply transition-transform duration-500 hover:-translate-y-2 hover:shadow-2xl;
   }
-  .hover-zoom {
-    @apply overflow-hidden;
-  }
-  .hover-zoom img {
-    @apply transition-transform duration-700 ease-out;
-  }
-  .hover-zoom:hover img {
-    @apply scale-105;
-  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(2rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(-2rem); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.animate-slideIn {
+  animation: slideInRight 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }

@@ -4,7 +4,7 @@ import MassageMenu from '@/components/MassageMenu';
 
 export default function ServiciosPage() {
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background animate-in fade-in duration-1000">
       <Header />
       <MassageMenu />
       <Footer />
