@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from "react";
@@ -80,8 +79,8 @@ export default function Contact() {
                 <Input type="text" placeholder="Ej: Elena Garro" className="bg-secondary/10 border-transparent focus:border-primary/30 focus:bg-white h-14 rounded-2xl transition-all duration-300 px-6" />
             </div>
             <div className="space-y-3">
-                <label className="text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 ml-1">Tu Correo</label>
-                <Input type="email" placeholder="tu@email.com" className="bg-secondary/10 border-transparent focus:border-primary/30 focus:bg-white h-14 rounded-2xl transition-all duration-300 px-6" />
+                <label className="text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 ml-1">Correo o Número de contacto</label>
+                <Input type="text" placeholder="tu@email.com o 984 000 0000" className="bg-secondary/10 border-transparent focus:border-primary/30 focus:bg-white h-14 rounded-2xl transition-all duration-300 px-6" />
             </div>
           </div>
           
