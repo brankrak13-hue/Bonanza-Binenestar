@@ -198,23 +198,8 @@ export default function Contact() {
         <div className="mt-20 pt-16 border-t border-primary/5 text-center animate-fadeIn" style={{ animationDelay: '400ms' }}>
             <h3 className="text-2xl font-semibold text-foreground mb-4 font-headline tracking-wide uppercase">Acceso Directo a Agenda</h3>
             <p className="text-muted-foreground mb-10 max-w-lg mx-auto leading-relaxed">
-                Escanea el código QR para ver nuestra disponibilidad en tiempo real o haz{' '}
-                <a href="https://scanned.page/p/G9vdm4" target="_blank" rel="noopener noreferrer" className="text-primary font-bold underline decoration-primary/30 underline-offset-4 hover:text-accent hover:decoration-accent transition-all">
-                    clic aquí
-                </a>.
+                El acceso directo a la agenda digital estará disponible próximamente. Por ahora, puedes solicitar tu cita a través de nuestro formulario o vía WhatsApp.
             </p>
-            <div className="flex justify-center group">
-                <a href="https://scanned.page/p/G9vdm4" target="_blank" rel="noopener noreferrer" className="relative p-2">
-                    <div className="absolute -inset-4 bg-primary/5 rounded-[2.5rem] scale-90 group-hover:scale-100 transition-transform duration-700 -z-10 blur-sm"></div>
-                    <Image
-                      src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://scanned.page/p/G9vdm4"
-                      alt="Código QR para agendar cita"
-                      width={200}
-                      height={200}
-                      className="rounded-3xl shadow-2xl transition-all duration-700 group-hover:scale-105 group-hover:rotate-1"
-                    />
-                </a>
-            </div>
         </div>
 
       </div>
