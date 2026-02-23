@@ -1,8 +1,13 @@
+'use client';
+
 import Image from "next/image";
 import { getPlaceholderImage } from "@/lib/images";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function About() {
+  const { t } = useLanguage();
   const image = getPlaceholderImage("about-us");
+
   return (
     <section id="about" className="bg-white py-12 sm:py-16">
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -21,16 +26,16 @@ export default function About() {
           </div>
           <div className="text-center md:text-left">
             <p className="text-sm tracking-widest uppercase text-primary animate-slideIn" style={{ animationDelay: '100ms' }}>
-              Nuestra Fundadora
+              {t('about.subtitle')}
             </p>
             <h2 className="text-4xl lg:text-5xl font-semibold my-4 text-gray-900 animate-slideIn" style={{ animationDelay: '200ms' }}>
-              Conoce a Bonanza
+              {t('about.title')}
             </h2>
             <p className="text-gray-600 max-w-md mx-auto md:mx-0 leading-relaxed animate-slideIn mb-6" style={{ animationDelay: '300ms' }}>
-              Con una pasión por el bienestar integral y años de estudio en técnicas de sanación ancestrales, Bonanza fundó este espacio como un refugio para el alma. Su misión es guiarte en un viaje de autodescubrimiento y sanación, combinando el arte del tacto con el poder de la vibración.
+              {t('about.desc1')}
             </p>
-             <p className="text-gray-600 max-w-md mx-auto md:mx-0 leading-relaxed animate-slideIn" style={{ animationDelay: '400ms' }}>
-              "Creemos que la verdadera belleza emana de un estado de equilibrio interior. Nuestro propósito es ayudarte a encontrarlo."
+             <p className="text-gray-600 max-w-md mx-auto md:mx-0 leading-relaxed animate-slideIn font-medium italic" style={{ animationDelay: '400ms' }}>
+              "{t('about.desc2')}"
             </p>
           </div>
         </div>

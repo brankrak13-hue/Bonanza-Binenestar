@@ -17,6 +17,12 @@ export const translations: any = {
       description: "Descubre un santuario de paz interior a través de nuestros masajes faciales y terapias de sound healing.",
       cta: "Agenda tu Cita"
     },
+    about: {
+      subtitle: "Nuestra Fundadora",
+      title: "Conoce a Bonanza",
+      desc1: "Con una pasión por el bienestar integral y años de estudio en técnicas de sanación ancestrales, Bonanza fundó este espacio como un refugio para el alma. Su misión es guiarte en un viaje de autodescubrimiento y sanación, combinando el arte del tacto con el poder de la vibración.",
+      desc2: "Creemos que la verdadera belleza emana de un estado de equilibrio interior. Nuestro propósito es ayudarte a encontrarlo."
+    },
     benefits: {
       natural: { title: "Ingredientes Naturales", desc: "Usamos solo productos orgánicos y de alta calidad." },
       experts: { title: "Terapeutas Expertos", desc: "Profesionales certificados con años de experiencia." },
@@ -190,6 +196,12 @@ export const translations: any = {
       subtitle: "BONANZA ART & WELLNESS",
       description: "Discover a sanctuary of inner peace through our facial massages and sound healing therapies.",
       cta: "Book Your Appointment"
+    },
+    about: {
+      subtitle: "Our Founder",
+      title: "Meet Bonanza",
+      desc1: "With a passion for holistic well-being and years of study in ancient healing techniques, Bonanza founded this space as a refuge for the soul. Her mission is to guide you on a journey of self-discovery and healing, combining the art of touch with the power of vibration.",
+      desc2: "We believe that true beauty emanates from a state of inner balance. Our purpose is to help you find it."
     },
     benefits: {
       natural: { title: "Natural Ingredients", desc: "We only use high-quality organic products." },
