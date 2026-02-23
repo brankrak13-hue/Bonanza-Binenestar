@@ -130,14 +130,17 @@ export const translations: any = {
     cart: {
       title: "Tu Carrito",
       empty: "Tu carrito está vacío",
+      emptyDesc: "Agrega servicios para verlos aquí.",
       continue: "Seguir comprando",
       subtotal: "Subtotal",
       processing: "Procesando pago...",
       success: "¡Pago exitoso!",
-      successDesc: "Tu compra ha sido procesada correctamente.",
+      successDesc: "Tu compra ha sido procesada correctamente (simulación).",
       error: "Error en el pago",
+      errorGeneric: "Hubo un error al procesar el pago.",
+      errorRetry: "No se pudo completar la transacción. Por favor, intenta de nuevo.",
       authPrompt: "¿Quieres guardar tu historial?",
-      authDesc: "Inicia sesión para registrar tus servicios.",
+      authDesc: "Inicia sesión para registrar tus servicios y acumular beneficios.",
       login: "Iniciar Sesión"
     },
     footer: {
@@ -310,14 +313,17 @@ export const translations: any = {
     cart: {
       title: "Your Cart",
       empty: "Your cart is empty",
+      emptyDesc: "Add services to see them here.",
       continue: "Continue shopping",
       subtotal: "Subtotal",
       processing: "Processing payment...",
       success: "Payment successful!",
-      successDesc: "Your purchase has been processed correctly.",
+      successDesc: "Your purchase has been processed correctly (simulation).",
       error: "Payment error",
+      errorGeneric: "There was an error processing the payment.",
+      errorRetry: "The transaction could not be completed. Please try again.",
       authPrompt: "Want to save your history?",
-      authDesc: "Log in to register your services.",
+      authDesc: "Log in to register your services and accumulate benefits.",
       login: "Log In"
     },
     footer: {
