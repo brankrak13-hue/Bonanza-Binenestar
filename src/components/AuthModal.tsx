@@ -20,6 +20,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -29,6 +30,7 @@ interface AuthModalProps {
 export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const auth = useAuth();
   const { toast } = useToast();
+  const { t } = useLanguage();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -39,13 +41,16 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     setIsLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      toast({ title: '¡Bienvenido de nuevo!', description: 'Has iniciado sesión correctamente.' });
+      toast({ 
+        title: t('auth.successLoginTitle'), 
+        description: t('auth.successLoginDesc') 
+      });
       onClose();
     } catch (error: any) {
       toast({ 
         variant: 'destructive', 
-        title: 'Error al iniciar sesión', 
-        description: 'Credenciales incorrectas. Por favor, intenta de nuevo.' 
+        title: t('auth.errorLoginTitle'), 
+        description: t('auth.errorLoginDesc') 
       });
     } finally {
       setIsLoading(false);
@@ -58,13 +63,16 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(userCredential.user, { displayName: name });
-      toast({ title: '¡Cuenta creada!', description: 'Bienvenido a Bonanza Arte & Bienestar.' });
+      toast({ 
+        title: t('auth.successRegisterTitle'), 
+        description: t('auth.successRegisterDesc') 
+      });
       onClose();
     } catch (error: any) {
       toast({ 
         variant: 'destructive', 
-        title: 'Error al registrarse', 
-        description: error.message || 'No se pudo crear la cuenta.' 
+        title: t('auth.errorRegisterTitle'), 
+        description: error.message || t('auth.errorRegisterDesc') 
       });
     } finally {
       setIsLoading(false);
@@ -75,21 +83,21 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-headline font-bold text-center">Mi Cuenta</DialogTitle>
+          <DialogTitle className="text-2xl font-headline font-bold text-center">{t('auth.title')}</DialogTitle>
           <DialogDescription className="text-center">
-            Inicia sesión para gestionar tus citas y compras.
+            {t('auth.description')}
           </DialogDescription>
         </DialogHeader>
         <Tabs defaultValue="login" className="w-full mt-4">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="login">Ingresar</TabsTrigger>
-            <TabsTrigger value="register">Registrarse</TabsTrigger>
+            <TabsTrigger value="login">{t('auth.loginTab')}</TabsTrigger>
+            <TabsTrigger value="register">{t('auth.registerTab')}</TabsTrigger>
           </TabsList>
           
           <TabsContent value="login">
             <form onSubmit={handleLogin} className="space-y-4 py-4">
               <div className="space-y-2">
-                <Label htmlFor="email">Correo electrónico</Label>
+                <Label htmlFor="email">{t('auth.email')}</Label>
                 <Input 
                   id="email" 
                   type="email" 
@@ -100,7 +108,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password">Contraseña</Label>
+                <Label htmlFor="password">{t('auth.password')}</Label>
                 <Input 
                   id="password" 
                   type="password" 
@@ -110,7 +118,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 />
               </div>
               <Button type="submit" className="w-full btn-primary" disabled={isLoading}>
-                {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Entrar'}
+                {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : t('auth.loginButton')}
               </Button>
             </form>
           </TabsContent>
@@ -118,7 +126,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           <TabsContent value="register">
             <form onSubmit={handleRegister} className="space-y-4 py-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Nombre completo</Label>
+                <Label htmlFor="name">{t('auth.name')}</Label>
                 <Input 
                   id="name" 
                   placeholder="Ej: Ana García" 
@@ -128,7 +136,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="register-email">Correo electrónico</Label>
+                <Label htmlFor="register-email">{t('auth.email')}</Label>
                 <Input 
                   id="register-email" 
                   type="email" 
@@ -139,7 +147,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="register-password">Contraseña</Label>
+                <Label htmlFor="register-password">{t('auth.password')}</Label>
                 <Input 
                   id="register-password" 
                   type="password" 
@@ -149,7 +157,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 />
               </div>
               <Button type="submit" className="w-full btn-primary" disabled={isLoading}>
-                {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Crear Cuenta'}
+                {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : t('auth.registerButton')}
               </Button>
             </form>
           </TabsContent>

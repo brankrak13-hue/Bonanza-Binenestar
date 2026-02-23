@@ -127,6 +127,25 @@ export const translations: any = {
       security: "PROTECCIÓN HUMANA ACTIVA",
       submit: "Solicitar Disponibilidad"
     },
+    auth: {
+      title: "Mi Cuenta",
+      description: "Inicia sesión para gestionar tus citas y compras.",
+      loginTab: "Ingresar",
+      registerTab: "Registrarse",
+      email: "Correo electrónico",
+      password: "Contraseña",
+      name: "Nombre completo",
+      loginButton: "Entrar",
+      registerButton: "Crear Cuenta",
+      successLoginTitle: "¡Bienvenido de nuevo!",
+      successLoginDesc: "Has iniciado sesión correctamente.",
+      errorLoginTitle: "Error al iniciar sesión",
+      errorLoginDesc: "Credenciales incorrectas. Por favor, intenta de nuevo.",
+      successRegisterTitle: "¡Cuenta creada!",
+      successRegisterDesc: "Bienvenido a Bonanza Arte & Bienestar.",
+      errorRegisterTitle: "Error al registrarse",
+      errorRegisterDesc: "No se pudo crear la cuenta."
+    },
     cart: {
       title: "Tu Carrito",
       empty: "Tu carrito está vacío",
@@ -309,6 +328,25 @@ export const translations: any = {
       messagePlaceholder: "Tell us about what you're looking for...",
       security: "ACTIVE HUMAN PROTECTION",
       submit: "Request Availability"
+    },
+    auth: {
+      title: "My Account",
+      description: "Log in to manage your appointments and purchases.",
+      loginTab: "Login",
+      registerTab: "Register",
+      email: "Email address",
+      password: "Password",
+      name: "Full name",
+      loginButton: "Sign In",
+      registerButton: "Create Account",
+      successLoginTitle: "Welcome back!",
+      successLoginDesc: "You have successfully logged in.",
+      errorLoginTitle: "Login Error",
+      errorLoginDesc: "Incorrect credentials. Please try again.",
+      successRegisterTitle: "Account Created!",
+      successRegisterDesc: "Welcome to Bonanza Art & Wellness.",
+      errorRegisterTitle: "Registration Error",
+      errorRegisterDesc: "The account could not be created."
     },
     cart: {
       title: "Your Cart",
