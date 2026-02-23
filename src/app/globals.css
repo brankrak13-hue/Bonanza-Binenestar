@@ -51,10 +51,6 @@
   .glass-card {
     @apply bg-white/70 backdrop-blur-md border border-white/20;
   }
-
-  .animate-hero-zoom {
-    transition: transform 15000ms ease-out;
-  }
 }
 
 @keyframes scaleIn {

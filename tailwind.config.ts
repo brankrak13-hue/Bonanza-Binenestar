@@ -108,12 +108,17 @@ export default {
             transform: 'translateX(0)',
           },
         },
+        heroZoom: {
+          '0%': { transform: 'scale(1.1)' },
+          '100%': { transform: 'scale(1)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         fadeIn: 'fadeIn 0.8s ease-out forwards',
         slideIn: 'slideIn 0.6s ease-out forwards',
+        'hero-zoom': 'heroZoom 15s ease-out forwards',
       },
     },
   },
