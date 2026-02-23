@@ -1,3 +1,5 @@
+'use client';
+
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import Benefits from '@/components/Benefits';
@@ -6,16 +8,19 @@ import ProductShowcase from '@/components/ProductShowcase';
 import { getPlaceholderImage } from '@/lib/images';
 import About from '@/components/About';
 import Contact from '@/components/Contact';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function Home() {
+  const { t } = useLanguage();
+
   return (
     <main id="home" className="min-h-screen bg-background">
       <Header />
       <HeroSection
-        title="Eleva tu Bienestar"
-        subtitle="BONANZA ARTE & BIENESTAR"
-        description="Descubre un santuario de paz interior a través de nuestros masajes faciales y terapias de sound healing."
-        buttonText="Agenda tu Cita"
+        title={t('hero.title')}
+        subtitle={t('hero.subtitle')}
+        description={t('hero.description')}
+        buttonText={t('hero.cta')}
         buttonLink="#contact"
         image={getPlaceholderImage('hero-wellness')}
       />
@@ -23,19 +28,19 @@ export default function Home() {
       <div id="services" className="py-16 sm:py-24 bg-white">
         <div className="space-y-12 sm:space-y-16">
           <ProductShowcase
-            subtitle="TÉCNICAS ANCESTRALES"
-            title="Masajes Holísticos"
-            description="Rejuvenece tu piel y libera tensiones con nuestros masajes faciales personalizados. Utilizamos técnicas que combinan drenaje linfático, reflexología y aromaterapia para una piel radiante y una relajación profunda."
+            subtitle={t('home.facial.subtitle')}
+            title={t('home.facial.title')}
+            description={t('home.facial.description')}
             image={getPlaceholderImage('facial-massage')}
-            buttonText="Ver Menú"
+            buttonText={t('home.facial.button')}
             buttonLink="/servicios"
           />
           <ProductShowcase
-            subtitle="Vibraciones que Sanan"
-            title="Terapia de Sound Healing"
-            description="Sumérgete en un baño de sonidos armónicos con cuencos tibetanos y otros instrumentos. Sesiones disponibles todos los días a las 7:30 AM y 8:00 PM para un equilibrio total."
+            subtitle={t('home.sound.subtitle')}
+            title={t('home.sound.title')}
+            description={t('home.sound.description')}
             image={getPlaceholderImage('sound-healing')}
-            buttonText="Reservar Sesión"
+            buttonText={t('home.sound.button')}
             buttonLink="#contact"
             reverse
           />

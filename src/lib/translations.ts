@@ -23,6 +23,20 @@ export const translations: any = {
       holistic: { title: "Enfoque Holístico", desc: "Tratamos cuerpo, mente y espíritu como un todo." },
       relaxing: { title: "Ambiente Relajante", desc: "Un espacio diseñado para tu paz y tranquilidad." }
     },
+    home: {
+      facial: {
+        subtitle: "TÉCNICAS ANCESTRALES",
+        title: "Masajes Holísticos",
+        description: "Rejuvenece tu piel y libera tensiones con nuestros masajes faciales personalizados. Utilizamos técnicas que combinan drenaje linfático, reflexología y aromaterapia para una piel radiante y una relajación profunda.",
+        button: "Ver Menú"
+      },
+      sound: {
+        subtitle: "Vibraciones que Sanan",
+        title: "Terapia de Sound Healing",
+        description: "Sumérgete en un baño de sonidos armónicos con cuencos tibetanos y otros instrumentos. Sesiones disponibles todos los días a las 7:30 AM y 8:00 PM para un equilibrio total.",
+        button: "Reservar Sesión"
+      }
+    },
     services: {
       title: "Nuestras Experiencias",
       subtitle: "BIENESTAR PREMIUM",
@@ -127,6 +141,36 @@ export const translations: any = {
       nav: "Navegación",
       legal: "Legal",
       rights: "Todos los derechos reservados."
+    },
+    legal: {
+      terms: {
+        title: "Términos y Condiciones",
+        s1_title: "1. Aceptación de los Términos",
+        s1_desc: "Al acceder y utilizar los servicios de Bonanza Arte & Bienestar, usted acepta estar sujeto a estos Términos y Condiciones. Si no está de acuerdo con alguna parte de estos términos, le rogamos que no utilice nuestros servicios.",
+        s2_title: "2. Descripción de Servicios",
+        s2_desc: "Bonanza Arte & Bienestar ofrece tratamientos de masaje facial, corporal y terapias de sonido (Sound Healing). Nos reservamos el derecho de modificar o interrumpir cualquier servicio en cualquier momento sin previo aviso.",
+        s3_title: "3. Reservas y Cancelaciones",
+        s3_desc: "Para garantizar la disponibilidad, se recomienda reservar con antelación. Las cancelaciones deben realizarse con al menos 24 horas de anticipación. Las cancelaciones tardías o la no asistencia pueden estar sujetas a un cargo por servicio.",
+        s4_title: "4. Salud y Bienestar",
+        s4_desc: "Es responsabilidad del cliente informar al terapeuta sobre cualquier condición médica, alergia o embarazo antes del inicio del tratamiento. Bonanza no se hace responsable de reacciones adversas derivadas de información omitida.",
+        s5_title: "5. Pagos",
+        s5_desc: "Todos los pagos deben realizarse al momento de la reserva o inmediatamente después de recibir el servicio. Aceptamos efectivo, tarjetas y pagos digitales autorizados en nuestra plataforma.",
+        updated: "Última actualización: Febrero 2024"
+      },
+      privacy: {
+        title: "Política de Privacidad",
+        s1_title: "1. Recopilación de Información",
+        s1_desc: "En Bonanza Arte & Bienestar, recopilamos información personal básica como su nombre, correo electrónico y número de teléfono únicamente cuando usted la proporciona voluntariamente al agendar una cita o suscribirse a nuestro boletín.",
+        s2_title: "2. Uso de la Información",
+        s2_desc: "La información recolectada se utiliza exclusivamente para gestionar sus citas, procesar pagos, mejorar nuestros servicios y enviarle comunicaciones relacionadas con su bienestar y promociones de Bonanza.",
+        s3_title: "3. Protección de Datos",
+        s3_desc: "Implementamos medidas de seguridad técnicas y organizativas para proteger sus datos personales contra el acceso no autorizado, la pérdida o la alteración. Sus datos nunca serán vendidos a terceros.",
+        s4_title: "4. Sus Derechos",
+        s4_desc: "Usted tiene derecho a acceder, rectificar o eliminar sus datos personales en cualquier momento. Puede ejercer estos derechos enviándonos un correo electrónico a través de nuestra sección de contacto.",
+        s5_title: "5. Cookies",
+        s5_desc: "Nuestro sitio utiliza cookies para mejorar su experiencia de navegación y analizar el tráfico de forma anónima. Puede configurar su navegador para rechazar las cookies si lo desea.",
+        updated: "Última actualización: Febrero 2024"
+      }
     }
   },
   en: {
@@ -152,6 +196,20 @@ export const translations: any = {
       experts: { title: "Expert Therapists", desc: "Certified professionals with years of experience." },
       holistic: { title: "Holistic Approach", desc: "We treat body, mind, and spirit as one." },
       relaxing: { title: "Relaxing Ambiance", desc: "A space designed for your peace and tranquility." }
+    },
+    home: {
+      facial: {
+        subtitle: "ANCIENT TECHNIQUES",
+        title: "Holistic Massages",
+        description: "Rejuvenate your skin and release tension with our personalized facial massages. We use techniques that combine lymphatic drainage, reflexology, and aromatherapy for radiant skin and deep relaxation.",
+        button: "View Menu"
+      },
+      sound: {
+        subtitle: "Healing Vibrations",
+        title: "Sound Healing Therapy",
+        description: "Immerse yourself in a harmonic sound bath with Tibetan bowls and other instruments. Sessions available every day at 7:30 AM and 8:00 PM for total balance.",
+        button: "Book Session"
+      }
     },
     services: {
       title: "Our Experiences",
@@ -257,6 +315,36 @@ export const translations: any = {
       nav: "Navigation",
       legal: "Legal",
       rights: "All rights reserved."
+    },
+    legal: {
+      terms: {
+        title: "Terms and Conditions",
+        s1_title: "1. Acceptance of Terms",
+        s1_desc: "By accessing and using the services of Bonanza Arte & Bienestar, you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, please do not use our services.",
+        s2_title: "2. Description of Services",
+        s2_desc: "Bonanza Arte & Bienestar offers facial and body massage treatments and sound therapies (Sound Healing). We reserve the right to modify or discontinue any service at any time without prior notice.",
+        s3_title: "3. Bookings and Cancellations",
+        s3_desc: "To ensure availability, advance booking is recommended. Cancellations must be made at least 24 hours in advance. Late cancellations or no-shows may be subject to a service fee.",
+        s4_title: "4. Health and Well-being",
+        s4_desc: "It is the client's responsibility to inform the therapist of any medical condition, allergy, or pregnancy before the start of the treatment. Bonanza is not responsible for adverse reactions derived from omitted information.",
+        s5_title: "5. Payments",
+        s5_desc: "All payments must be made at the time of booking or immediately after receiving the service. We accept cash, cards, and authorized digital payments on our platform.",
+        updated: "Last updated: February 2024"
+      },
+      privacy: {
+        title: "Privacy Policy",
+        s1_title: "1. Information Collection",
+        s1_desc: "At Bonanza Arte & Bienestar, we collect basic personal information such as your name, email, and phone number only when you voluntarily provide it when booking an appointment or subscribing to our newsletter.",
+        s2_title: "2. Use of Information",
+        s2_desc: "The information collected is used exclusively to manage your appointments, process payments, improve our services, and send you communications related to your well-being and Bonanza promotions.",
+        s3_title: "3. Data Protection",
+        s3_desc: "We implement technical and organizational security measures to protect your personal data against unauthorized access, loss, or alteration. Your data will never be sold to third parties.",
+        s4_title: "4. Your Rights",
+        s4_desc: "You have the right to access, rectify, or delete your personal data at any time. You can exercise these rights by sending us an email through our contact section.",
+        s5_title: "5. Cookies",
+        s5_desc: "Our site uses cookies to improve your browsing experience and analyze traffic anonymously. You can configure your browser to reject cookies if you wish.",
+        updated: "Last updated: February 2024"
+      }
     }
   }
 };
