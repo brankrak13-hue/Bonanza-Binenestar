@@ -29,8 +29,8 @@ export default function Footer() {
             { title: t('services.sound.title'), href: '/#contact' },
         ],
         [t('footer.legal')]: [
-            { title: 'Términos y Condiciones', href: '/terminos' },
-            { title: 'Política de Privacidad', href: '/privacidad' },
+            { title: t('legal.terms.title'), href: '/terminos' },
+            { title: t('legal.privacy.title'), href: '/privacidad' },
         ]
     };
 
