@@ -5,21 +5,23 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Instagram, MapPin, Phone, Calendar as CalendarIcon, MessageCircle, Clock, ShieldCheck, Sun, Moon } from "lucide-react";
-import Image from "next/image";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { es, enUS } from "date-fns/locale";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Contact() {
+  const { t, language } = useLanguage();
   const [date, setDate] = React.useState<Date>();
   const [isCalendarOpen, setIsCalendarOpen] = React.useState(false);
   const [selectedTime, setSelectedTime] = React.useState<string>("7:30 AM");
 
   const whatsappLink = "https://wa.me/529843143457?text=Hola,%20quisiera%20reservar%20una%20sesión%20de%20Sound%20Healing%20o%20Masaje.";
+  const currentLocale = language === 'es' ? es : enUS;
 
   const handleDateSelect = (d: Date | undefined) => {
     setDate(d);
@@ -30,13 +32,10 @@ export default function Contact() {
     <section id="contact" className="bg-secondary/30 py-16 sm:py-24">
       <div className="max-w-screen-md mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 animate-fadeIn">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground font-headline mb-4">Agenda Tu Experiencia</h2>
-          <p className="mt-4 text-muted-foreground text-lg">
-            Inicia tu viaje hacia el bienestar profundo. Elige tu fecha ideal o contáctanos directamente.
-          </p>
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground font-headline mb-4">{t('contact.title')}</h2>
+          <p className="mt-4 text-muted-foreground text-lg">{t('contact.desc')}</p>
         </div>
 
-        {/* Sound Healing Schedule Banner */}
         <div className="mb-12 p-6 bg-white rounded-3xl shadow-sm border border-primary/10 animate-scaleIn">
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                 <div className="flex items-center gap-4">
@@ -44,14 +43,14 @@ export default function Contact() {
                         <Clock className="w-6 h-6 text-primary" />
                     </div>
                     <div>
-                        <h3 className="font-bold text-gray-900 uppercase tracking-widest text-sm">Sesiones de Sound Healing</h3>
-                        <p className="text-gray-500 text-sm">Sesiones todos los días a las <span className="text-primary font-bold">7:30 AM</span> y <span className="text-primary font-bold">8:00 PM</span></p>
+                        <h3 className="font-bold text-gray-900 uppercase tracking-widest text-sm">{t('contact.bannerTitle')}</h3>
+                        <p className="text-gray-500 text-sm">{t('contact.bannerDesc')}</p>
                     </div>
                 </div>
                 <Button asChild className="btn-primary h-12 rounded-full px-8 bg-accent hover:bg-accent/90 shadow-lg hover:shadow-accent/40 transition-all">
                     <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                         <MessageCircle className="w-5 h-5" />
-                        Reservar por WhatsApp
+                        {t('contact.whatsapp')}
                     </a>
                 </Button>
             </div>
@@ -68,57 +67,56 @@ export default function Contact() {
             </a>
             <a href="https://maps.app.goo.gl/vZpV5rLkXj7HgXjZ7" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-all duration-300 hover:scale-105">
                 <MapPin className="w-5 h-5"/>
-                <span className="font-medium">Nuestra Ubicación</span>
+                <span className="font-medium">{t('contact.location')}</span>
             </a>
         </div>
 
         <form className="space-y-8 bg-white p-8 sm:p-12 rounded-[3rem] shadow-2xl border border-white/40 animate-fadeIn" style={{ animationDelay: '200ms' }}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
             <div className="space-y-3">
-                <label className="text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 ml-1">Tu Nombre</label>
-                <Input type="text" placeholder="Ej: Elena Garro" className="bg-secondary/10 border-transparent focus:border-primary/30 focus:bg-white h-14 rounded-2xl transition-all duration-300 px-6" />
+                <label className="text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 ml-1">{t('contact.name')}</label>
+                <Input type="text" placeholder="Elena Garro" className="bg-secondary/10 border-transparent focus:border-primary/30 focus:bg-white h-14 rounded-2xl transition-all duration-300 px-6" />
             </div>
             <div className="space-y-3">
-                <label className="text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 ml-1">Correo o Número de contacto</label>
-                <Input type="text" placeholder="tu@email.com o 984 000 0000" className="bg-secondary/10 border-transparent focus:border-primary/30 focus:bg-white h-14 rounded-2xl transition-all duration-300 px-6" />
+                <label className="text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 ml-1">{t('contact.contactInfo')}</label>
+                <Input type="text" placeholder="tu@email.com / 984 000 0000" className="bg-secondary/10 border-transparent focus:border-primary/30 focus:bg-white h-14 rounded-2xl transition-all duration-300 px-6" />
             </div>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             <div className="space-y-4">
-              <label className="text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 ml-1">¿Cuándo quieres visitarnos?</label>
+              <label className="text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 ml-1">{t('contact.when')}</label>
               <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant={"outline"}
                     className={cn(
-                      "w-full justify-start text-left font-normal bg-secondary/10 border-transparent h-16 rounded-2xl px-6 hover:bg-white hover:border-primary/20 transition-all group",
-                      !date && "text-muted-foreground",
-                      isCalendarOpen && "border-primary/30 bg-white"
+                      "w-full justify-start text-left font-normal bg-secondary/10 border-transparent h-16 rounded-2xl px-6 hover:bg-white hover:border-primary/20 transition-all",
+                      !date && "text-muted-foreground"
                     )}
                   >
-                    <CalendarIcon className={cn("mr-3 h-5 w-5 transition-colors", isCalendarOpen ? "text-primary" : "text-gray-400")} />
+                    <CalendarIcon className="mr-3 h-5 w-5 text-gray-400" />
                     {date ? (
-                        <span className="font-semibold text-gray-900">{format(date, "PPP", { locale: es })}</span>
+                        <span className="font-semibold text-gray-900">{format(date, "PPP", { locale: currentLocale })}</span>
                     ) : (
-                        <span>Selecciona una fecha</span>
+                        <span>{t('contact.selectDate')}</span>
                     )}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 border-none shadow-2xl rounded-3xl overflow-hidden animate-in fade-in zoom-in-95 duration-300" align="start">
+                <PopoverContent className="w-auto p-0 border-none shadow-2xl rounded-3xl overflow-hidden" align="start">
                   <Calendar
                     mode="single"
                     selected={date}
                     onSelect={handleDateSelect}
                     initialFocus
-                    locale={es}
+                    locale={currentLocale}
                   />
                 </PopoverContent>
               </Popover>
             </div>
 
             <div className="space-y-4">
-              <label className="text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 ml-1">Sesión Preferida</label>
+              <label className="text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 ml-1">{t('contact.session')}</label>
               <RadioGroup 
                 value={selectedTime} 
                 onValueChange={setSelectedTime} 
@@ -127,58 +125,36 @@ export default function Contact() {
                 <Label
                     htmlFor="morning"
                     className={cn(
-                        "flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all duration-500 cursor-pointer gap-2 group/time overflow-hidden relative",
-                        selectedTime === "7:30 AM"
-                            ? "border-primary bg-primary/5 shadow-[inset_0_2px_10px_rgba(41,102,84,0.1)]"
-                            : "border-secondary/40 bg-transparent hover:border-primary/20 hover:bg-gray-50/50"
+                        "flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all cursor-pointer gap-2",
+                        selectedTime === "7:30 AM" ? "border-primary bg-primary/5" : "border-secondary/40"
                     )}
                 >
                     <RadioGroupItem value="7:30 AM" id="morning" className="sr-only" />
-                    <Sun className={cn("w-5 h-5 transition-all duration-500", selectedTime === "7:30 AM" ? "text-primary scale-110" : "text-gray-400 group-hover/time:text-primary/60")} />
-                    <div className="flex flex-col items-center">
-                        <span className={cn("text-[10px] font-bold tracking-widest uppercase mb-0.5 transition-colors", selectedTime === "7:30 AM" ? "text-primary" : "text-gray-500")}>
-                            Mañana
-                        </span>
-                        <span className="text-[9px] text-gray-400 font-medium">7:30 AM</span>
-                    </div>
-                    {selectedTime === "7:30 AM" && (
-                        <div className="absolute top-1 right-1">
-                            <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                        </div>
-                    )}
+                    <Sun className={cn("w-5 h-5", selectedTime === "7:30 AM" ? "text-primary" : "text-gray-400")} />
+                    <span className="text-[10px] font-bold tracking-widest uppercase">{t('contact.morning')}</span>
+                    <span className="text-[9px] text-gray-400">7:30 AM</span>
                 </Label>
                 
                 <Label
                     htmlFor="evening"
                     className={cn(
-                        "flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all duration-500 cursor-pointer gap-2 group/time overflow-hidden relative",
-                        selectedTime === "8:00 PM"
-                            ? "border-primary bg-primary/5 shadow-[inset_0_2px_10px_rgba(41,102,84,0.1)]"
-                            : "border-secondary/40 bg-transparent hover:border-primary/20 hover:bg-gray-50/50"
+                        "flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all cursor-pointer gap-2",
+                        selectedTime === "8:00 PM" ? "border-primary bg-primary/5" : "border-secondary/40"
                     )}
                 >
                     <RadioGroupItem value="8:00 PM" id="evening" className="sr-only" />
-                    <Moon className={cn("w-5 h-5 transition-all duration-500", selectedTime === "8:00 PM" ? "text-primary scale-110" : "text-gray-400 group-hover/time:text-primary/60")} />
-                    <div className="flex flex-col items-center">
-                        <span className={cn("text-[10px] font-bold tracking-widest uppercase mb-0.5 transition-colors", selectedTime === "8:00 PM" ? "text-primary" : "text-gray-500")}>
-                            Noche
-                        </span>
-                        <span className="text-[9px] text-gray-400 font-medium">8:00 PM</span>
-                    </div>
-                    {selectedTime === "8:00 PM" && (
-                        <div className="absolute top-1 right-1">
-                            <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                        </div>
-                    )}
+                    <Moon className={cn("w-5 h-5", selectedTime === "8:00 PM" ? "text-primary" : "text-gray-400")} />
+                    <span className="text-[10px] font-bold tracking-widest uppercase">{t('contact.evening')}</span>
+                    <span className="text-[9px] text-gray-400">8:00 PM</span>
                 </Label>
               </RadioGroup>
             </div>
           </div>
 
           <div className="space-y-4">
-            <label className="text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 ml-1">Mensaje o Preferencias</label>
+            <label className="text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 ml-1">{t('contact.message')}</label>
             <Textarea 
-                placeholder="Cuéntanos un poco sobre lo que buscas para personalizar tu ritual..." 
+                placeholder={t('contact.messagePlaceholder')} 
                 className="bg-secondary/10 border-transparent focus:border-primary/30 focus:bg-white min-h-[140px] rounded-3xl transition-all duration-300 px-6 py-4 resize-none" 
             />
           </div>
@@ -186,22 +162,14 @@ export default function Contact() {
           <div className="flex flex-col items-center gap-6 pt-6">
             <div className="flex items-center gap-2 text-[10px] font-bold tracking-widest text-gray-400 bg-gray-50/80 px-5 py-2.5 rounded-full border border-gray-100/50">
               <ShieldCheck className="w-4 h-4 text-primary" />
-              PROTECCIÓN HUMANA ACTIVA (APP CHECK)
+              {t('contact.security')} (APP CHECK)
             </div>
-            <Button type="submit" size="lg" className="btn-primary w-full sm:w-auto px-16 h-16 text-sm group">
-              Solicitar Disponibilidad
-              <MessageCircle className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
+            <Button type="submit" size="lg" className="btn-primary w-full sm:w-auto px-16 h-16 text-sm">
+              {t('contact.submit')}
+              <MessageCircle className="w-4 h-4 ml-2" />
             </Button>
           </div>
         </form>
-
-        <div className="mt-20 pt-16 border-t border-primary/5 text-center animate-fadeIn" style={{ animationDelay: '400ms' }}>
-            <h3 className="text-2xl font-semibold text-foreground mb-4 font-headline tracking-wide uppercase">Acceso Directo a Agenda</h3>
-            <p className="text-muted-foreground mb-10 max-w-lg mx-auto leading-relaxed">
-                El acceso directo a la agenda digital estará disponible próximamente. Por ahora, puedes solicitar tu cita a través de nuestro formulario o vía WhatsApp.
-            </p>
-        </div>
-
       </div>
     </section>
   );

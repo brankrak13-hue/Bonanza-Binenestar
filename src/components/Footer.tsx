@@ -6,47 +6,44 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { LotusIcon } from "@/components/icons/LotusIcon";
 import { Instagram } from "lucide-react";
-
-const footerLinks = {
-    'Navegación': [
-        { title: 'Inicio', href: '#home' },
-        { title: 'Servicios', href: '/#services' },
-        { title: 'Sobre Nosotros', href: '#about' },
-        { title: 'Contacto', href: '#contact' },
-    ],
-    'Servicios': [
-        { title: 'Masajes', href: '/servicios' },
-        { title: 'Masaje Facial', href: '/servicios' },
-        { title: 'Sound Healing', href: '/#contact' },
-        { title: 'Paquetes', href: '#' },
-    ],
-    'Legal': [
-        { title: 'Términos y Condiciones', href: '/terminos' },
-        { title: 'Política de Privacidad', href: '/privacidad' },
-    ]
-};
-
-const socialLinks = [
-    { name: 'Instagram', href: 'https://www.instagram.com/bonanzaarteybienestar/', icon: <Instagram className="h-5 w-5" /> },
-]
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Footer() {
+    const { t } = useLanguage();
     const [year, setYear] = useState<number | null>(null);
 
     useEffect(() => {
         setYear(new Date().getFullYear());
     }, []);
 
+    const footerLinks = {
+        [t('footer.nav')]: [
+            { title: t('nav.home'), href: '#home' },
+            { title: t('nav.services'), href: '/#services' },
+            { title: t('nav.about'), href: '#about' },
+            { title: t('nav.contact'), href: '#contact' },
+        ],
+        [t('nav.services')]: [
+            { title: t('nav.services'), href: '/servicios' },
+            { title: t('massages.purification.title'), href: '/servicios' },
+            { title: t('services.sound.title'), href: '/#contact' },
+        ],
+        [t('footer.legal')]: [
+            { title: 'Términos y Condiciones', href: '/terminos' },
+            { title: 'Política de Privacidad', href: '/privacidad' },
+        ]
+    };
+
     return (
         <footer className="bg-secondary border-t">
             <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
                     <div className="lg:col-span-1">
-                        <h3 className="text-sm font-semibold tracking-wider uppercase text-foreground mb-4">Newsletter</h3>
-                        <p className="text-sm text-muted-foreground mb-4">Recibe noticias y promociones especiales en tu correo.</p>
+                        <h3 className="text-sm font-semibold tracking-wider uppercase text-foreground mb-4">{t('footer.newsletter')}</h3>
+                        <p className="text-sm text-muted-foreground mb-4">{t('footer.newsDesc')}</p>
                         <form className="flex gap-2">
-                            <Input type="email" placeholder="Tu dirección de e-mail" className="bg-background border-input focus:bg-white focus:border-primary focus:ring-primary" />
-                            <Button type="submit" variant="default" className="bg-primary hover:bg-primary/90 text-primary-foreground">Suscribir</Button>
+                            <Input type="email" placeholder="Email" className="bg-background" />
+                            <Button type="submit" variant="default">{t('footer.subscribe')}</Button>
                         </form>
                     </div>
 
@@ -73,15 +70,12 @@ export default function Footer() {
                             <LotusIcon className="w-5 h-5 text-primary" />
                             <span className="font-headline text-xl font-semibold">BONANZA</span>
                         </Link>
-                        {year && <p>&copy; {year} Bonanza Arte & Bienestar. Todos los derechos reservados.</p>}
+                        {year && <p>&copy; {year} Bonanza {t('footer.rights')}</p>}
                     </div>
                     <div className="flex space-x-4 mt-4 sm:mt-0">
-                        {socialLinks.map(link => (
-                            <a key={link.name} href={link.href} className="text-muted-foreground hover:text-primary transition-colors" target="_blank" rel="noopener noreferrer">
-                                <span className="sr-only">{link.name}</span>
-                                {link.icon}
-                            </a>
-                        ))}
+                        <a href="https://www.instagram.com/bonanzaarteybienestar/" className="text-muted-foreground hover:text-primary transition-colors" target="_blank" rel="noopener noreferrer">
+                            <Instagram className="h-5 w-5" />
+                        </a>
                     </div>
                 </div>
             </div>

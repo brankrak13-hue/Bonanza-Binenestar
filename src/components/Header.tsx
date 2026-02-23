@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Search, ShoppingBag, User, Menu, X, LogOut } from "lucide-react";
+import { Search, ShoppingBag, User, Menu, X, LogOut, Languages } from "lucide-react";
 import { LotusIcon } from "@/components/icons/LotusIcon";
 import { useCart } from "@/context/CartContext";
+import { useLanguage } from "@/context/LanguageContext";
 import CartSidebar from "@/components/CartSidebar";
 import AuthModal from "@/components/AuthModal";
 import { Badge } from "@/components/ui/badge";
@@ -20,6 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -29,6 +31,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const { cartCount } = useCart();
   const { user, isUserLoading } = useUser();
+  const { t, language, setLanguage } = useLanguage();
   const auth = useAuth();
   const { toast } = useToast();
 
@@ -39,32 +42,36 @@ export default function Header() {
   }, []);
 
   const navItems = [
-    { name: "INICIO", href: "/" },
-    { name: "SERVICIOS", href: "/servicios" },
-    { name: "ASESOR IA", href: "/agente-virtual" },
-    { name: "NOSOTROS", href: "/#about" },
-    { name: "CONTACTO", href: "/#contact" },
+    { name: t('nav.home'), href: "/" },
+    { name: t('nav.services'), href: "/servicios" },
+    { name: t('nav.advisor'), href: "/agente-virtual" },
+    { name: t('nav.about'), href: "/#about" },
+    { name: t('nav.contact'), href: "/#contact" },
   ];
 
   const handleSignOut = async () => {
     try {
       await signOut(auth);
-      toast({ title: "Sesión cerrada", description: "Vuelve pronto." });
+      toast({ title: t('nav.signOut'), description: "..." });
     } catch (error) {
-      toast({ variant: "destructive", title: "Error", description: "No se pudo cerrar la sesión." });
+      toast({ variant: "destructive", title: "Error", description: "..." });
     }
+  };
+
+  const toggleLanguage = () => {
+    setLanguage(language === 'es' ? 'en' : 'es');
   };
 
   return (
     <>
       {isBannerVisible && (
         <div className="bg-primary text-primary-foreground text-center py-2 px-4 text-[10px] md:text-xs tracking-[0.2em] uppercase font-semibold relative z-50">
-          <p>Experimenta la sanación holística. ¡Agenda hoy!</p>
+          <p>{language === 'es' ? 'Experimenta la sanación holística. ¡Agenda hoy!' : 'Experience holistic healing. Book today!'}</p>
           <button 
             type="button" 
             onClick={() => setIsBannerVisible(false)}
             className="absolute right-4 top-1/2 -translate-y-1/2 hover:opacity-70 transition-opacity"
-            aria-label="Cerrar banner"
+            aria-label="Close banner"
           >
             <X className="w-3 h-3 md:w-4 h-4" />
           </button>
@@ -83,7 +90,7 @@ export default function Header() {
                 type="button"
                 className="p-2 -ml-2 text-foreground/70 hover:text-primary transition-colors"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                aria-label="Abrir menú"
+                aria-label="Open menu"
               >
                 <Menu className="w-6 h-6" />
               </button>
@@ -95,7 +102,7 @@ export default function Header() {
                         <LotusIcon className="w-7 h-7 md:w-8 h-8 text-primary transition-transform duration-700 group-hover:rotate-[360deg]" />
                         <span className="font-headline text-2xl md:text-3xl lg:text-4xl font-bold tracking-wider text-foreground ml-2">BONANZA</span>
                     </div>
-                    <span className="text-[8px] md:text-[10px] font-semibold tracking-[0.3em] text-primary/80 -mt-1">ARTE & BIENESTAR</span>
+                    <span className="text-[8px] md:text-[10px] font-semibold tracking-[0.3em] text-primary/80 -mt-1">{language === 'es' ? 'ARTE & BIENESTAR' : 'ART & WELLNESS'}</span>
                 </Link>
             </div>
 
@@ -112,9 +119,14 @@ export default function Header() {
             </nav>
 
             <div className="flex-1 flex items-center justify-end space-x-1 md:space-x-4">
-              <button type="button" className="p-2 text-foreground/60 hover:text-primary transition-all duration-300 hover:scale-110">
-                <Search className="w-5 h-5" />
-              </button>
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={toggleLanguage} 
+                className="text-foreground/60 hover:text-primary transition-all rounded-full"
+              >
+                <span className="text-[10px] font-bold">{language.toUpperCase()}</span>
+              </Button>
 
               <button 
                 type="button" 
@@ -138,20 +150,20 @@ export default function Header() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-64 p-2 glass-card animate-scaleIn">
                     <DropdownMenuLabel className="pb-3">
-                      <p className="text-sm font-bold text-foreground">Hola, {user.displayName || 'Bienvenido'}</p>
+                      <p className="text-sm font-bold text-foreground">{language === 'es' ? 'Hola' : 'Hello'}, {user.displayName || 'User'}</p>
                       <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider truncate">{user.email}</p>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild className="cursor-pointer focus:bg-primary/10 rounded-md py-2 px-3">
-                      <Link href="/perfil" className="w-full text-xs font-semibold tracking-wider">MI PERFIL</Link>
+                      <Link href="/perfil" className="w-full text-xs font-semibold tracking-wider">{t('nav.myProfile')}</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild className="cursor-pointer focus:bg-primary/10 rounded-md py-2 px-3">
-                      <Link href="/pedidos" className="w-full text-xs font-semibold tracking-wider">MIS CITAS</Link>
+                      <Link href="/pedidos" className="w-full text-xs font-semibold tracking-wider">{t('nav.myAppointments')}</Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleSignOut} className="text-destructive cursor-pointer focus:bg-destructive/10 rounded-md py-2 px-3 font-semibold text-xs tracking-wider">
                       <LogOut className="mr-2 h-4 w-4" />
-                      CERRAR SESIÓN
+                      {t('nav.signOut')}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -211,16 +223,11 @@ export default function Header() {
                 {item.name}
               </Link>
             ))}
+            <Button variant="outline" onClick={toggleLanguage} className="mt-4 justify-start gap-3 rounded-full h-12">
+              <Languages className="w-5 h-5 text-primary" />
+              <span className="font-bold">{language === 'es' ? 'English (EN)' : 'Español (ES)'}</span>
+            </Button>
           </nav>
-          
-          <div className="mt-auto pt-8 border-t">
-            <p className="text-xs text-muted-foreground tracking-widest uppercase font-semibold mb-4">Síguenos</p>
-            <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 flex items-center justify-center rounded-full bg-secondary text-primary hover:bg-primary hover:text-white transition-all">
-                <Search className="w-5 h-5" />
-              </a>
-            </div>
-          </div>
         </div>
       </div>
       
