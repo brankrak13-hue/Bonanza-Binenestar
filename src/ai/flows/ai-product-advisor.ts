@@ -16,7 +16,7 @@ export type AiProductAdvisorInput = z.infer<typeof AiProductAdvisorInputSchema>;
 
 const AiProductAdvisorOutputSchema = z.object({
   productName: z.string().describe('The name of the recommended Bonanza service.'),
-  productType: z.enum(['masaje', 'terapia', 'facial', 'otro', 'massage', 'therapy', 'facial']).describe('The type of the recommended service.'),
+  productType: z.enum(['masaje', 'terapia', 'facial', 'otro', 'massage', 'therapy']).describe('The type of the recommended service.'),
   description: z.string().describe('A detailed description of the recommended service.'),
   reasoning: z.string().describe('An explanation of why this service fits the user\'s needs.'),
   suggestedNextQuestions: z.array(z.string()).describe('A list of follow-up questions.'),
