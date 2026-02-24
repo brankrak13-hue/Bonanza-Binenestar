@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from "react";
@@ -50,6 +51,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
         },
         body: JSON.stringify({
           ...paymentRequest,
+          amount: totalPrice,
           userId: user?.uid || 'guest',
         }),
       });
@@ -149,7 +151,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                   </div>
                   
                   <GooglePayButton
-                    environment="TEST"
+                    environment="TEST" // CAMBIAR A "PRODUCTION" cuando tengas el merchantId
                     paymentRequest={{
                       apiVersion: 2,
                       apiVersionMinor: 0,
@@ -163,14 +165,15 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                           tokenizationSpecification: {
                             type: 'PAYMENT_GATEWAY',
                             parameters: {
-                              gateway: 'example',
-                              gatewayMerchantId: 'exampleGatewayMerchantId',
+                              gateway: 'stripe',
+                              'stripe:version': '2025-01-27',
+                              'stripe:publishableKey': 'pk_test_TU_LLAVE_PUBLICA_AQUI',
                             },
                           },
                         },
                       ],
                       merchantInfo: {
-                        merchantId: '12345678901234567890',
+                        merchantId: '12345678901234567890', // TU ID DE COMERCIANTE DE GOOGLE CONSOLE
                         merchantName: 'Bonanza Arte & Bienestar',
                       },
                       transactionInfo: {
