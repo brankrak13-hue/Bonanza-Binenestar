@@ -50,7 +50,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          ...paymentRequest,
+          paymentMethodData: paymentRequest.paymentMethodData,
           amount: totalPrice,
           userId: user?.uid || 'guest',
         }),
@@ -151,7 +151,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                   </div>
                   
                   <GooglePayButton
-                    environment="TEST" // CAMBIAR A "PRODUCTION" cuando tengas el merchantId
+                    environment="TEST" 
                     paymentRequest={{
                       apiVersion: 2,
                       apiVersionMinor: 0,
@@ -160,20 +160,20 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                           type: 'CARD',
                           parameters: {
                             allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
-                            allowedCardNetworks: ['MASTERCARD', 'VISA'],
+                            allowedCardNetworks: ['MASTERCARD', 'VISA', 'AMEX'],
                           },
                           tokenizationSpecification: {
                             type: 'PAYMENT_GATEWAY',
                             parameters: {
                               gateway: 'stripe',
                               'stripe:version': '2025-01-27',
-                              'stripe:publishableKey': 'pk_test_TU_LLAVE_PUBLICA_AQUI',
+                              'stripe:publishableKey': process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '',
                             },
                           },
                         },
                       ],
                       merchantInfo: {
-                        merchantId: '12345678901234567890', // TU ID DE COMERCIANTE DE GOOGLE CONSOLE
+                        merchantId: '12345678901234567890', 
                         merchantName: 'Bonanza Arte & Bienestar',
                       },
                       transactionInfo: {
