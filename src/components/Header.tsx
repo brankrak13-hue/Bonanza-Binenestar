@@ -2,15 +2,16 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Search, ShoppingBag, User, Menu, X, LogOut, Languages } from "lucide-react";
+import { Search, ShoppingBag, User, Menu, X, LogOut, Languages, LayoutDashboard, ShieldCheck } from "lucide-react";
 import { LotusIcon } from "@/components/icons/LotusIcon";
 import { useCart } from "@/context/CartContext";
 import { useLanguage } from "@/context/LanguageContext";
 import CartSidebar from "@/components/CartSidebar";
 import AuthModal from "@/components/AuthModal";
 import { Badge } from "@/components/ui/badge";
-import { useUser, useAuth } from "@/firebase";
+import { useUser, useAuth, useFirestore, useDoc, useMemoFirebase } from "@/firebase";
 import { signOut } from "firebase/auth";
+import { doc } from "firebase/firestore";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,7 +34,12 @@ export default function Header() {
   const { user, isUserLoading } = useUser();
   const { t, language, setLanguage } = useLanguage();
   const auth = useAuth();
+  const db = useFirestore();
   const { toast } = useToast();
+
+  // Verificar si el usuario es administrador
+  const adminRef = useMemoFirebase(() => (user && db ? doc(db, 'roles_admin', user.uid) : null), [user, db]);
+  const { data: adminRole } = useDoc(adminRef);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -154,6 +160,19 @@ export default function Header() {
                       <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider truncate">{user.email}</p>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
+                    
+                    {adminRole && (
+                      <>
+                        <DropdownMenuItem asChild className="cursor-pointer focus:bg-primary/10 rounded-md py-2 px-3 text-primary">
+                          <Link href="/admin" className="w-full text-xs font-bold tracking-wider flex items-center gap-2">
+                            <LayoutDashboard className="w-4 h-4" />
+                            {t('admin.title')}
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                      </>
+                    )}
+
                     <DropdownMenuItem asChild className="cursor-pointer focus:bg-primary/10 rounded-md py-2 px-3">
                       <Link href="/perfil" className="w-full text-xs font-semibold tracking-wider">{t('nav.myProfile')}</Link>
                     </DropdownMenuItem>
@@ -223,6 +242,19 @@ export default function Header() {
                 {item.name}
               </Link>
             ))}
+            
+            {adminRole && (
+               <Link
+                href="/admin"
+                className="text-xl font-headline font-bold text-primary flex items-center gap-2 animate-fadeIn"
+                style={{ animationDelay: '500ms' }}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <LayoutDashboard className="w-6 h-6" />
+                {t('admin.title')}
+              </Link>
+            )}
+
             <Button variant="outline" onClick={toggleLanguage} className="mt-4 justify-start gap-3 rounded-full h-12">
               <Languages className="w-5 h-5 text-primary" />
               <span className="font-bold">{language === 'es' ? 'English (EN)' : 'Español (ES)'}</span>

@@ -1,14 +1,9 @@
 rules_version = '2';
 
 /**
- * BONANZA ARTE & BIENESTAR - HIGH-SECURITY RULES
+ * BONANZA ARTE & BIENESTAR - RULES V2
  * 
- * 🛡️ SISTEMA DE PROTECCIÓN ANTIAQUEREO E INTEGRIDAD DE DATOS
- * 
- * Este conjunto de reglas implementa una arquitectura de Confianza Cero:
- * 1. Default Deny: Cualquier acceso no autorizado se bloquea de inmediato.
- * 2. Validación de Humano: App Check verifica la legitimidad de la conexión.
- * 3. Aislamiento de Identidad: Los datos sensibles solo son accesibles por el dueño del UID.
+ * 🛡️ SISTEMA DE PROTECCIÓN E INTEGRIDAD DE DATOS
  */
 
 service cloud.firestore {
@@ -19,7 +14,7 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
-    // --- FUNCIONES DE SEGURIDAD AVANZADA ---
+    // --- FUNCIONES DE SEGURIDAD ---
     
     function isSignedIn() {
       return request.auth != null;
@@ -33,17 +28,20 @@ service cloud.firestore {
       return isSignedIn() && exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
     }
 
-    // --- REGLAS DE PROTECCIÓN DE DATOS POR COLECCIÓN ---
+    // --- REGLAS POR COLECCIÓN ---
 
+    // Administración: Permitir a los usuarios crear su propio registro (para el flujo de la llave secreta)
     match /roles_admin/{adminId} {
-      allow read: if isAdmin();
+      allow read: if isSignedIn();
+      allow create: if isOwner(adminId);
+      allow update, delete: if isAdmin();
     }
 
-    // Perfiles: Cifrado lógico para que solo el dueño vea sus datos
+    // Perfiles
     match /userProfiles/{userProfileId} {
       allow get, list: if isOwner(userProfileId) || isAdmin();
       allow create: if isOwner(userProfileId);
-      allow update: if isOwner(userProfileId) && request.resource.data.externalAuthUserId == resource.data.externalAuthUserId;
+      allow update: if isOwner(userProfileId);
       allow delete: if isAdmin();
     }
 
@@ -62,7 +60,7 @@ service cloud.firestore {
       }
     }
 
-    // Catálogo: Solo lectura pública, escritura bloqueada para no-admins
+    // Catálogo público
     match /products/{productId} {
       allow read: if true;
       allow write: if isAdmin();
@@ -79,18 +77,18 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // Configuración del sitio (Imágenes personalizadas)
+    // Importante: Permitir lectura pública para que todos vean las imágenes cambiadas
+    match /siteSettings/{doc=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
     match /exclusiveExperiences/{experienceId} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    // Configuración del sitio: Lectura pública para imágenes personalizadas, escritura solo admin
-    match /siteSettings/content/images/{imageId} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    // Seguridad de Entrada: Prevención de SPAM y ataques de inyección
     match /newsletterSubscribers/{subscriberId} {
       allow create: if true;
       allow read, delete: if isAdmin();
