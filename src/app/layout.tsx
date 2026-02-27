@@ -1,9 +1,11 @@
+
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { CartProvider } from '@/context/CartContext';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
 import { LanguageProvider } from '@/context/LanguageContext';
+import { SiteSettingsProvider } from '@/context/SiteSettingsContext';
 
 export const metadata: Metadata = {
   title: 'Bonanza - Arte y Bienestar',
@@ -28,10 +30,12 @@ export default function RootLayout({
       <body className="font-body antialiased" suppressHydrationWarning>
         <FirebaseClientProvider>
           <LanguageProvider>
-            <CartProvider>
-              {children}
-              <Toaster />
-            </CartProvider>
+            <SiteSettingsProvider>
+              <CartProvider>
+                {children}
+                <Toaster />
+              </CartProvider>
+            </SiteSettingsProvider>
           </LanguageProvider>
         </FirebaseClientProvider>
       </body>

@@ -1,3 +1,4 @@
+
 export const translations: any = {
   es: {
     nav: {
@@ -9,8 +10,28 @@ export const translations: any = {
       myAccount: "MI CUENTA",
       myProfile: "MI PERFIL",
       myAppointments: "MIS CITAS",
-      signOut: "CERRAR SESIÓN"
+      signOut: "CERRAR SESIÓN",
+      admin: "ADMIN"
     },
+    admin: {
+      title: "Panel de Control",
+      subtitle: "GESTIÓN DE CONTENIDO",
+      accessTitle: "Acceso Administrativo",
+      accessDesc: "Ingresa la llave maestra para obtener privilegios de administrador.",
+      accessPlaceholder: "Contraseña larga de administrador...",
+      accessButton: "Validar Llave",
+      accessSuccess: "¡Acceso concedido!",
+      accessError: "Llave incorrecta. Acceso denegado.",
+      imagesTitle: "Gestión de Imágenes",
+      imagesDesc: "Cambia las imágenes de cualquier sección pegando una nueva URL.",
+      imageLabel: "Nueva URL de Imagen",
+      save: "Actualizar Imagen",
+      saving: "Actualizando...",
+      section: "Sección",
+      preview: "Vista Previa",
+      logout: "Salir del Panel"
+    },
+    // ... resto de las traducciones (mantener las existentes)
     hero: {
       title: "Eleva tu Bienestar",
       subtitle: "BONANZA ARTE & BIENESTAR",
@@ -247,8 +268,28 @@ export const translations: any = {
       myAccount: "MY ACCOUNT",
       myProfile: "MY PROFILE",
       myAppointments: "MY APPOINTMENTS",
-      signOut: "SIGN OUT"
+      signOut: "SIGN OUT",
+      admin: "ADMIN"
     },
+    admin: {
+      title: "Control Panel",
+      subtitle: "CONTENT MANAGEMENT",
+      accessTitle: "Administrative Access",
+      accessDesc: "Enter the master key to obtain administrative privileges.",
+      accessPlaceholder: "Long admin password...",
+      accessButton: "Validate Key",
+      accessSuccess: "Access granted!",
+      accessError: "Incorrect key. Access denied.",
+      imagesTitle: "Image Management",
+      imagesDesc: "Change the images of any section by pasting a new URL.",
+      imageLabel: "New Image URL",
+      save: "Update Image",
+      saving: "Updating...",
+      section: "Section",
+      preview: "Preview",
+      logout: "Exit Panel"
+    },
+    // ... resto de las traducciones (mantener las existentes)
     hero: {
       title: "Elevate Your Well-being",
       subtitle: "BONANZA ART & WELLNESS",

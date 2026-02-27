@@ -1,7 +1,11 @@
+
+'use client';
+
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import type { ImagePlaceholder } from '@/lib/images';
 import Link from 'next/link';
+import { useSiteSettings } from '@/context/SiteSettingsContext';
 
 type ProductShowcaseProps = {
   id?: string;
@@ -24,6 +28,9 @@ export default function ProductShowcase({
   buttonLink,
   reverse = false,
 }: ProductShowcaseProps) {
+  const { getImage } = useSiteSettings();
+  const currentImage = getImage(image.id);
+
   return (
     <section id={id}>
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -40,12 +47,12 @@ export default function ProductShowcase({
           >
             <div className="hover-zoom aspect-[4/3]">
               <Image
-                src={image.imageUrl}
-                alt={image.description}
+                src={currentImage.imageUrl}
+                alt={currentImage.description}
                 width={800}
                 height={600}
                 className="object-cover w-full h-full rounded-lg shadow-xl"
-                data-ai-hint={image.imageHint}
+                data-ai-hint={currentImage.imageHint}
               />
             </div>
           </div>

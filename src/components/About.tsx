@@ -1,12 +1,15 @@
+
 'use client';
 
 import Image from "next/image";
-import { getPlaceholderImage } from "@/lib/images";
 import { useLanguage } from "@/context/LanguageContext";
+import { useSiteSettings } from "@/context/SiteSettingsContext";
 
 export default function About() {
   const { t } = useLanguage();
-  const image = getPlaceholderImage("about-us");
+  const { getImage } = useSiteSettings();
+  
+  const image = getImage("about-us");
 
   return (
     <section id="about" className="bg-white py-12 sm:py-16">

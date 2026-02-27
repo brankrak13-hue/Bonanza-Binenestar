@@ -1,9 +1,11 @@
+
 "use client";
 
 import Image from "next/image";
 import type { ImagePlaceholder } from "@/lib/images";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
+import { useSiteSettings } from "@/context/SiteSettingsContext";
 
 type HeroSectionProps = {
   title: string;
@@ -16,17 +18,21 @@ type HeroSectionProps = {
 
 export default function HeroSection({ title, subtitle, description, buttonText, buttonLink, image }: HeroSectionProps) {
   const { t } = useLanguage();
+  const { getImage } = useSiteSettings();
+  
+  // Usar la imagen del contexto (posiblemente sobreescrita por el admin)
+  const currentImage = getImage(image.id);
   
   return (
     <section className="relative w-full h-[calc(100vh-120px)] min-h-[600px] flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 z-0">
         <Image
-          src={image.imageUrl}
-          alt={image.description}
+          src={currentImage.imageUrl}
+          alt={currentImage.description}
           fill
           priority
           className="object-cover animate-hero-zoom"
-          data-ai-hint={image.imageHint}
+          data-ai-hint={currentImage.imageHint}
         />
         <div className="absolute inset-0 bg-black/40 backdrop-grayscale-[0.2]" />
       </div>
