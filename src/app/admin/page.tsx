@@ -9,7 +9,7 @@ import { placeholderImages } from '@/lib/images';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Loader2, Image as ImageIcon, LayoutDashboard, LogOut, Save, ExternalLink } from 'lucide-react';
+import { Loader2, Image as ImageIcon, LayoutDashboard, LogOut, Save, ExternalLink, ShieldAlert } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Image from 'next/image';
@@ -165,8 +165,6 @@ export default function AdminDashboard() {
                     </div>
                 </CardContent>
               </Card>
-
-              {/* Aquí podrías añadir un registro de actividades o gestión de usuarios en el futuro */}
           </div>
         </div>
       </div>
