@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { createContext, useContext, ReactNode } from 'react';
@@ -8,7 +7,9 @@ import { placeholderImages, type ImagePlaceholder } from '@/lib/images';
 
 interface SiteSettingsContextType {
   images: Record<string, string>;
+  prices: Record<string, number>;
   getImage: (id: string) => ImagePlaceholder;
+  getPrice: (id: string, defaultPrice: number) => number;
   isLoading: boolean;
 }
 
@@ -17,12 +18,20 @@ const SiteSettingsContext = createContext<SiteSettingsContextType | undefined>(u
 export function SiteSettingsProvider({ children }: { children: ReactNode }) {
   const db = useFirestore();
 
+  // Query for images
   const imagesQuery = useMemoFirebase(() => {
     if (!db) return null;
     return collection(db, 'siteSettings', 'content', 'images');
   }, [db]);
 
-  const { data: imageOverrides, isLoading } = useCollection(imagesQuery);
+  // Query for prices
+  const pricesQuery = useMemoFirebase(() => {
+    if (!db) return null;
+    return collection(db, 'siteSettings', 'content', 'prices');
+  }, [db]);
+
+  const { data: imageOverrides, isLoading: isLoadingImages } = useCollection(imagesQuery);
+  const { data: priceOverrides, isLoading: isLoadingPrices } = useCollection(pricesQuery);
 
   const imagesMap = React.useMemo(() => {
     const map: Record<string, string> = {};
@@ -33,6 +42,16 @@ export function SiteSettingsProvider({ children }: { children: ReactNode }) {
     }
     return map;
   }, [imageOverrides]);
+
+  const pricesMap = React.useMemo(() => {
+    const map: Record<string, number> = {};
+    if (priceOverrides) {
+      priceOverrides.forEach((doc: any) => {
+        map[doc.id] = Number(doc.price);
+      });
+    }
+    return map;
+  }, [priceOverrides]);
 
   const getImage = (id: string): ImagePlaceholder => {
     const defaultImg = placeholderImages.find(img => img.id === id);
@@ -51,8 +70,18 @@ export function SiteSettingsProvider({ children }: { children: ReactNode }) {
     };
   };
 
+  const getPrice = (id: string, defaultPrice: number): number => {
+    return pricesMap[id] !== undefined ? pricesMap[id] : defaultPrice;
+  };
+
   return (
-    <SiteSettingsContext.Provider value={{ images: imagesMap, getImage, isLoading }}>
+    <SiteSettingsContext.Provider value={{ 
+      images: imagesMap, 
+      prices: pricesMap,
+      getImage, 
+      getPrice,
+      isLoading: isLoadingImages || isLoadingPrices 
+    }}>
       {children}
     </SiteSettingsContext.Provider>
   );

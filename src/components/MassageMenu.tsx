@@ -11,65 +11,73 @@ import {
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
 import { useLanguage } from "@/context/LanguageContext";
+import { useSiteSettings } from "@/context/SiteSettingsContext";
 import { Plus, Clock, Sparkles, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function MassageMenu() {
     const { t } = useLanguage();
     const { addToCart } = useCart();
+    const { getPrice } = useSiteSettings();
     const [addedId, setAddedId] = useState<string | null>(null);
 
     const massages = [
         {
+            id: 'purification',
             title: t('massages.purification.title'),
             subtitle: t('massages.purification.sub'),
             description: t('massages.purification.desc'),
             prices: [
-                { price: 1100, duration: 90 },
-                { price: 900, duration: 60 }
+                { price: getPrice('purification-90', 1100), duration: 90 },
+                { price: getPrice('purification-60', 900), duration: 60 }
             ]
         },
         {
+            id: 'fluidity',
             title: t('massages.fluidity.title'),
             subtitle: t('massages.fluidity.sub'),
             description: t('massages.fluidity.desc'),
             prices: [
-                { price: 800, duration: 60 },
-                { price: 1000, duration: 90 }
+                { price: getPrice('fluidity-60', 800), duration: 60 },
+                { price: getPrice('fluidity-90', 1000), duration: 90 }
             ]
         },
         {
+            id: 'release',
             title: t('massages.release.title'),
             subtitle: t('massages.release.sub'),
             description: t('massages.release.desc'),
             prices: [
-                { price: 1100, duration: 90 },
-                { price: 900, duration: 60 }
+                { price: getPrice('release-90', 1100), duration: 90 },
+                { price: getPrice('release-60', 900), duration: 60 }
             ]
         },
         {
+            id: 'awakening',
             title: t('massages.awakening.title'),
             subtitle: t('massages.awakening.sub'),
             description: t('massages.awakening.desc'),
             prices: [
-                { price: 800, duration: 60 },
-                { price: 1000, duration: 90 }
+                { price: getPrice('awakening-60', 800), duration: 60 },
+                { price: getPrice('awakening-90', 1000), duration: 90 }
             ]
         },
         {
+            id: 'reset',
             title: t('massages.reset.title'),
             subtitle: t('massages.reset.sub'),
             description: t('massages.reset.desc'),
             prices: [
-                { price: 700, duration: 60 }
+                { price: getPrice('reset-60', 700), duration: 60 }
             ]
         },
         {
+            id: 'sculpt',
             title: t('massages.sculpt.title'),
             subtitle: t('massages.sculpt.sub'),
             description: t('massages.sculpt.desc'),
             prices: [
-                { price: 900, duration: 60 }
+                { price: getPrice('sculpt-60', 900), duration: 60 }
             ]
         }
     ];

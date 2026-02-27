@@ -22,16 +22,19 @@ export const translations: any = {
       accessButton: "Validar Llave",
       accessSuccess: "¡Acceso concedido!",
       accessError: "Llave incorrecta. Acceso denegado.",
+      imagesTab: "Imágenes",
+      pricesTab: "Precios",
       imagesTitle: "Gestión de Imágenes",
       imagesDesc: "Cambia las imágenes de cualquier sección pegando una nueva URL.",
+      pricesTitle: "Gestión de Precios",
+      pricesDesc: "Ajusta los costos de los servicios en tiempo real.",
       imageLabel: "Nueva URL de Imagen",
-      save: "Actualizar Imagen",
+      save: "Actualizar",
       saving: "Actualizando...",
       section: "Sección",
       preview: "Vista Previa",
       logout: "Salir del Panel"
     },
-    // ... resto de las traducciones (mantener las existentes)
     hero: {
       title: "Eleva tu Bienestar",
       subtitle: "BONANZA ARTE & BIENESTAR",
@@ -280,16 +283,19 @@ export const translations: any = {
       accessButton: "Validate Key",
       accessSuccess: "Access granted!",
       accessError: "Incorrect key. Access denied.",
+      imagesTab: "Images",
+      pricesTab: "Prices",
       imagesTitle: "Image Management",
       imagesDesc: "Change the images of any section by pasting a new URL.",
+      pricesTitle: "Price Management",
+      pricesDesc: "Adjust service costs in real time.",
       imageLabel: "New Image URL",
-      save: "Update Image",
+      save: "Update",
       saving: "Updating...",
       section: "Section",
       preview: "Preview",
       logout: "Exit Panel"
     },
-    // ... resto de las traducciones (mantener las existentes)
     hero: {
       title: "Elevate Your Well-being",
       subtitle: "BONANZA ART & WELLNESS",
