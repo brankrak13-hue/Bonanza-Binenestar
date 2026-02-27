@@ -84,6 +84,12 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // Configuración del sitio: Lectura pública para imágenes personalizadas, escritura solo admin
+    match /siteSettings/content/images/{imageId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
     // Seguridad de Entrada: Prevención de SPAM y ataques de inyección
     match /newsletterSubscribers/{subscriberId} {
       allow create: if true;
