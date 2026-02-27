@@ -121,7 +121,7 @@ export default function MassageMenu() {
                                                 key={i} 
                                                 className={cn(
                                                     "flex justify-between items-center p-5 rounded-3xl bg-white/80 border transition-all duration-500",
-                                                    isAdded ? "border-accent" : "border-transparent"
+                                                    isAdded ? "border-accent shadow-md scale-[1.02]" : "border-transparent"
                                                 )}
                                             >
                                                 <div className="flex items-center gap-3">
@@ -133,12 +133,18 @@ export default function MassageMenu() {
                                                     <Button 
                                                         size="icon" 
                                                         className={cn(
-                                                            "rounded-full w-10 h-10 p-0 transition-all",
-                                                            isAdded ? "bg-accent" : "bg-primary"
+                                                            "rounded-full w-10 h-10 p-0 transition-all duration-300 transform",
+                                                            isAdded 
+                                                                ? "bg-accent rotate-0 scale-110" 
+                                                                : "bg-primary hover:rotate-90 hover:scale-110 active:scale-90"
                                                         )}
                                                         onClick={() => handleAddToCart({ title: massage.title, subtitle: massage.subtitle, price: p.price, duration: p.duration })}
                                                     >
-                                                        {isAdded ? <Check className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
+                                                        {isAdded ? (
+                                                            <Check className="h-5 w-5 animate-in zoom-in duration-300" />
+                                                        ) : (
+                                                            <Plus className="h-5 w-5" />
+                                                        )}
                                                     </Button>
                                                 </div>
                                             </div>
