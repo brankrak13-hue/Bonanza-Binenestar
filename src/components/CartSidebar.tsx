@@ -15,9 +15,10 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
 import { Minus, Plus, Trash2, ShoppingCart, Loader2, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useUser } from "@/firebase";
+import { useUser, useFirestore } from "@/firebase";
 import AuthModal from "@/components/AuthModal";
 import { useLanguage } from "@/context/LanguageContext";
+import { collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
 
 const GooglePayButton = dynamic(
   () => import('@google-pay/button-react'),
@@ -37,6 +38,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
   const [processingPayment, setProcessingPayment] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const { user } = useUser();
+  const db = useFirestore();
   const { toast } = useToast();
   const { t } = useLanguage();
 
@@ -44,6 +46,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
     if (totalPrice === 0) return;
     setProcessingPayment(true);
     try {
+      // 1. Procesar el cargo en el servidor (Stripe)
       const response = await fetch('/api/process-payment', {
         method: 'POST',
         headers: {
@@ -59,6 +62,44 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
       const result = await response.json();
 
       if (response.ok && result.success) {
+        // 2. Si el pago fue exitoso y el usuario está autenticado, guardar en Firestore
+        if (user && db) {
+          const orderId = `order_${Date.now()}`;
+          const orderRef = doc(db, 'userProfiles', user.uid, 'orders', orderId);
+          
+          const orderData = {
+            id: orderId,
+            userProfileId: user.uid,
+            orderDate: new Date().toISOString(),
+            totalAmount: totalPrice,
+            status: 'pending', // Aparecerá como "Próxima" en la UI
+            paymentStatus: 'paid',
+            shippingAddressId: 'digital_service', // Requerido por el esquema de backend.json
+            billingAddressId: 'digital_service',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          };
+
+          // Guardar el pedido principal
+          await setDoc(orderRef, orderData);
+
+          // Guardar los items del pedido en la subcolección
+          for (const item of cartItems) {
+            const itemRef = doc(collection(orderRef, 'orderItems'));
+            await setDoc(itemRef, {
+              id: itemRef.id,
+              orderId: orderId,
+              productId: item.id,
+              productName: item.title, // Info extra para la UI
+              quantity: item.quantity,
+              priceAtPurchase: item.price,
+              duration: item.duration,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+            });
+          }
+        }
+
         toast({
           title: t('cart.success'),
           description: t('cart.successDesc'),

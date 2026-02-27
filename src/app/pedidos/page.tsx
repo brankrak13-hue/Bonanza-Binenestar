@@ -1,3 +1,4 @@
+
 'use client';
 
 import Header from '@/components/Header';
@@ -5,14 +6,15 @@ import Footer from '@/components/Footer';
 import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { useLanguage } from '@/context/LanguageContext';
 import { collection, query, orderBy } from 'firebase/firestore';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, Calendar, Clock, CreditCard, ChevronRight, Package, ShoppingBag } from 'lucide-react';
+import { Loader2, Calendar, CreditCard, ChevronRight, Package, ShoppingBag } from 'lucide-react';
 import { format } from 'date-fns';
 import { es, enUS } from 'date-fns/locale';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 export default function PedidosPage() {
   const { user, isUserLoading } = useUser();
@@ -76,7 +78,7 @@ export default function PedidosPage() {
         <CardContent className="p-6 flex-grow">
           <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
             <div>
-              <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400 mb-1">ID: {order.id.slice(0, 8)}</p>
+              <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400 mb-1">ID: {order.id.slice(0, 15)}</p>
               <h3 className="text-xl font-bold font-headline">{t('appointments.details')}</h3>
             </div>
             <Badge className={cn(
@@ -168,8 +170,4 @@ export default function PedidosPage() {
       <Footer />
     </main>
   );
-}
-
-function cn(...inputs: any[]) {
-  return inputs.filter(Boolean).join(' ');
 }
