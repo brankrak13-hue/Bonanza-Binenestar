@@ -146,6 +146,42 @@ export const translations: any = {
       errorRegisterTitle: "Error al registrarse",
       errorRegisterDesc: "No se pudo crear la cuenta."
     },
+    profile: {
+      title: "Mi Perfil",
+      subtitle: "GESTIÓN DE CUENTA",
+      desc: "Mantén tu información actualizada para una mejor experiencia.",
+      firstName: "Nombre",
+      lastName: "Apellido",
+      email: "Correo Electrónico (No editable)",
+      phone: "Teléfono de Contacto",
+      save: "Guardar Cambios",
+      saving: "Guardando...",
+      success: "Perfil actualizado",
+      successDesc: "Tus datos se han guardado correctamente.",
+      error: "Error al actualizar",
+      errorDesc: "No se pudo actualizar el perfil.",
+      noAuth: "Debes iniciar sesión para ver tu perfil."
+    },
+    appointments: {
+      title: "Mis Citas",
+      subtitle: "HISTORIAL Y RESERVAS",
+      desc: "Consulta el estado de tus rituales de bienestar.",
+      upcoming: "Próximas",
+      history: "Historial",
+      noUpcoming: "No tienes citas próximas.",
+      noHistory: "Aún no has completado ninguna sesión.",
+      bookNow: "Agendar ahora",
+      status: {
+        pending: "Pendiente",
+        processing: "En proceso",
+        shipped: "Confirmada",
+        delivered: "Completada",
+        cancelled: "Cancelada"
+      },
+      date: "Fecha",
+      total: "Total",
+      details: "Detalles"
+    },
     cart: {
       title: "Tu Carrito",
       empty: "Tu carrito está vacío",
@@ -347,6 +383,42 @@ export const translations: any = {
       successRegisterDesc: "Welcome to Bonanza Art & Wellness.",
       errorRegisterTitle: "Registration Error",
       errorRegisterDesc: "The account could not be created."
+    },
+    profile: {
+      title: "My Profile",
+      subtitle: "ACCOUNT MANAGEMENT",
+      desc: "Keep your information updated for a better experience.",
+      firstName: "First Name",
+      lastName: "Last Name",
+      email: "Email Address (Not editable)",
+      phone: "Contact Phone",
+      save: "Save Changes",
+      saving: "Saving...",
+      success: "Profile updated",
+      successDesc: "Your details have been saved successfully.",
+      error: "Update error",
+      errorDesc: "Could not update the profile.",
+      noAuth: "You must log in to view your profile."
+    },
+    appointments: {
+      title: "My Appointments",
+      subtitle: "HISTORY AND BOOKINGS",
+      desc: "Check the status of your wellness rituals.",
+      upcoming: "Upcoming",
+      history: "History",
+      noUpcoming: "You have no upcoming appointments.",
+      noHistory: "You haven't completed any sessions yet.",
+      bookNow: "Book now",
+      status: {
+        pending: "Pending",
+        processing: "Processing",
+        shipped: "Confirmed",
+        delivered: "Completed",
+        cancelled: "Cancelled"
+      },
+      date: "Date",
+      total: "Total",
+      details: "Details"
     },
     cart: {
       title: "Your Cart",
