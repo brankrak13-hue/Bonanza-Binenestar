@@ -9,12 +9,36 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Loader2, Image as ImageIcon, LayoutDashboard, LogOut, Save, ExternalLink, ShieldAlert, Banknote, Clock } from 'lucide-react';
+import { 
+  Loader2, 
+  Image as ImageIcon, 
+  LayoutDashboard, 
+  LogOut, 
+  Save, 
+  ExternalLink, 
+  ShieldAlert, 
+  Banknote, 
+  Clock 
+} from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
+
+// List of services for price management
+const SERVICES_LIST = [
+  { id: 'purification-90', name: 'Purificación Sutil (90 min)', default: 1100 },
+  { id: 'purification-60', name: 'Purificación Sutil (60 min)', default: 900 },
+  { id: 'fluidity-60', name: 'Fluidez Esencial (60 min)', default: 800 },
+  { id: 'fluidity-90', name: 'Fluidez Esencial (90 min)', default: 1000 },
+  { id: 'release-90', name: 'Liberación de Tensión (90 min)', default: 1100 },
+  { id: 'release-60', name: 'Liberación de Tensión (60 min)', default: 900 },
+  { id: 'awakening-60', name: 'Despertar Vital (60 min)', default: 800 },
+  { id: 'awakening-90', name: 'Despertar Vital (90 min)', default: 1000 },
+  { id: 'reset-60', name: 'Re-inicia tu Mente (60 min)', default: 700 },
+  { id: 'sculpt-60', name: 'Moldea tu figura (60 min)', default: 900 },
+];
 
 export default function AdminDashboard() {
   const { user, isUserLoading } = useUser();
@@ -74,20 +98,6 @@ export default function AdminDashboard() {
     }
   };
 
-  // List of services based on MassageMenu.tsx for price management
-  const servicesList = [
-    { id: 'purification-90', name: 'Purificación Sutil (90 min)', default: 1100 },
-    { id: 'purification-60', name: 'Purificación Sutil (60 min)', default: 900 },
-    { id: 'fluidity-60', name: 'Fluidez Esencial (60 min)', default: 800 },
-    { id: 'fluidity-90', name: 'Fluidez Esencial (90 min)', default: 1000 },
-    { id: 'release-90', name: 'Liberación de Tensión (90 min)', default: 1100 },
-    { id: 'release-60', name: 'Liberación de Tensión (60 min)', default: 900 },
-    { id: 'awakening-60', name: 'Despertar Vital (60 min)', default: 800 },
-    { id: 'awakening-90', name: 'Despertar Vital (90 min)', default: 1000 },
-    { id: 'reset-60', name: 'Re-inicia tu Mente (60 min)', default: 700 },
-    { id: 'sculpt-60', name: 'Moldea tu figura (60 min)', default: 900 },
-  ];
-
   if (isUserLoading || isAdminChecking) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -104,8 +114,8 @@ export default function AdminDashboard() {
           <LayoutDashboard className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
           <h1 className="text-2xl font-bold mb-4">Acceso Denegado</h1>
           <p className="text-muted-foreground mb-8">Esta área es solo para administradores de Bonanza.</p>
-          <Button asChild className="btn-primary">
-              <button onClick={() => router.push('/admin/acceso')}>Ir a Acceso</button>
+          <Button onClick={() => router.push('/admin/acceso')} className="btn-primary">
+              Ir a Acceso
           </Button>
         </div>
         <Footer />
@@ -215,7 +225,7 @@ export default function AdminDashboard() {
                     <CardDescription>{t('admin.pricesDesc')}</CardDescription>
                   </CardHeader>
                   <CardContent className="p-8 space-y-8">
-                    {servicesList.map((service) => {
+                    {SERVICES_LIST.map((service) => {
                       const override = priceOverrides?.find(o => o.id === service.id);
                       const currentPrice = override?.price !== undefined ? override.price : service.default;
 

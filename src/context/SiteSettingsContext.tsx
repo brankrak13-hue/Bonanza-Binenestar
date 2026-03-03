@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, useContext, ReactNode, useMemo } from 'react';
 import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
 import { collection } from 'firebase/firestore';
 import { placeholderImages, type ImagePlaceholder } from '@/lib/images';
@@ -33,7 +33,7 @@ export function SiteSettingsProvider({ children }: { children: ReactNode }) {
   const { data: imageOverrides, isLoading: isLoadingImages } = useCollection(imagesQuery);
   const { data: priceOverrides, isLoading: isLoadingPrices } = useCollection(pricesQuery);
 
-  const imagesMap = React.useMemo(() => {
+  const imagesMap = useMemo(() => {
     const map: Record<string, string> = {};
     if (imageOverrides) {
       imageOverrides.forEach((doc: any) => {
@@ -43,7 +43,7 @@ export function SiteSettingsProvider({ children }: { children: ReactNode }) {
     return map;
   }, [imageOverrides]);
 
-  const pricesMap = React.useMemo(() => {
+  const pricesMap = useMemo(() => {
     const map: Record<string, number> = {};
     if (priceOverrides) {
       priceOverrides.forEach((doc: any) => {
