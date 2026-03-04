@@ -1,6 +1,7 @@
+
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { Sparkles, MessageSquare, ArrowRight, Loader2, Brain, Stars, Sparkle, Wind, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -40,7 +41,7 @@ export default function AiProductAdvisor() {
     return () => clearInterval(interval);
   }, [loading, THINKING_STEPS.length]);
 
-  const handleSubmit = async (e?: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e?: React.FormEvent) => {
     e?.preventDefault();
     if (!query.trim()) return;
 
@@ -60,16 +61,19 @@ export default function AiProductAdvisor() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [query, language, t]);
 
   const handleNextQuestion = (q: string) => {
     setQuery(q);
-    const syntheticEvent = { preventDefault: () => {} } as React.FormEvent;
-    setTimeout(() => handleSubmit(syntheticEvent), 100);
+    // Usamos un pequeño delay para asegurar que el estado de query se actualice antes del submit
+    setTimeout(() => {
+        const fakeEvent = { preventDefault: () => {} } as React.FormEvent;
+        handleSubmit(fakeEvent);
+    }, 50);
   };
 
   return (
-    <section id="ai-advisor" className="py-20 sm:py-32 bg-secondary/10 relative overflow-hidden">
+    <section id="ai-advisor" className="py-10 sm:py-20 bg-secondary/10 relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-20">
           <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 blur-[120px] rounded-full animate-pulse" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-accent/20 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '2s' }} />
@@ -78,24 +82,24 @@ export default function AiProductAdvisor() {
       <div className="max-w-screen-md mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="animate-fadeIn">
           <Card className="border-none shadow-[0_32px_64px_-16px_rgba(41,102,84,0.15)] glass-card rounded-[3rem] overflow-hidden border border-white/40">
-            <CardHeader className="text-center pt-16 pb-10">
-              <div className="mx-auto bg-primary/10 rounded-full p-5 w-fit mb-8 relative group">
+            <CardHeader className="text-center pt-12 pb-8">
+              <div className="mx-auto bg-primary/10 rounded-full p-5 w-fit mb-6 relative group">
                   <div className="absolute inset-0 bg-primary/20 rounded-full animate-ping group-hover:animate-none opacity-40" />
-                  <Stars className="w-10 h-10 text-primary relative z-10 animate-spin-slow" />
+                  <Stars className="w-8 h-8 text-primary relative z-10 animate-spin-slow" />
               </div>
-              <CardTitle className="text-5xl md:text-6xl font-bold mb-6 tracking-tight font-headline text-gray-900">{t('ai.title')}</CardTitle>
-              <CardDescription className="max-w-md mx-auto text-lg text-gray-500 leading-relaxed font-body italic">
+              <CardTitle className="text-4xl md:text-5xl font-bold mb-4 tracking-tight font-headline text-gray-900">{t('ai.title')}</CardTitle>
+              <CardDescription className="max-w-md mx-auto text-base text-gray-500 leading-relaxed font-body italic">
                 "{t('ai.desc')}"
               </CardDescription>
             </CardHeader>
-            <CardContent className="px-10 pb-16">
-              <form onSubmit={handleSubmit} className="relative group space-y-8">
+            <CardContent className="px-6 sm:px-10 pb-16">
+              <form onSubmit={handleSubmit} className="relative group space-y-6">
                 <div className="relative">
                   <Textarea
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder={t('ai.placeholder')}
-                    className="min-h-[160px] bg-white/40 border-white/60 rounded-[2.5rem] p-8 text-xl focus:ring-primary/10 transition-all duration-500 group-hover:bg-white/80 resize-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] backdrop-blur-sm"
+                    className="min-h-[140px] bg-white/40 border-white/60 rounded-[2rem] p-6 text-lg focus:ring-primary/10 transition-all duration-500 group-hover:bg-white/80 resize-none shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)] backdrop-blur-sm"
                     disabled={loading}
                   />
                   {!loading && query.trim() && (
@@ -107,94 +111,94 @@ export default function AiProductAdvisor() {
                 
                 <Button 
                   type="submit" 
-                  className="w-full btn-primary h-20 text-base tracking-[0.25em] shadow-xl group/btn" 
+                  className="w-full btn-primary h-16 text-base tracking-[0.25em] shadow-xl group/btn rounded-2xl" 
                   disabled={loading || !query.trim()}
                 >
                   {loading ? (
                     <span className="flex items-center gap-4">
-                      <Loader2 className="w-6 h-6 animate-spin" />
+                      <Loader2 className="w-5 h-5 animate-spin" />
                       {THINKING_STEPS[thinkingStep]}
                     </span>
                   ) : (
                     <span className="flex items-center gap-3">
                       {t('ai.cta')}
-                      <Wind className="w-6 h-6 transition-transform group-hover/btn:translate-x-2" />
+                      <Wind className="w-5 h-5 transition-transform group-hover/btn:translate-x-2" />
                     </span>
                   )}
                 </Button>
               </form>
 
               {loading && (
-                  <div className="mt-16 space-y-8 animate-pulse">
-                      <div className="flex items-center gap-4 mb-8">
+                  <div className="mt-12 space-y-8 animate-pulse">
+                      <div className="flex items-center gap-4 mb-6">
                         <Brain className="w-6 h-6 text-primary/30 animate-pulse" />
                         <div className="h-1.5 w-32 bg-primary/10 rounded-full" />
                       </div>
-                      <Skeleton className="h-12 w-3/4 rounded-3xl" />
-                      <div className="space-y-4">
-                        <Skeleton className="h-5 w-full rounded-full" />
-                        <Skeleton className="h-5 w-11/12 rounded-full" />
-                        <Skeleton className="h-5 w-10/12 rounded-full" />
+                      <Skeleton className="h-10 w-3/4 rounded-2xl" />
+                      <div className="space-y-3">
+                        <Skeleton className="h-4 w-full rounded-full" />
+                        <Skeleton className="h-4 w-11/12 rounded-full" />
+                        <Skeleton className="h-4 w-10/12 rounded-full" />
                       </div>
                   </div>
               )}
 
               {error && (
-                <div className="mt-12 p-10 rounded-[2.5rem] bg-destructive/5 text-destructive border border-destructive/10 text-center animate-scaleIn flex flex-col items-center gap-4">
+                <div className="mt-10 p-8 rounded-[2.5rem] bg-destructive/5 text-destructive border border-destructive/10 text-center animate-scaleIn flex flex-col items-center gap-4">
                   <XCircle className="w-8 h-8" />
-                  <p className="font-bold text-lg tracking-wide uppercase">{error}</p>
+                  <p className="font-bold text-base tracking-wide uppercase">{error}</p>
                 </div>
               )}
 
               {result && (
-                <div className="mt-16 p-10 rounded-[3rem] bg-white shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-primary/5 animate-scaleIn">
-                  <div className="flex items-center gap-3 text-[11px] font-bold tracking-[0.4em] text-primary/60 uppercase mb-8">
-                    <Stars className="w-5 h-5 animate-spin-slow text-accent" />
+                <div className="mt-12 p-8 sm:p-10 rounded-[2.5rem] bg-white shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-primary/5 animate-scaleIn">
+                  <div className="flex items-center gap-3 text-[10px] font-bold tracking-[0.4em] text-primary/60 uppercase mb-6">
+                    <Stars className="w-4 h-4 animate-spin-slow text-accent" />
                     {t('ai.ritual')}
                   </div>
                   
-                  <h3 className="font-bold text-5xl md:text-6xl text-gray-900 mb-4 font-headline leading-tight">{result.productName}</h3>
-                  <div className="inline-flex px-6 py-2 rounded-full bg-primary/5 text-primary text-[11px] font-bold uppercase tracking-[0.2em] mb-10 border border-primary/10">
+                  <h3 className="font-bold text-4xl md:text-5xl text-gray-900 mb-4 font-headline leading-tight">{result.productName}</h3>
+                  <div className="inline-flex px-5 py-1.5 rounded-full bg-primary/5 text-primary text-[10px] font-bold uppercase tracking-[0.2em] mb-8 border border-primary/10">
                     {result.productType}
                   </div>
                   
-                  <div className="space-y-12">
+                  <div className="space-y-10">
                     <div>
-                      <h4 className="font-bold text-gray-400 text-[11px] tracking-[0.3em] uppercase mb-5 flex items-center gap-3">
+                      <h4 className="font-bold text-gray-400 text-[10px] tracking-[0.3em] uppercase mb-4 flex items-center gap-3">
                         <div className="w-6 h-px bg-gray-200" />
                         {t('ai.purpose')}
                       </h4>
-                      <p className="text-gray-700 leading-relaxed text-xl font-light">{result.description}</p>
+                      <p className="text-gray-700 leading-relaxed text-lg font-light">{result.description}</p>
                     </div>
                     
-                    <div className="p-8 rounded-[2.5rem] bg-secondary/40 border border-white shadow-[inset_0_2px_10px_rgba(41,102,84,0.05)]">
-                      <h4 className="font-bold text-primary text-[11px] tracking-[0.3em] uppercase mb-4 flex items-center gap-3">
+                    <div className="p-6 sm:p-8 rounded-[2rem] bg-secondary/40 border border-white shadow-[inset_0_2px_10px_rgba(41,102,84,0.05)]">
+                      <h4 className="font-bold text-primary text-[10px] tracking-[0.3em] uppercase mb-3 flex items-center gap-3">
                         <MessageSquare className="w-4 h-4" />
                         {t('ai.intuition')}
                       </h4>
-                      <p className="text-gray-800 leading-relaxed italic font-medium text-lg">"{result.reasoning}"</p>
+                      <p className="text-gray-800 leading-relaxed italic font-medium text-base">"{result.reasoning}"</p>
                     </div>
 
                     {result.suggestedNextQuestions && result.suggestedNextQuestions.length > 0 && (
-                        <div className="pt-8">
-                            <h4 className="font-bold text-gray-400 text-[11px] tracking-[0.3em] uppercase mb-6 text-center">{t('ai.next')}</h4>
-                            <div className="flex flex-col gap-4">
+                        <div className="pt-6">
+                            <h4 className="font-bold text-gray-400 text-[10px] tracking-[0.3em] uppercase mb-5 text-center">{t('ai.next')}</h4>
+                            <div className="flex flex-col gap-3">
                                 {result.suggestedNextQuestions.map((q, i) => (
                                     <button 
                                       key={i} 
                                       onClick={() => handleNextQuestion(q)}
-                                      className="text-left p-6 text-base font-semibold text-gray-600 border border-gray-100/60 rounded-[1.75rem] hover:border-primary/30 hover:bg-white hover:text-primary transition-all duration-500 flex justify-between items-center group/btn shadow-sm hover:shadow-md"
+                                      className="text-left p-5 text-sm font-semibold text-gray-600 border border-gray-100/60 rounded-[1.5rem] hover:border-primary/30 hover:bg-white hover:text-primary transition-all duration-500 flex justify-between items-center group/btn shadow-sm hover:shadow-md"
                                     >
                                         {q}
-                                        <ArrowRight className="w-5 h-5 opacity-0 -translate-x-3 group-hover/btn:opacity-100 group-hover/btn:translate-x-0 transition-all text-primary" />
+                                        <ArrowRight className="w-4 h-4 opacity-0 -translate-x-3 group-hover/btn:opacity-100 group-hover/btn:translate-x-0 transition-all text-primary" />
                                     </button>
                                 ))}
                             </div>
                         </div>
                     )}
 
-                    <div className="pt-10 flex justify-center">
-                        <Button asChild variant="outline" className="rounded-full px-12 h-14 border-primary/20 text-primary hover:bg-primary hover:text-white transition-all duration-500 font-bold tracking-[0.2em] text-[11px] uppercase shadow-lg">
+                    <div className="pt-8 flex justify-center">
+                        <Button asChild variant="outline" className="rounded-full px-10 h-12 border-primary/20 text-primary hover:bg-primary hover:text-white transition-all duration-500 font-bold tracking-[0.2em] text-[10px] uppercase shadow-lg">
                             <Link href="/servicios">{t('ai.menuCta')}</Link>
                         </Button>
                     </div>
