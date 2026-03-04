@@ -86,9 +86,14 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     e.preventDefault();
     setIsLoading(true);
     try {
-      // Firebase envía el correo automáticamente a la dirección proporcionada.
-      // El correo incluye un enlace de seguridad (Out-of-band link).
-      await sendPasswordResetEmail(auth, email);
+      // Configuramos la URL de redirección para que el enlace del correo
+      // apunte directamente a nuestra página de restablecimiento.
+      const actionCodeSettings = {
+        url: window.location.origin + '/restablecer',
+        handleCodeInApp: true,
+      };
+      
+      await sendPasswordResetEmail(auth, email, actionCodeSettings);
       setView('resetSuccess');
       toast({
         title: t('auth.resetSuccess'),
