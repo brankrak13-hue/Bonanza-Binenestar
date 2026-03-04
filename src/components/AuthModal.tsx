@@ -117,191 +117,193 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             setTimeout(() => setView('auth'), 300); // Reset view after closing
         }
     }}>
-      <DialogContent className="sm:max-w-[440px] rounded-[3rem] border-none shadow-[0_40px_100px_-20px_rgba(41,102,84,0.3)] glass-card overflow-hidden animate-in fade-in zoom-in-95 duration-500">
+      <DialogContent className="w-[calc(100%-2rem)] sm:max-w-[440px] rounded-[2.5rem] sm:rounded-[4rem] border-none shadow-[0_40px_100px_-20px_rgba(41,102,84,0.3)] glass-card overflow-hidden animate-in fade-in zoom-in-95 duration-500 p-0">
         <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-primary/20 via-primary to-primary/20" />
         
-        <DialogHeader className="pt-8 px-4">
-          <div className="mx-auto bg-primary/5 rounded-full p-4 w-fit mb-6 animate-in slide-in-from-top-4 duration-700">
-            {view === 'resetSuccess' ? (
-                <CheckCircle2 className="w-10 h-10 text-green-500" />
-            ) : view === 'reset' ? (
-                <Key className="w-10 h-10 text-primary animate-pulse" />
-            ) : (
-                <LotusIcon className="w-10 h-10 text-primary" />
-            )}
-          </div>
-          <DialogTitle className="text-3xl font-headline font-bold text-center text-gray-900 leading-tight">
-            {view === 'auth' ? t('auth.title') : view === 'resetSuccess' ? "Verifica tu Email" : t('auth.resetTitle')}
-          </DialogTitle>
-          <DialogDescription className="text-center text-gray-500 font-body italic px-6 mt-2">
-            {view === 'auth' ? t('auth.description') : view === 'resetSuccess' ? "Te enviamos un enlace de seguridad." : t('auth.resetDesc')}
-          </DialogDescription>
-        </DialogHeader>
+        <div className="p-6 sm:p-10 max-h-[90vh] overflow-y-auto custom-scrollbar">
+          <DialogHeader className="pt-2 sm:pt-4">
+            <div className="mx-auto bg-primary/5 rounded-full p-4 w-fit mb-4 sm:mb-6 animate-in slide-in-from-top-4 duration-700">
+              {view === 'resetSuccess' ? (
+                  <CheckCircle2 className="w-8 h-8 sm:w-10 sm:h-10 text-green-500" />
+              ) : view === 'reset' ? (
+                  <Key className="w-8 h-8 sm:w-10 sm:h-10 text-primary animate-pulse" />
+              ) : (
+                  <LotusIcon className="w-8 h-8 sm:w-10 sm:h-10 text-primary" />
+              )}
+            </div>
+            <DialogTitle className="text-2xl sm:text-3xl font-headline font-bold text-center text-gray-900 leading-tight">
+              {view === 'auth' ? t('auth.title') : view === 'resetSuccess' ? "Verifica tu Email" : t('auth.resetTitle')}
+            </DialogTitle>
+            <DialogDescription className="text-center text-gray-500 font-body italic px-2 sm:px-6 mt-2 text-xs sm:text-sm">
+              {view === 'auth' ? t('auth.description') : view === 'resetSuccess' ? "Te enviamos un enlace de seguridad." : t('auth.resetDesc')}
+            </DialogDescription>
+          </DialogHeader>
 
-        {view === 'auth' ? (
-          <Tabs defaultValue="login" className="w-full mt-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <TabsList className="grid w-full grid-cols-2 rounded-full h-14 p-1.5 bg-secondary/40 backdrop-blur-sm border border-white/40 shadow-inner">
-              <TabsTrigger value="login" className="rounded-full text-[10px] uppercase font-bold tracking-[0.2em] transition-all duration-500 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md">
-                {t('auth.loginTab')}
-              </TabsTrigger>
-              <TabsTrigger value="register" className="rounded-full text-[10px] uppercase font-bold tracking-[0.2em] transition-all duration-500 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md">
-                {t('auth.registerTab')}
-              </TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="login" className="animate-in fade-in duration-500">
-              <form onSubmit={handleLogin} className="space-y-5 py-8">
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 ml-2">{t('auth.email')}</Label>
-                  <div className="relative group">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300 group-focus-within:text-primary transition-colors" />
+          {view === 'auth' ? (
+            <Tabs defaultValue="login" className="w-full mt-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <TabsList className="grid w-full grid-cols-2 rounded-full h-12 sm:h-14 p-1.5 bg-secondary/40 backdrop-blur-sm border border-white/40 shadow-inner">
+                <TabsTrigger value="login" className="rounded-full text-[9px] sm:text-[10px] uppercase font-bold tracking-[0.2em] transition-all duration-500 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md">
+                  {t('auth.loginTab')}
+                </TabsTrigger>
+                <TabsTrigger value="register" className="rounded-full text-[9px] sm:text-[10px] uppercase font-bold tracking-[0.2em] transition-all duration-500 data-[state=active]:bg-white data-[state=active]:text-primary data-[state=active]:shadow-md">
+                  {t('auth.registerTab')}
+                </TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="login" className="animate-in fade-in duration-500">
+                <form onSubmit={handleLogin} className="space-y-4 sm:space-y-5 py-6 sm:py-8">
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="text-[9px] sm:text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 ml-2">{t('auth.email')}</Label>
+                    <div className="relative group">
+                      <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300 group-focus-within:text-primary transition-colors" />
+                      <Input 
+                          id="email" 
+                          type="email" 
+                          placeholder="tu@email.com" 
+                          value={email} 
+                          onChange={(e) => setEmail(e.target.value)} 
+                          className="h-12 sm:h-14 rounded-2xl bg-secondary/20 border-transparent focus:border-primary/20 focus:bg-white pl-11 text-sm sm:text-base transition-all duration-300"
+                          required 
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="password" className="text-[9px] sm:text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 ml-2">{t('auth.password')}</Label>
                     <Input 
-                        id="email" 
-                        type="email" 
-                        placeholder="tu@email.com" 
-                        value={email} 
-                        onChange={(e) => setEmail(e.target.value)} 
-                        className="h-14 rounded-2xl bg-secondary/20 border-transparent focus:border-primary/20 focus:bg-white pl-11 text-base transition-all duration-300"
-                        required 
+                      id="password" 
+                      type="password" 
+                      value={password} 
+                      onChange={(e) => setPassword(e.target.value)} 
+                      className="h-12 sm:h-14 rounded-2xl bg-secondary/20 border-transparent focus:border-primary/20 focus:bg-white px-6 text-sm sm:text-base transition-all duration-300"
+                      required 
                     />
                   </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="password" className="text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 ml-2">{t('auth.password')}</Label>
-                  <Input 
-                    id="password" 
-                    type="password" 
-                    value={password} 
-                    onChange={(e) => setPassword(e.target.value)} 
-                    className="h-14 rounded-2xl bg-secondary/20 border-transparent focus:border-primary/20 focus:bg-white px-6 text-base transition-all duration-300"
-                    required 
-                  />
-                </div>
-                <div className="text-right px-1">
-                  <button 
-                    type="button" 
-                    onClick={() => setView('reset')}
-                    className="text-[10px] uppercase tracking-[0.2em] font-bold text-primary hover:text-accent transition-colors underline-offset-4 hover:underline"
-                  >
-                    {t('auth.forgotPassword')}
-                  </button>
-                </div>
-                <Button type="submit" className="w-full btn-primary h-16 rounded-2xl text-xs tracking-[0.3em] shadow-xl hover:shadow-primary/20 active:scale-95 transition-all" disabled={isLoading}>
-                  {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : t('auth.loginButton')}
-                </Button>
-              </form>
-            </TabsContent>
+                  <div className="text-right px-1">
+                    <button 
+                      type="button" 
+                      onClick={() => setView('reset')}
+                      className="text-[9px] sm:text-[10px] uppercase tracking-[0.2em] font-bold text-primary hover:text-accent transition-colors underline-offset-4 hover:underline"
+                    >
+                      {t('auth.forgotPassword')}
+                    </button>
+                  </div>
+                  <Button type="submit" className="w-full btn-primary h-14 sm:h-16 rounded-2xl text-[10px] sm:text-xs tracking-[0.3em] shadow-xl hover:shadow-primary/20 active:scale-95 transition-all" disabled={isLoading}>
+                    {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : t('auth.loginButton')}
+                  </Button>
+                </form>
+              </TabsContent>
 
-            <TabsContent value="register" className="animate-in fade-in duration-500">
-              <form onSubmit={handleRegister} className="space-y-5 py-8">
-                <div className="space-y-2">
-                  <Label htmlFor="name" className="text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 ml-2">{t('auth.name')}</Label>
+              <TabsContent value="register" className="animate-in fade-in duration-500">
+                <form onSubmit={handleRegister} className="space-y-4 sm:space-y-5 py-6 sm:py-8">
+                  <div className="space-y-2">
+                    <Label htmlFor="name" className="text-[9px] sm:text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 ml-2">{t('auth.name')}</Label>
+                    <Input 
+                      id="name" 
+                      placeholder="Ej: Ana García" 
+                      value={name} 
+                      onChange={(e) => setName(e.target.value)} 
+                      className="h-12 sm:h-14 rounded-2xl bg-secondary/20 border-transparent focus:border-primary/20 focus:bg-white px-6 text-sm sm:text-base transition-all duration-300"
+                      required 
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="register-email" className="text-[9px] sm:text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 ml-2">{t('auth.email')}</Label>
+                    <Input 
+                      id="register-email" 
+                      type="email" 
+                      placeholder="tu@email.com" 
+                      value={email} 
+                      onChange={(e) => setEmail(e.target.value)} 
+                      className="h-12 sm:h-14 rounded-2xl bg-secondary/20 border-transparent focus:border-primary/20 focus:bg-white px-6 text-sm sm:text-base transition-all duration-300"
+                      required 
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="register-password" className="text-[9px] sm:text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 ml-2">{t('auth.password')}</Label>
+                    <Input 
+                      id="register-password" 
+                      type="password" 
+                      value={password} 
+                      onChange={(e) => setPassword(e.target.value)} 
+                      className="h-12 sm:h-14 rounded-2xl bg-secondary/20 border-transparent focus:border-primary/20 focus:bg-white px-6 text-sm sm:text-base transition-all duration-300"
+                      required 
+                    />
+                  </div>
+                  <Button type="submit" className="w-full btn-primary h-14 sm:h-16 rounded-2xl text-[10px] sm:text-xs tracking-[0.3em] shadow-xl hover:shadow-primary/20 active:scale-95 transition-all" disabled={isLoading}>
+                    {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : t('auth.registerButton')}
+                  </Button>
+                </form>
+              </TabsContent>
+            </Tabs>
+          ) : view === 'resetSuccess' ? (
+            <div className="py-8 sm:py-12 text-center space-y-6 sm:space-y-8 animate-in zoom-in-95 duration-700">
+              <div className="mx-auto relative">
+                  <div className="absolute inset-0 bg-green-100/50 rounded-full blur-2xl animate-pulse" />
+                  <div className="relative bg-green-50 rounded-full p-6 sm:p-8 w-fit mx-auto shadow-[0_15px_30px_-10px_rgba(34,197,94,0.3)]">
+                      <CheckCircle2 className="w-10 h-10 sm:w-14 sm:h-14 text-green-500 animate-bounce" />
+                  </div>
+              </div>
+              <div className="space-y-3 px-2">
+                  <p className="text-gray-700 font-medium leading-relaxed text-sm sm:text-base">
+                      Hemos enviado un enlace sagrado a <strong>{email}</strong>.
+                  </p>
+                  <p className="text-[10px] sm:text-xs text-gray-400 italic">
+                      Recuerda revisar tu carpeta de <strong>SPAM</strong> si no aparece en unos instantes.
+                  </p>
+              </div>
+              <Button variant="outline" className="rounded-full px-10 sm:px-12 h-12 sm:h-14 border-primary/20 text-primary hover:bg-primary hover:text-white transition-all duration-500 font-bold tracking-[0.2em] text-[9px] sm:text-[10px] uppercase shadow-md" onClick={() => setView('auth')}>
+                Volver al inicio
+              </Button>
+            </div>
+          ) : (
+            <form onSubmit={handleResetPassword} className="space-y-6 sm:space-y-8 py-6 sm:py-10 animate-in slide-in-from-bottom-4 duration-700">
+              <div className="space-y-3">
+                <Label htmlFor="reset-email" className="text-[9px] sm:text-[10px] uppercase tracking-[0.5em] font-bold text-primary/50 ml-2">{t('auth.email')}</Label>
+                <div className="relative group">
+                  <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-300 group-focus-within:text-primary transition-all duration-500" />
                   <Input 
-                    id="name" 
-                    placeholder="Ej: Ana García" 
-                    value={name} 
-                    onChange={(e) => setName(e.target.value)} 
-                    className="h-14 rounded-2xl bg-secondary/20 border-transparent focus:border-primary/20 focus:bg-white px-6 text-base transition-all duration-300"
-                    required 
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="register-email" className="text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 ml-2">{t('auth.email')}</Label>
-                  <Input 
-                    id="register-email" 
+                    id="reset-email" 
                     type="email" 
                     placeholder="tu@email.com" 
                     value={email} 
                     onChange={(e) => setEmail(e.target.value)} 
-                    className="h-14 rounded-2xl bg-secondary/20 border-transparent focus:border-primary/20 focus:bg-white px-6 text-base transition-all duration-300"
+                    className="h-16 sm:h-20 rounded-[1.5rem] sm:rounded-[2rem] bg-secondary/30 border-transparent focus:border-primary/20 focus:bg-white pl-14 text-base sm:text-lg transition-all duration-500 shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)]"
                     required 
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="register-password" className="text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 ml-2">{t('auth.password')}</Label>
-                  <Input 
-                    id="register-password" 
-                    type="password" 
-                    value={password} 
-                    onChange={(e) => setPassword(e.target.value)} 
-                    className="h-14 rounded-2xl bg-secondary/20 border-transparent focus:border-primary/20 focus:bg-white px-6 text-base transition-all duration-300"
-                    required 
-                  />
-                </div>
-                <Button type="submit" className="w-full btn-primary h-16 rounded-2xl text-xs tracking-[0.3em] shadow-xl hover:shadow-primary/20 active:scale-95 transition-all" disabled={isLoading}>
-                  {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : t('auth.registerButton')}
-                </Button>
-              </form>
-            </TabsContent>
-          </Tabs>
-        ) : view === 'resetSuccess' ? (
-          <div className="py-12 text-center space-y-8 animate-in zoom-in-95 duration-700">
-            <div className="mx-auto relative">
-                <div className="absolute inset-0 bg-green-100/50 rounded-full blur-2xl animate-pulse" />
-                <div className="relative bg-green-50 rounded-full p-8 w-fit mx-auto shadow-[0_15px_30px_-10px_rgba(34,197,94,0.3)]">
-                    <CheckCircle2 className="w-14 h-14 text-green-500 animate-bounce" />
-                </div>
-            </div>
-            <div className="space-y-3 px-2">
-                <p className="text-gray-700 font-medium leading-relaxed">
-                    Hemos enviado un enlace sagrado a <strong>{email}</strong>.
-                </p>
-                <p className="text-xs text-gray-400 italic">
-                    Recuerda revisar tu carpeta de <strong>SPAM</strong> si no aparece en unos instantes.
-                </p>
-            </div>
-            <Button variant="outline" className="rounded-full px-12 h-14 border-primary/20 text-primary hover:bg-primary hover:text-white transition-all duration-500 font-bold tracking-[0.2em] text-[10px] uppercase shadow-md" onClick={() => setView('auth')}>
-              Volver al inicio
-            </Button>
-          </div>
-        ) : (
-          <form onSubmit={handleResetPassword} className="space-y-8 py-10 animate-in slide-in-from-bottom-4 duration-700">
-            <div className="space-y-3">
-              <Label htmlFor="reset-email" className="text-[10px] uppercase tracking-[0.5em] font-bold text-primary/50 ml-2">{t('auth.email')}</Label>
-              <div className="relative group">
-                <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-300 group-focus-within:text-primary transition-all duration-500" />
-                <Input 
-                  id="reset-email" 
-                  type="email" 
-                  placeholder="tu@email.com" 
-                  value={email} 
-                  onChange={(e) => setEmail(e.target.value)} 
-                  className="h-20 rounded-[2rem] bg-secondary/30 border-transparent focus:border-primary/20 focus:bg-white pl-14 text-lg transition-all duration-500 shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)]"
-                  required 
-                />
               </div>
-            </div>
-            <div className="space-y-6">
-                <Button type="submit" className="w-full btn-primary h-20 rounded-[2rem] text-xs tracking-[0.4em] shadow-[0_20px_40px_-10px_rgba(41,102,84,0.4)] hover:shadow-[0_25px_50px_-12px_rgba(41,102,84,0.5)] active:scale-95 transition-all group/btn overflow-hidden relative" disabled={isLoading}>
-                    <div className="absolute inset-0 bg-white/10 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500" />
-                    {isLoading ? (
-                        <Loader2 className="mr-2 h-6 w-6 animate-spin" />
-                    ) : (
-                        <span className="flex items-center gap-3 relative z-10">
-                            {t('auth.sendReset')}
-                            <ArrowRight className="w-5 h-5 transition-transform group-hover/btn:translate-x-2" />
-                        </span>
-                    )}
-                </Button>
-                
-                <div className="text-center">
-                    <button 
-                        type="button" 
-                        onClick={() => setView('auth')}
-                        className="text-[10px] uppercase tracking-[0.4em] font-bold text-gray-400 hover:text-primary transition-all duration-500 flex items-center justify-center gap-2 mx-auto"
-                    >
-                        <LotusIcon className="w-4 h-4 opacity-40" />
-                        VOLVER AL INICIO
-                    </button>
-                </div>
-            </div>
+              <div className="space-y-6">
+                  <Button type="submit" className="w-full btn-primary h-16 sm:h-20 rounded-[1.5rem] sm:rounded-[2rem] text-[10px] sm:text-xs tracking-[0.4em] shadow-[0_20px_40px_-10px_rgba(41,102,84,0.4)] hover:shadow-[0_25px_50px_-12px_rgba(41,102,84,0.5)] active:scale-95 transition-all group/btn overflow-hidden relative" disabled={isLoading}>
+                      <div className="absolute inset-0 bg-white/10 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500" />
+                      {isLoading ? (
+                          <Loader2 className="mr-2 h-6 w-6 animate-spin" />
+                      ) : (
+                          <span className="flex items-center gap-3 relative z-10">
+                              {t('auth.sendReset')}
+                              <ArrowRight className="w-5 h-5 transition-transform group-hover/btn:translate-x-2" />
+                          </span>
+                      )}
+                  </Button>
+                  
+                  <div className="text-center">
+                      <button 
+                          type="button" 
+                          onClick={() => setView('auth')}
+                          className="text-[9px] sm:text-[10px] uppercase tracking-[0.4em] font-bold text-gray-400 hover:text-primary transition-all duration-500 flex items-center justify-center gap-2 mx-auto"
+                      >
+                          <LotusIcon className="w-4 h-4 opacity-40" />
+                          VOLVER AL INICIO
+                      </button>
+                  </div>
+              </div>
 
-            <div className="pt-6 flex justify-center gap-2 items-center opacity-30 grayscale pointer-events-none">
-                <ShieldCheck className="w-4 h-4" />
-                <span className="text-[8px] font-bold tracking-[0.3em] uppercase">Security Protocol v2.5</span>
-            </div>
-          </form>
-        )}
+              <div className="pt-4 sm:pt-6 flex justify-center gap-2 items-center opacity-30 grayscale pointer-events-none">
+                  <ShieldCheck className="w-4 h-4" />
+                  <span className="text-[8px] font-bold tracking-[0.3em] uppercase">Security Protocol v2.5</span>
+              </div>
+            </form>
+          )}
+        </div>
       </DialogContent>
     </Dialog>
   );
