@@ -168,7 +168,20 @@ export const translations: any = {
       successRegisterTitle: "¡Cuenta creada!",
       successRegisterDesc: "Bienvenido a Bonanza Arte & Bienestar.",
       errorRegisterTitle: "Error al registrarse",
-      errorRegisterDesc: "No se pudo crear la cuenta."
+      errorRegisterDesc: "No se pudo crear la cuenta.",
+      forgotPassword: "¿Olvidaste tu contraseña?",
+      resetTitle: "Recuperar Contraseña",
+      resetDesc: "Ingresa tu email para recibir un enlace de recuperación.",
+      sendReset: "Enviar Enlace",
+      resetSuccess: "Enlace enviado. Revisa tu correo.",
+      confirmResetTitle: "Nueva Contraseña",
+      confirmResetDesc: "Ingresa tu nueva contraseña para recuperar el acceso.",
+      newPassword: "Nueva Contraseña",
+      confirmNewPassword: "Confirmar Contraseña",
+      updatePassword: "Actualizar Contraseña",
+      passwordSuccess: "Contraseña actualizada correctamente.",
+      passwordError: "Hubo un error al actualizar la contraseña.",
+      matchError: "Las contraseñas no coinciden."
     },
     profile: {
       title: "Mi Perfil",
@@ -429,7 +442,20 @@ export const translations: any = {
       successRegisterTitle: "Account Created!",
       successRegisterDesc: "Welcome to Bonanza Art & Wellness.",
       errorRegisterTitle: "Registration Error",
-      errorRegisterDesc: "The account could not be created."
+      errorRegisterDesc: "The account could not be created.",
+      forgotPassword: "Forgot your password?",
+      resetTitle: "Reset Password",
+      resetDesc: "Enter your email to receive a recovery link.",
+      sendReset: "Send Link",
+      resetSuccess: "Link sent. Check your email.",
+      confirmResetTitle: "New Password",
+      confirmResetDesc: "Enter your new password to regain access.",
+      newPassword: "New Password",
+      confirmNewPassword: "Confirm Password",
+      updatePassword: "Update Password",
+      passwordSuccess: "Password updated successfully.",
+      passwordError: "There was an error updating your password.",
+      matchError: "Passwords do not match."
     },
     profile: {
       title: "My Profile",

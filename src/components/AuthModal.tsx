@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -5,7 +6,8 @@ import { useAuth } from '@/firebase';
 import { 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword,
-  updateProfile 
+  updateProfile,
+  sendPasswordResetEmail
 } from 'firebase/auth';
 import {
   Dialog,
@@ -19,7 +21,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Key, Mail } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
 interface AuthModalProps {
@@ -35,6 +37,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [view, setView] = useState<'auth' | 'reset'>('auth');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,89 +82,159 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     }
   };
 
+  const handleResetPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      await sendPasswordResetEmail(auth, email);
+      toast({
+        title: t('auth.resetSuccess'),
+        description: t('auth.resetDesc')
+      });
+      setView('auth');
+    } catch (error: any) {
+      toast({
+        variant: 'destructive',
+        title: "Error",
+        description: error.message
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] rounded-[2rem]">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-headline font-bold text-center">{t('auth.title')}</DialogTitle>
+          <DialogTitle className="text-2xl font-headline font-bold text-center">
+            {view === 'auth' ? t('auth.title') : t('auth.resetTitle')}
+          </DialogTitle>
           <DialogDescription className="text-center">
-            {t('auth.description')}
+            {view === 'auth' ? t('auth.description') : t('auth.resetDesc')}
           </DialogDescription>
         </DialogHeader>
-        <Tabs defaultValue="login" className="w-full mt-4">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="login">{t('auth.loginTab')}</TabsTrigger>
-            <TabsTrigger value="register">{t('auth.registerTab')}</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="login">
-            <form onSubmit={handleLogin} className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">{t('auth.email')}</Label>
-                <Input 
-                  id="email" 
-                  type="email" 
-                  placeholder="tu@email.com" 
-                  value={email} 
-                  onChange={(e) => setEmail(e.target.value)} 
-                  required 
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="password">{t('auth.password')}</Label>
-                <Input 
-                  id="password" 
-                  type="password" 
-                  value={password} 
-                  onChange={(e) => setPassword(e.target.value)} 
-                  required 
-                />
-              </div>
-              <Button type="submit" className="w-full btn-primary" disabled={isLoading}>
-                {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : t('auth.loginButton')}
-              </Button>
-            </form>
-          </TabsContent>
 
-          <TabsContent value="register">
-            <form onSubmit={handleRegister} className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">{t('auth.name')}</Label>
+        {view === 'auth' ? (
+          <Tabs defaultValue="login" className="w-full mt-4">
+            <TabsList className="grid w-full grid-cols-2 rounded-full h-12 p-1 bg-secondary/30">
+              <TabsTrigger value="login" className="rounded-full text-[10px] uppercase font-bold tracking-widest">{t('auth.loginTab')}</TabsTrigger>
+              <TabsTrigger value="register" className="rounded-full text-[10px] uppercase font-bold tracking-widest">{t('auth.registerTab')}</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="login">
+              <form onSubmit={handleLogin} className="space-y-4 py-6">
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-[10px] uppercase tracking-widest font-bold text-gray-400 ml-1">{t('auth.email')}</Label>
+                  <Input 
+                    id="email" 
+                    type="email" 
+                    placeholder="tu@email.com" 
+                    value={email} 
+                    onChange={(e) => setEmail(e.target.value)} 
+                    className="h-12 rounded-xl bg-secondary/20 border-transparent focus:border-primary/30"
+                    required 
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="password" className="text-[10px] uppercase tracking-widest font-bold text-gray-400 ml-1">{t('auth.password')}</Label>
+                  <Input 
+                    id="password" 
+                    type="password" 
+                    value={password} 
+                    onChange={(e) => setPassword(e.target.value)} 
+                    className="h-12 rounded-xl bg-secondary/20 border-transparent focus:border-primary/30"
+                    required 
+                  />
+                </div>
+                <div className="text-right">
+                  <button 
+                    type="button" 
+                    onClick={() => setView('reset')}
+                    className="text-[10px] uppercase tracking-widest font-bold text-primary hover:underline"
+                  >
+                    {t('auth.forgotPassword')}
+                  </button>
+                </div>
+                <Button type="submit" className="w-full btn-primary h-14 rounded-xl" disabled={isLoading}>
+                  {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : t('auth.loginButton')}
+                </Button>
+              </form>
+            </TabsContent>
+
+            <TabsContent value="register">
+              <form onSubmit={handleRegister} className="space-y-4 py-6">
+                <div className="space-y-2">
+                  <Label htmlFor="name" className="text-[10px] uppercase tracking-widest font-bold text-gray-400 ml-1">{t('auth.name')}</Label>
+                  <Input 
+                    id="name" 
+                    placeholder="Ej: Ana García" 
+                    value={name} 
+                    onChange={(e) => setName(e.target.value)} 
+                    className="h-12 rounded-xl bg-secondary/20 border-transparent focus:border-primary/30"
+                    required 
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="register-email" className="text-[10px] uppercase tracking-widest font-bold text-gray-400 ml-1">{t('auth.email')}</Label>
+                  <Input 
+                    id="register-email" 
+                    type="email" 
+                    placeholder="tu@email.com" 
+                    value={email} 
+                    onChange={(e) => setEmail(e.target.value)} 
+                    className="h-12 rounded-xl bg-secondary/20 border-transparent focus:border-primary/30"
+                    required 
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="register-password" className="text-[10px] uppercase tracking-widest font-bold text-gray-400 ml-1">{t('auth.password')}</Label>
+                  <Input 
+                    id="register-password" 
+                    type="password" 
+                    value={password} 
+                    onChange={(e) => setPassword(e.target.value)} 
+                    className="h-12 rounded-xl bg-secondary/20 border-transparent focus:border-primary/30"
+                    required 
+                  />
+                </div>
+                <Button type="submit" className="w-full btn-primary h-14 rounded-xl" disabled={isLoading}>
+                  {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : t('auth.registerButton')}
+                </Button>
+              </form>
+            </TabsContent>
+          </Tabs>
+        ) : (
+          <form onSubmit={handleResetPassword} className="space-y-6 py-8">
+            <div className="space-y-2">
+              <Label htmlFor="reset-email" className="text-[10px] uppercase tracking-widest font-bold text-gray-400 ml-1">{t('auth.email')}</Label>
+              <div className="relative">
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <Input 
-                  id="name" 
-                  placeholder="Ej: Ana García" 
-                  value={name} 
-                  onChange={(e) => setName(e.target.value)} 
-                  required 
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="register-email">{t('auth.email')}</Label>
-                <Input 
-                  id="register-email" 
+                  id="reset-email" 
                   type="email" 
                   placeholder="tu@email.com" 
                   value={email} 
                   onChange={(e) => setEmail(e.target.value)} 
+                  className="h-14 rounded-2xl bg-secondary/20 border-transparent focus:border-primary/30 pl-12"
                   required 
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="register-password">{t('auth.password')}</Label>
-                <Input 
-                  id="register-password" 
-                  type="password" 
-                  value={password} 
-                  onChange={(e) => setPassword(e.target.value)} 
-                  required 
-                />
-              </div>
-              <Button type="submit" className="w-full btn-primary" disabled={isLoading}>
-                {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : t('auth.registerButton')}
-              </Button>
-            </form>
-          </TabsContent>
-        </Tabs>
+            </div>
+            <Button type="submit" className="w-full btn-primary h-14 rounded-2xl" disabled={isLoading}>
+              {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : t('auth.sendReset')}
+            </Button>
+            <div className="text-center">
+              <button 
+                type="button" 
+                onClick={() => setView('auth')}
+                className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground hover:text-primary transition-colors"
+              >
+                Volver al inicio de sesión
+              </button>
+            </div>
+          </form>
+        )}
       </DialogContent>
     </Dialog>
   );
