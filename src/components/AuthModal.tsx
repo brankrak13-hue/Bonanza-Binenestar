@@ -21,7 +21,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Key, Mail } from 'lucide-react';
+import { Loader2, Key, Mail, CheckCircle2 } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
 interface AuthModalProps {
@@ -37,7 +37,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-  const [view, setView] = useState<'auth' | 'reset'>('auth');
+  const [view, setView] = useState<'auth' | 'reset' | 'resetSuccess'>('auth');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,12 +86,14 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     e.preventDefault();
     setIsLoading(true);
     try {
+      // Firebase envía el correo automáticamente a la dirección proporcionada.
+      // El correo incluye un enlace de seguridad (Out-of-band link).
       await sendPasswordResetEmail(auth, email);
+      setView('resetSuccess');
       toast({
         title: t('auth.resetSuccess'),
-        description: t('auth.resetDesc')
+        description: "Se ha enviado un enlace de seguridad a tu correo."
       });
-      setView('auth');
     } catch (error: any) {
       toast({
         variant: 'destructive',
@@ -108,10 +110,10 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
       <DialogContent className="sm:max-w-[425px] rounded-[2rem]">
         <DialogHeader>
           <DialogTitle className="text-2xl font-headline font-bold text-center">
-            {view === 'auth' ? t('auth.title') : t('auth.resetTitle')}
+            {view === 'auth' ? t('auth.title') : view === 'resetSuccess' ? "Verifica tu Email" : t('auth.resetTitle')}
           </DialogTitle>
           <DialogDescription className="text-center">
-            {view === 'auth' ? t('auth.description') : t('auth.resetDesc')}
+            {view === 'auth' ? t('auth.description') : view === 'resetSuccess' ? "Te enviamos un enlace de seguridad." : t('auth.resetDesc')}
           </DialogDescription>
         </DialogHeader>
 
@@ -204,6 +206,18 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
               </form>
             </TabsContent>
           </Tabs>
+        ) : view === 'resetSuccess' ? (
+          <div className="py-10 text-center space-y-6">
+            <div className="mx-auto bg-green-50 rounded-full p-4 w-fit">
+              <CheckCircle2 className="w-12 h-12 text-green-500" />
+            </div>
+            <p className="text-sm text-gray-600 px-4 leading-relaxed">
+              Hemos enviado un enlace a <strong>{email}</strong> para que puedas crear una nueva contraseña. Por favor, revisa tu carpeta de <strong>SPAM</strong> si no lo ves en unos minutos.
+            </p>
+            <Button variant="outline" className="rounded-full px-8" onClick={() => setView('auth')}>
+              Volver al inicio
+            </Button>
+          </div>
         ) : (
           <form onSubmit={handleResetPassword} className="space-y-6 py-8">
             <div className="space-y-2">
