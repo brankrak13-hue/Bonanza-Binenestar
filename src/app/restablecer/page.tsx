@@ -14,7 +14,7 @@ import { Label } from '@/components/ui/label';
 import { Loader2, Lock, CheckCircle2, ShieldCheck, Stars, ArrowRight, ShieldAlert, Sparkles } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import Link from 'next/link';
+import Link from 'link';
 import { LotusIcon } from '@/components/icons/LotusIcon';
 
 function RestablecerContent() {
@@ -76,6 +76,7 @@ function RestablecerContent() {
       await confirmPasswordReset(auth, oobCode, newPassword);
       setIsSuccess(true);
       toast({ title: t('auth.passwordSuccess') });
+      // Redirección suave después de un ritual de éxito
       setTimeout(() => router.push('/'), 5000);
     } catch (error: any) {
       toast({
