@@ -18,7 +18,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useUser, useFirestore } from "@/firebase";
 import AuthModal from "@/components/AuthModal";
 import { useLanguage } from "@/context/LanguageContext";
-import { collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { collection, doc, setDoc } from "firebase/firestore";
 
 const GooglePayButton = dynamic(
   () => import('@google-pay/button-react'),
@@ -72,25 +72,23 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
             userProfileId: user.uid,
             orderDate: new Date().toISOString(),
             totalAmount: totalPrice,
-            status: 'pending', // Aparecerá como "Próxima" en la UI
+            status: 'pending',
             paymentStatus: 'paid',
-            shippingAddressId: 'digital_service', // Requerido por el esquema de backend.json
+            shippingAddressId: 'digital_service',
             billingAddressId: 'digital_service',
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           };
 
-          // Guardar el pedido principal
           await setDoc(orderRef, orderData);
 
-          // Guardar los items del pedido en la subcolección
           for (const item of cartItems) {
             const itemRef = doc(collection(orderRef, 'orderItems'));
             await setDoc(itemRef, {
               id: itemRef.id,
               orderId: orderId,
               productId: item.id,
-              productName: item.title, // Info extra para la UI
+              productName: item.title,
               quantity: item.quantity,
               priceAtPurchase: item.price,
               duration: item.duration,
@@ -119,7 +117,6 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
       setProcessingPayment(false);
     }
   };
-
 
   return (
     <>
@@ -207,26 +204,25 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                             type: 'PAYMENT_GATEWAY',
                             parameters: {
                               gateway: 'stripe',
-                              'stripe:version': '2025-01-27',
-                              'stripe:publishableKey': process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '',
+                              'stripe:version': '2018-08-20',
+                              'stripe:publishableKey': process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_placeholder',
                             },
                           },
                         },
                       ],
                       merchantInfo: {
-                        merchantId: '12345678901234567890', 
                         merchantName: 'Bonanza Arte & Bienestar',
                       },
                       transactionInfo: {
                         totalPriceStatus: 'FINAL',
-                        totalPriceLabel: t('cart.subtotal'),
+                        totalPriceLabel: 'Total',
                         totalPrice: totalPrice.toFixed(2),
                         currencyCode: 'MXN',
                         countryCode: 'MX',
                       },
                     }}
                     onLoadPaymentData={handlePayment}
-                    buttonType="pay"
+                    buttonType="plain"
                     buttonColor="black"
                     className="w-full"
                     disabled={processingPayment || cartCount === 0}
