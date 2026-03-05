@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from "react";
@@ -46,7 +45,6 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
     if (totalPrice === 0) return;
     setProcessingPayment(true);
     try {
-      // 1. Procesar el cargo en el servidor (Stripe)
       const response = await fetch('/api/process-payment', {
         method: 'POST',
         headers: {
@@ -62,7 +60,6 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
       const result = await response.json();
 
       if (response.ok && result.success) {
-        // 2. Si el pago fue exitoso y el usuario está autenticado, guardar en Firestore
         if (user && db) {
           const orderId = `order_${Date.now()}`;
           const orderRef = doc(db, 'userProfiles', user.uid, 'orders', orderId);
@@ -198,14 +195,14 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                           type: 'CARD',
                           parameters: {
                             allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
-                            allowedCardNetworks: ['MASTERCARD', 'VISA', 'AMEX'],
+                            allowedCardNetworks: ['MASTERCARD', 'VISA'],
                           },
                           tokenizationSpecification: {
                             type: 'PAYMENT_GATEWAY',
                             parameters: {
                               gateway: 'stripe',
-                              'stripe:version': '2018-08-20',
-                              'stripe:publishableKey': process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_placeholder',
+                              'stripe:version': '2020-08-27',
+                              'stripe:publishableKey': process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_TYooMQauvdEDq54NiTphI7jx',
                             },
                           },
                         },
@@ -222,7 +219,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                       },
                     }}
                     onLoadPaymentData={handlePayment}
-                    buttonType="plain"
+                    buttonType="buy"
                     buttonColor="black"
                     className="w-full"
                     disabled={processingPayment || cartCount === 0}
