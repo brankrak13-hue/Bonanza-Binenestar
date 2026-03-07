@@ -13,102 +13,22 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
-import { Minus, Plus, Trash2, ShoppingCart, Loader2, CreditCard, ShieldCheck, AlertCircle, ArrowRight, Zap } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { useUser, useFirestore } from "@/firebase";
+import { Minus, Plus, Trash2, ShoppingCart, ShieldCheck, AlertCircle, Sparkles } from "lucide-react";
+import { useUser } from "@/firebase";
 import AuthModal from "@/components/AuthModal";
 import { useLanguage } from "@/context/LanguageContext";
-import { doc, setDoc } from "firebase/firestore";
 import StripeBuyButton from "@/components/StripeBuyButton";
 
 interface CartSidebarProps { open: boolean; onOpenChange: (open: boolean) => void; }
 
 export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
-  const { cartItems, removeFromCart, updateQuantity, totalPrice, cartCount, clearCart } = useCart();
-  const [isRedirecting, setIsRedirecting] = useState(false);
+  const { cartItems, removeFromCart, updateQuantity, totalPrice, cartCount } = useCart();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [showDirectButton, setShowDirectButton] = useState(false);
   const { user } = useUser();
-  const db = useFirestore();
-  const { toast } = useToast();
   const { t } = useLanguage();
 
   const stripeButtonId = "buy_btn_1T8Egc3RNCg5Dgsj5HcwJeIN";
   const stripePubKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "pk_live_51T4Cck3RNCg5DgsjcSYMdryVssd0TIIZhJS1Suh38gZhDeHaHXdwptI3ou42x90huN7jMjonmZ4FGMBVwA7Dcn2A00pSB2Z1uH";
-
-  const handleOrderCreation = async () => {
-    if (!user || !db) return null;
-    const orderId = `order_${Date.now()}`;
-    const orderRef = doc(db, 'userProfiles', user.uid, 'orders', orderId);
-    
-    const orderData = {
-      id: orderId,
-      userProfileId: user.uid,
-      orderDate: new Date().toISOString(),
-      totalAmount: totalPrice,
-      status: 'pending',
-      paymentStatus: 'awaiting_payment',
-      items: cartItems.map(item => ({
-        productId: item.id,
-        name: item.title,
-        quantity: item.quantity,
-        price: item.price
-      })),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
-    try {
-      await setDoc(orderRef, orderData);
-      return orderId;
-    } catch (err) {
-      console.error("Error al pre-registrar pedido:", err);
-      return null;
-    }
-  };
-
-  const handleStripeCheckout = async () => {
-    if (!user) {
-      setIsAuthModalOpen(true);
-      return;
-    }
-
-    setIsRedirecting(true);
-    
-    try {
-      const orderId = await handleOrderCreation();
-      if (!orderId) throw new Error("No se pudo iniciar el proceso de reserva.");
-
-      const response = await fetch('/api/checkout-session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          items: cartItems,
-          userId: user.uid,
-          userEmail: user.email,
-          orderId: orderId
-        }),
-      });
-
-      const data = await response.json();
-      
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        // Si falla la API dinámica, ofrecemos el botón directo como respaldo
-        setShowDirectButton(true);
-        throw new Error(data.error || 'La pasarela dinámica no respondió. Intenta con el botón rápido.');
-      }
-    } catch (error: any) {
-      toast({ 
-        variant: "destructive", 
-        title: "Aviso de Pago", 
-        description: error.message || "Usa el botón de pago directo a continuación."
-      });
-      setIsRedirecting(false);
-      setShowDirectButton(true);
-    }
-  };
 
   return (
     <>
@@ -147,7 +67,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                   <div className="p-6 bg-amber-50 border border-amber-200 rounded-[2rem] flex gap-4 items-start">
                     <AlertCircle className="w-5 h-5 text-amber-600 mt-1" />
                     <div className="space-y-2">
-                      <p className="text-sm font-bold text-amber-900">Inicia sesión para finalizar</p>
+                      <p className="text-sm font-bold text-amber-900">Inicia sesión para guardar tu historial</p>
                       <Button variant="link" className="p-0 h-auto text-amber-700 font-bold underline" onClick={() => setIsAuthModalOpen(true)}>ENTRAR AQUÍ</Button>
                     </div>
                   </div>
@@ -180,38 +100,22 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                   <span className="text-4xl font-bold font-headline text-primary">${totalPrice.toLocaleString()} <span className="text-xs font-body font-normal">MXN</span></span>
                 </div>
                 
-                <div className="space-y-4">
-                  {showDirectButton ? (
-                    <div className="space-y-4 animate-in slide-in-from-bottom-4">
-                      <p className="text-[10px] text-center font-bold text-primary uppercase tracking-widest mb-2">Pago Directo Habilitado</p>
-                      <StripeBuyButton buttonId={stripeButtonId} publishableKey={stripePubKey} />
-                      <Button variant="ghost" className="w-full text-[10px] text-gray-400 font-bold uppercase tracking-widest" onClick={() => setShowDirectButton(false)}>
-                        Intentar Carrito Dinámico de nuevo
-                      </Button>
-                    </div>
-                  ) : (
-                    <Button 
-                      onClick={handleStripeCheckout} 
-                      className="w-full h-16 rounded-2xl btn-primary shadow-xl flex items-center justify-center gap-3"
-                      disabled={isRedirecting}
-                    >
-                      {isRedirecting ? (
-                        <>
-                          <Loader2 className="animate-spin w-5 h-5" />
-                          Conectando con Stripe...
-                        </>
-                      ) : (
-                        <>
-                          <Zap className="w-5 h-5 fill-current" /> 
-                          Finalizar Reserva Segura
-                          <ArrowRight className="w-4 h-4 ml-1" />
-                        </>
-                      )}
-                    </Button>
-                  )}
+                <div className="space-y-4 text-center">
+                  <p className="text-[10px] font-bold text-primary uppercase tracking-[0.3em] mb-4 flex items-center justify-center gap-2">
+                    <Sparkles className="w-3 h-3" />
+                    Completa tu reserva segura
+                    <Sparkles className="w-3 h-3" />
+                  </p>
+                  
+                  {/* Botón de Compra Directo de Stripe */}
+                  <StripeBuyButton buttonId={stripeButtonId} publishableKey={stripePubKey} />
+                  
+                  <p className="text-[9px] text-gray-400 italic mt-2">
+                    "Al pagar, serás redirigido a la pasarela oficial de Stripe."
+                  </p>
                 </div>
                 
-                <div className="flex justify-center items-center gap-2 opacity-30 mt-2">
+                <div className="flex justify-center items-center gap-2 opacity-30 mt-4">
                   <ShieldCheck className="w-4 h-4 text-primary" />
                   <span className="text-[8px] font-bold uppercase tracking-widest">Protegido por Stripe Checkout</span>
                 </div>

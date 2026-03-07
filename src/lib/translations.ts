@@ -84,6 +84,7 @@ export const translations: any = {
       cta: "Ver Menú",
       book: "Reservar Sesión",
       add: "Agregar al Carrito",
+      buy: "Comprar Ahora",
       added: "Agregado",
       min: "min"
     },
@@ -91,32 +92,38 @@ export const translations: any = {
       purification: {
         title: "Purificación Sutil",
         sub: "Drenaje",
-        desc: "Movimientos suaves para reducir inflamación y dar ligereza."
+        desc: "Movimientos suaves para reducir inflamación y dar ligereza.",
+        stripeUrl: "https://buy.stripe.com/test_purification"
       },
       fluidity: {
         title: "Fluidez Esencial",
         sub: "Sueco",
-        desc: "Movimientos continuos para soltar tensión y dar calma profunda."
+        desc: "Movimientos continuos para soltar tensión y dar calma profunda.",
+        stripeUrl: "https://buy.stripe.com/test_fluidity"
       },
       release: {
         title: "Liberación de Tensión",
         sub: "Tejido Profundo",
-        desc: "Técnica profunda para alivio de tensión muscular rígida."
+        desc: "Técnica profunda para alivio de tensión muscular rígida.",
+        stripeUrl: "https://buy.stripe.com/test_release"
       },
       awakening: {
         title: "Despertar Vital",
         sub: "Quiromasaje",
-        desc: "Manos intuitivas que liberan emociones en espalda y hombros."
+        desc: "Manos intuitivas que liberan emociones en espalda y hombros.",
+        stripeUrl: "https://buy.stripe.com/test_awakening"
       },
       reset: {
         title: "Re-inicia tu Mente",
         sub: "Cráneo Facial",
-        desc: "Tratamiento profundo para disolver tensiones arraigadas."
+        desc: "Tratamiento profundo para disolver tensiones arraigadas.",
+        stripeUrl: "https://buy.stripe.com/test_reset"
       },
       sculpt: {
         title: "Moldea tu figura",
         sub: "Reductivo",
-        desc: "Masaje intenso para activar el cuerpo y definir figura."
+        desc: "Masaje intenso para activar el cuerpo y definir figura.",
+        stripeUrl: "https://buy.stripe.com/test_sculpt"
       }
     },
     ai: {
@@ -358,6 +365,7 @@ export const translations: any = {
       cta: "View Menu",
       book: "Book Session",
       add: "Add to Cart",
+      buy: "Buy Now",
       added: "Added",
       min: "min"
     },
@@ -365,32 +373,38 @@ export const translations: any = {
       purification: {
         title: "Subtle Purification",
         sub: "Drainage",
-        desc: "Gentle movements to reduce inflammation and promote lightness."
+        desc: "Gentle movements to reduce inflammation and promote lightness.",
+        stripeUrl: "https://buy.stripe.com/test_purification_en"
       },
       fluidity: {
         title: "Essential Fluidity",
         sub: "Swedish",
-        desc: "Continuous movements to release tension and induce deep calm."
+        desc: "Continuous movements to release tension and induce deep calm.",
+        stripeUrl: "https://buy.stripe.com/test_fluidity_en"
       },
       release: {
         title: "Tension Release",
         sub: "Deep Tissue",
-        desc: "Deep technique for rigid muscle areas and tension relief."
+        desc: "Deep technique for rigid muscle areas and tension relief.",
+        stripeUrl: "https://buy.stripe.com/test_release_en"
       },
       awakening: {
         title: "Vital Awakening",
         sub: "Chiromassage",
-        desc: "Intuitive hands releasing back and shoulder emotions."
+        desc: "Intuitive hands releasing back and shoulder emotions.",
+        stripeUrl: "https://buy.stripe.com/test_awakening_en"
       },
       reset: {
         title: "Mind Reset",
         sub: "Craniofacial",
-        desc: "Profound treatment to dissolve deep-seated tensions."
+        desc: "Profound treatment to dissolve deep-seated tensions.",
+        stripeUrl: "https://buy.stripe.com/test_reset_en"
       },
       sculpt: {
         title: "Body Sculpting",
         sub: "Reductive",
-        desc: "Intense massage to activate the body and define figure."
+        desc: "Intense massage to activate the body and define figure.",
+        stripeUrl: "https://buy.stripe.com/test_sculpt_en"
       }
     },
     ai: {
