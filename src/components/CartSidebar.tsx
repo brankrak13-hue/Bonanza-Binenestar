@@ -70,9 +70,11 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
     setIsRedirecting(true);
     
     try {
+      // 1. Pre-registramos la orden en Firestore
       const orderId = await handleOrderCreation();
       if (!orderId) throw new Error("No se pudo iniciar el proceso de reserva.");
 
+      // 2. Solicitamos la sesión de Stripe Checkout
       const response = await fetch('/api/checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -87,11 +89,12 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
       const data = await response.json();
       
       if (data.url) {
-        // Redirección a la página segura de Stripe
-        // En modo prueba sin llave, el servidor devolverá la URL de pedidos para simular éxito
+        // Redirección a la página segura de Stripe (Hospedada)
         window.location.href = data.url;
-        if (data.error) {
-            toast({ title: "Modo Simulación", description: data.error });
+        
+        // Si el servidor detectó que no hay llaves y simuló el éxito
+        if (data.message) {
+            console.warn(data.message);
             clearCart();
         }
       } else {
@@ -185,7 +188,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                     ) : (
                       <>
                         <CreditCard className="w-5 h-5" /> 
-                        Proceder al Pago
+                        Finalizar Compra Segura
                         <ArrowRight className="w-4 h-4 ml-1" />
                       </>
                     )}
@@ -193,7 +196,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                 </div>
                 <div className="flex justify-center items-center gap-2 opacity-30 mt-2">
                   <ShieldCheck className="w-4 h-4 text-primary" />
-                  <span className="text-[8px] font-bold uppercase tracking-widest">Pago Protegido por Stripe Checkout</span>
+                  <span className="text-[8px] font-bold uppercase tracking-widest">Protegido por Stripe Checkout</span>
                 </div>
               </SheetFooter>
             </>
