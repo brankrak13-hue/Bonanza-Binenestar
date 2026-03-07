@@ -164,7 +164,11 @@ export default function Contact() {
               <ShieldCheck className="w-4 h-4 text-primary" />
               {t('contact.security')} (APP CHECK)
             </div>
-            <Button type="submit" size="lg" className="btn-primary glow-on-hover w-full sm:w-auto px-16 h-16 text-sm">
+            <Button 
+              type="submit" 
+              size="lg" 
+              className="glow-on-hover w-full sm:w-auto px-16 h-16 text-sm bg-white text-primary border border-primary/20 shadow-xl hover:shadow-primary/5 transition-all duration-500 font-bold tracking-[0.15em] uppercase flex items-center justify-center rounded-full"
+            >
               {t('contact.submit')}
               <MessageCircle className="w-4 h-4 ml-2" />
             </Button>
