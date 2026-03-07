@@ -8,6 +8,18 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  async rewrites() {
+    return [
+      {
+        source: '/services',
+        destination: '/servicios',
+      },
+      {
+        source: '/ai-advisor',
+        destination: '/agente-virtual',
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {
