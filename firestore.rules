@@ -1,7 +1,7 @@
 rules_version = '2';
 
 /**
- * BONANZA ARTE & BIENESTAR - RULES V2
+ * BONANZA ARTE & BIENESTAR - RULES V2 (Stripe Integrated)
  * 
  * 🛡️ SISTEMA DE PROTECCIÓN E INTEGRIDAD DE DATOS
  */
@@ -30,14 +30,14 @@ service cloud.firestore {
 
     // --- REGLAS POR COLECCIÓN ---
 
-    // Administración: Permitir a los usuarios crear su propio registro (para el flujo de la llave secreta)
+    // Administración: Roles globales
     match /roles_admin/{adminId} {
       allow read: if isSignedIn();
       allow create: if isOwner(adminId);
       allow update, delete: if isAdmin();
     }
 
-    // Perfiles
+    // Perfiles de Usuario
     match /userProfiles/{userProfileId} {
       allow get, list: if isOwner(userProfileId) || isAdmin();
       allow create: if isOwner(userProfileId);
@@ -60,11 +60,35 @@ service cloud.firestore {
       }
     }
 
-    // Catálogo público
+    // --- INTEGRACIÓN STRIPE (CUSTOMERS & PAYMENTS) ---
+    match /customers/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+
+      match /checkout_sessions/{id} {
+        allow read, write: if isOwner(uid) || isAdmin();
+      }
+      match /subscriptions/{id} {
+        allow read: if isOwner(uid) || isAdmin();
+      }
+      match /payments/{id} {
+        allow read: if isOwner(uid) || isAdmin();
+      }
+    }
+
+    // Catálogo público (Productos y Precios de Stripe)
     match /products/{productId} {
       allow read: if true;
       allow write: if isAdmin();
       
+      // Precios y Tasas (Stripe Extension Pattern)
+      match /prices/{id} {
+        allow read: if true;
+      }
+      match /tax_rates/{id} {
+        allow read: if true;
+      }
+
+      // Reseñas de productos
       match /reviews/{reviewId} {
         allow read: if resource.data.isApproved == true || isOwner(resource.data.userProfileId) || isAdmin();
         allow create: if isSignedIn() && request.resource.data.userProfileId == request.auth.uid;
@@ -77,8 +101,7 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
-    // Configuración del sitio (Imágenes personalizadas)
-    // Importante: Permitir lectura pública para que todos vean las imágenes cambiadas
+    // Configuración del sitio y Banners
     match /siteSettings/{doc=**} {
       allow read: if true;
       allow write: if isAdmin();
@@ -89,6 +112,7 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // Captación de Leads y Contacto
     match /newsletterSubscribers/{subscriberId} {
       allow create: if true;
       allow read, delete: if isAdmin();
