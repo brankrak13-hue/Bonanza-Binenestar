@@ -1,4 +1,3 @@
-
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
@@ -14,11 +13,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'El carrito está vacío' }, { status: 400 });
     }
 
-    const origin = request.headers.get('origin');
+    // Detectamos el origin de forma más robusta para evitar fallos en entornos de desarrollo
+    const origin = request.headers.get('origin') || request.headers.get('referer') || 'http://localhost:9002';
 
     // Si no hay llave de Stripe, simulamos una respuesta de éxito para desarrollo
-    if (!process.env.STRIPE_SECRET_KEY) {
-      console.warn('⚠️ Falta STRIPE_SECRET_KEY. Simulando éxito para desarrollo.');
+    if (!process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY === 'tu_sk_test_aqui') {
+      console.warn('⚠️ STRIPE_SECRET_KEY no configurada. Usando Modo Simulación de Éxito.');
       return NextResponse.json({ 
         url: `${origin}/pedidos?status=success&order_id=${orderId}`,
         message: 'Modo simulación activo.'
@@ -38,9 +38,9 @@ export async function POST(request: Request) {
       quantity: item.quantity,
     }));
 
-    // Creamos la sesión de Checkout (Paso authoritative del blueprint)
+    // Creamos la sesión de Checkout siguiendo el blueprint de Stripe
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'], // Google Pay y Apple Pay se activan en el Dashboard de Stripe
+      payment_method_types: ['card'],
       line_items,
       mode: 'payment',
       customer_email: userEmail,
