@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { useUser, useFirestore, useDoc, updateDocumentNonBlocking } from '@/firebase';
+import { useUser, useFirestore, useDoc, useMemoFirebase, updateDocumentNonBlocking } from '@/firebase';
 import { useLanguage } from '@/context/LanguageContext';
 import { doc, setDoc } from 'firebase/firestore';
 import { Input } from '@/components/ui/input';
@@ -19,7 +19,12 @@ export default function PerfilPage() {
   const { t } = useLanguage();
   const { toast } = useToast();
   
-  const userProfileRef = user ? doc(db, 'userProfiles', user.uid) : null;
+  // Memorizamos la referencia para evitar bucles infinitos de renderizado
+  const userProfileRef = useMemoFirebase(() => 
+    (user && db ? doc(db, 'userProfiles', user.uid) : null), 
+    [user, db]
+  );
+  
   const { data: profile, isLoading: isProfileLoading } = useDoc(userProfileRef);
 
   const [firstName, setFirstName] = useState('');
@@ -50,7 +55,7 @@ export default function PerfilPage() {
 
     try {
       if (!profile) {
-        // Create profile if it doesn't exist
+        // Crear perfil si no existe
         await setDoc(doc(db, 'userProfiles', user.uid), {
           ...updatedData,
           id: user.uid,
@@ -58,7 +63,7 @@ export default function PerfilPage() {
           createdAt: new Date().toISOString(),
         });
       } else {
-        // Update existing profile
+        // Actualizar perfil existente
         updateDocumentNonBlocking(doc(db, 'userProfiles', user.uid), updatedData);
       }
       
