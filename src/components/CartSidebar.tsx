@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from "react";
@@ -17,44 +18,23 @@ import { useUser } from "@/firebase";
 import AuthModal from "@/components/AuthModal";
 import { useLanguage } from "@/context/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
+import StripeBuyButton from "./StripeBuyButton";
 
 interface CartSidebarProps { open: boolean; onOpenChange: (open: boolean) => void; }
 
 export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
   const { cartItems, removeFromCart, updateQuantity, totalPrice, cartCount } = useCart();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
   const { user } = useUser();
   const { t } = useLanguage();
-  const { toast } = useToast();
 
-  const handleCheckout = async () => {
-    if (cartItems.length === 0) return;
-    
-    setIsProcessing(true);
-    try {
-      const response = await fetch('/api/checkout-session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items: cartItems }),
-      });
-
-      const data = await response.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        throw new Error(data.error || 'Error al conectar con Stripe');
-      }
-    } catch (err: any) {
-      toast({
-        variant: "destructive",
-        title: "Error de pago",
-        description: err.message,
-      });
-    } finally {
-      setIsProcessing(false);
-    }
-  };
+  // Aquí pondrías tu llave pública de Stripe que empieza con pk_test_... o pk_live_...
+  const STRIPE_PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "";
+  
+  // Para el carrito dinámico, lo ideal es usar un "Payment Link" genérico o configurar 
+  // el Buy Button para que acepte los items del carro. 
+  // Por ahora, usaremos un ID de ejemplo que tú reemplazarás en el panel de Stripe.
+  const BUY_BUTTON_ID = "buy_btn_1T8..."; 
 
   return (
     <>
@@ -147,22 +127,12 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
               </div>
 
               <SheetFooter className="p-8 border-t bg-white flex items-center justify-between gap-4 min-h-[200px]">
-                {/* Izquierda: Botón y Info Stripe */}
+                {/* Izquierda: Botón de Stripe y Info de Seguridad */}
                 <div className="flex flex-col items-start gap-4 flex-1">
-                  <Button 
-                    className="w-full btn-primary h-14 rounded-2xl text-[10px] tracking-[0.2em] flex items-center justify-center gap-2 shadow-lg transition-all" 
-                    disabled={isProcessing}
-                    onClick={handleCheckout}
-                  >
-                    {isProcessing ? (
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                    ) : (
-                      <>
-                        CONFIRMAR Y PAGAR
-                        <ArrowRight className="w-4 h-4" />
-                      </>
-                    )}
-                  </Button>
+                  <StripeBuyButton 
+                    buttonId={BUY_BUTTON_ID} 
+                    publishableKey={STRIPE_PUBLISHABLE_KEY} 
+                  />
                   
                   <div className="flex items-center gap-2 opacity-40 ml-2">
                     <ShieldCheck className="w-3 h-3 text-primary" />
