@@ -27,7 +27,8 @@ export default function MassageMenu() {
 
     const handleRedirectToStripe = (link: string) => {
         if (link) {
-            window.location.href = link;
+            // Abrimos en una pestaña nueva para evitar que el visualizador bloquee la página externa de Stripe
+            window.open(link, '_blank', 'noopener,noreferrer');
         }
     };
 
