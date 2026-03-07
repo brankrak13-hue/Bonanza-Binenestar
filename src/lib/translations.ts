@@ -47,12 +47,6 @@ export const translations: any = {
       desc1: "Con una pasión por el bienestar integral y años de estudio en técnicas de sanación ancestrales, Bonanza fundó este espacio como un refugio para el alma. Su misión es guiarte en un viaje de autodescubrimiento y sanación, combinando el arte del tacto con el poder de la vibración.",
       desc2: "Creemos que la verdadera belleza emana de un estado de equilibrio interior. Nuestro propósito es ayudarte a encontrarlo."
     },
-    benefits: {
-      natural: { title: "Ingredientes Naturales", desc: "Usamos solo productos orgánicos y de alta calidad." },
-      experts: { title: "Terapeutas Expertos", desc: "Profesionales certificados con años de experiencia." },
-      holistic: { title: "Enfoque Holístico", desc: "Tratamos cuerpo, mente y espíritu como un todo." },
-      relaxing: { title: "Ambiente Relajante", desc: "Un espacio diseñado para tu paz y tranquilidad." }
-    },
     home: {
       facial: {
         subtitle: "TÉCNICAS ANCESTRALES",
@@ -71,21 +65,6 @@ export const translations: any = {
       title: "Nuestras Experiencias",
       subtitle: "BIENESTAR PREMIUM",
       desc: "Cada tratamiento es un ritual personalizado diseñado para restaurar tu armonía interior.",
-      facial: {
-        title: "Masajes Holísticos",
-        subtitle: "TÉCNICAS ANCESTRALES",
-        desc: "Rejuvenece tu piel y libera tensiones con nuestros masajes faciales personalizados."
-      },
-      sound: {
-        title: "Terapia de Sound Healing",
-        subtitle: "Vibraciones que Sanan",
-        desc: "Sumérgete en un baño de sonidos armónicos con cuencos tibetanos. Sesiones diarias."
-      },
-      cta: "Ver Menú",
-      book: "Reservar Sesión",
-      add: "Agregar al Carrito",
-      buy: "Comprar Ahora",
-      added: "Agregado",
       min: "min"
     },
     massages: {
@@ -94,8 +73,8 @@ export const translations: any = {
         sub: "Drenaje",
         desc: "Movimientos suaves para reducir inflamación y dar ligereza.",
         prices: [
-          { amount: 900, duration: 60, priceId: "price_1T8FFQ3RNCg5Dgsjy0Ayflxs" },
-          { amount: 1100, duration: 90, priceId: "price_1T8FFQ3RNCg5DgsjTyrf20S9" }
+          { amount: 900, duration: 60, paymentLink: "https://buy.stripe.com/placeholder_p1" },
+          { amount: 1100, duration: 90, paymentLink: "https://buy.stripe.com/placeholder_p2" }
         ]
       },
       fluidity: {
@@ -103,8 +82,8 @@ export const translations: any = {
         sub: "Sueco",
         desc: "Movimientos continuos para soltar tensión y dar calma profunda.",
         prices: [
-            { amount: 800, duration: 60, priceId: "price_1T8D7X3RNCg5DgsjkEfyBwl0" },
-            { amount: 1000, duration: 90, priceId: "price_1T8FTu3RNCg5DgsjKIn3zg1g" }
+            { amount: 800, duration: 60, paymentLink: "https://buy.stripe.com/placeholder_f1" },
+            { amount: 1000, duration: 90, paymentLink: "https://buy.stripe.com/placeholder_f2" }
         ]
       },
       release: {
@@ -112,8 +91,8 @@ export const translations: any = {
         sub: "Tejido Profundo",
         desc: "Técnica profunda para alivio de tensión muscular rígida.",
         prices: [
-            { amount: 900, duration: 60, priceId: "price_1T8DBl3RNCg5DgsjnpuzTSKX" },
-            { amount: 1100, duration: 90, priceId: "price_1T8FRe3RNCg5DgsjFJ01Ib4p" }
+            { amount: 900, duration: 60, paymentLink: "https://buy.stripe.com/placeholder_l1" },
+            { amount: 1100, duration: 90, paymentLink: "https://buy.stripe.com/placeholder_l2" }
         ]
       },
       awakening: {
@@ -121,8 +100,8 @@ export const translations: any = {
         sub: "Quiromasaje",
         desc: "Manos intuitivas que liberan emociones en espalda y hombros.",
         prices: [
-            { amount: 800, duration: 60, priceId: "price_1T8DFC3RNCg5DgsjHPaZ4xVo" },
-            { amount: 1000, duration: 90, priceId: "price_1T8FKS3RNCg5DgsjRTfXjkEf" }
+            { amount: 800, duration: 60, paymentLink: "https://buy.stripe.com/placeholder_a1" },
+            { amount: 1000, duration: 90, paymentLink: "https://buy.stripe.com/placeholder_a2" }
         ]
       },
       reset: {
@@ -130,7 +109,7 @@ export const translations: any = {
         sub: "Cráneo Facial",
         desc: "Tratamiento profundo para disolver tensiones arraigadas.",
         prices: [
-            { amount: 700, duration: 60, priceId: "price_1T8DXj3RNCg5DgsjdVdjGSTK" }
+            { amount: 700, duration: 60, paymentLink: "https://buy.stripe.com/placeholder_r1" }
         ]
       },
       sculpt: {
@@ -138,7 +117,7 @@ export const translations: any = {
         sub: "Reductivo",
         desc: "Masaje intenso para activar el cuerpo y definir figura.",
         prices: [
-            { amount: 900, duration: 60, priceId: "price_1T8FMS3RNCg5DgsjfswAJ8qG" }
+            { amount: 900, duration: 60, paymentLink: "https://buy.stripe.com/placeholder_s1" }
         ]
       }
     },
@@ -147,7 +126,6 @@ export const translations: any = {
       desc: "Dinos cómo te sientes y nuestra sabiduría artificial revelará el ritual que tu alma necesita hoy.",
       placeholder: "Ej: 'Me siento con mucha carga mental y tensión en el cuello'...",
       cta: "Consultar Sabiduría IA",
-      thinking: "Sintonizando tu energía...",
       ritual: "Ritual Revelado",
       purpose: "Propósito del Ritual",
       intuition: "Nuestra Intuición",
@@ -176,7 +154,7 @@ export const translations: any = {
     },
     auth: {
       title: "Mi Cuenta",
-      description: "Inicia sesión para gestionar tus citas y compras.",
+      description: "Inicia sesión para gestionar tus citas.",
       loginTab: "Ingresar",
       registerTab: "Registrarse",
       email: "Correo electrónico",
@@ -187,9 +165,9 @@ export const translations: any = {
       successLoginTitle: "¡Bienvenido de nuevo!",
       successLoginDesc: "Has iniciado sesión correctamente.",
       errorLoginTitle: "Error al iniciar sesión",
-      errorLoginDesc: "Credenciales incorrectas. Por favor, intenta de nuevo.",
+      errorLoginDesc: "Credenciales incorrectas.",
       successRegisterTitle: "¡Cuenta creada!",
-      successRegisterDesc: "Bienvenido a Bonanza Arte & Bienestar.",
+      successRegisterDesc: "Bienvenido a Bonanza.",
       errorRegisterTitle: "Error al registrarse",
       errorRegisterDesc: "No se pudo crear la cuenta.",
       forgotPassword: "¿Olvidaste tu contraseña?",
@@ -197,19 +175,17 @@ export const translations: any = {
       resetDesc: "Ingresa tu email para recibir un enlace de recuperación.",
       sendReset: "Enviar Enlace",
       resetSuccess: "Enlace enviado. Revisa tu correo.",
-      confirmResetTitle: "Nueva Contraseña",
-      confirmResetDesc: "Ingresa tu nueva contraseña para recuperar el acceso.",
       newPassword: "Nueva Contraseña",
       confirmNewPassword: "Confirmar Contraseña",
       updatePassword: "Actualizar Contraseña",
-      passwordSuccess: "Contraseña actualizada correctamente.",
-      passwordError: "Hubo un error al actualizar la contraseña.",
+      passwordSuccess: "Contraseña actualizada.",
+      passwordError: "Hubo un error.",
       matchError: "Las contraseñas no coinciden."
     },
     profile: {
       title: "Mi Perfil",
       subtitle: "GESTIÓN DE CUENTA",
-      desc: "Mantén tu información actualizada para una mejor experiencia.",
+      desc: "Mantén tu información actualizada.",
       firstName: "Nombre",
       lastName: "Apellido",
       email: "Correo Electrónico (No editable)",
@@ -225,7 +201,7 @@ export const translations: any = {
     appointments: {
       title: "Mis Citas",
       subtitle: "HISTORIAL Y RESERVAS",
-      desc: "Consulta el estado de tus rituales de bienestar.",
+      desc: "Consulta el estado de tus rituales.",
       upcoming: "Próximas",
       history: "Historial",
       noUpcoming: "No tienes citas próximas.",
@@ -242,25 +218,9 @@ export const translations: any = {
       total: "Total",
       details: "Detalles"
     },
-    cart: {
-      title: "Tu Carrito",
-      empty: "Tu carrito está vacío",
-      emptyDesc: "Agrega servicios para verlos aquí.",
-      continue: "Seguir comprando",
-      subtotal: "Subtotal",
-      processing: "Procesando pago...",
-      success: "¡Pago exitoso!",
-      successDesc: "Tu compra ha sido procesada correctamente.",
-      error: "Error en el pago",
-      errorGeneric: "Hubo un error al procesar el pago.",
-      errorRetry: "No se pudo completar la transacción. Por favor, intenta de nuevo.",
-      authPrompt: "¿Quieres guardar tu historial?",
-      authDesc: "Inicia sesión para registrar tus servicios y acumular beneficios.",
-      login: "Iniciar Sesión"
-    },
     footer: {
       newsletter: "Newsletter",
-      newsDesc: "Recibe noticias y promociones en tu correo.",
+      newsDesc: "Recibe noticias y promociones.",
       subscribe: "Suscribir",
       nav: "Navegación",
       legal: "Legal",
@@ -270,29 +230,13 @@ export const translations: any = {
       terms: {
         title: "Términos y Condiciones",
         s1_title: "1. Aceptación de los Términos",
-        s1_desc: "Al acceder y utilizar los servicios de Bonanza Arte & Bienestar, usted acepta estar sujeto a estos Términos y Condiciones. Si no está de acuerdo con alguna parte de estos términos, le rogamos que no utilice nuestros servicios.",
-        s2_title: "2. Descripción de Servicios",
-        s2_desc: "Bonanza Arte & Bienestar ofrece tratamientos de masaje facial, corporal y terapias de sonido (Sound Healing). Nos reservamos el derecho de modificar o interrumpir cualquier servicio en cualquier momento sin previo aviso.",
-        s3_title: "3. Reservas y Cancelaciones",
-        s3_desc: "Para garantizar la disponibilidad, se recomienda reservar con antelación. Las cancelaciones deben realizarse con al menos 24 horas de anticipación. Las cancelaciones tardías o la no asistencia pueden estar sujetas a un cargo por servicio.",
-        s4_title: "4. Salud y Bienestar",
-        s4_desc: "Es responsabilidad del cliente informar al terapeuta sobre cualquier condición médica, alergia o embarazo antes del inicio del tratamiento. Bonanza no se hace responsable de reacciones adversas derivadas de información omitida.",
-        s5_title: "5. Pagos",
-        s5_desc: "Todos los pagos deben realizarse al momento de la reserva o inmediatamente después de recibir el servicio. Aceptamos efectivo, tarjetas y pagos digitales autorizados en nuestra plataforma.",
+        s1_desc: "Al acceder y utilizar los servicios de Bonanza Arte & Bienestar, usted acepta estos Términos.",
         updated: "Última actualización: Febrero 2024"
       },
       privacy: {
         title: "Política de Privacidad",
         s1_title: "1. Recopilación de Información",
-        s1_desc: "En Bonanza Arte & Bienestar, recopilamos información personal básica como su nombre, correo electrónico y número de teléfono únicamente cuando usted la proporciona voluntariamente al agendar una cita o suscribirse a nuestro boletín.",
-        s2_title: "2. Uso de la Información",
-        s2_desc: "La información recolectada se utiliza exclusivamente para gestionar sus citas, procesar pagos, mejorar nuestros servicios y enviarle comunicaciones relacionadas con su bienestar y promociones de Bonanza.",
-        s3_title: "3. Protección de Datos",
-        s3_desc: "Implementamos medidas de seguridad técnicas y organizativas para proteger sus datos personales contra el acceso no autorizado, la pérdida o la alteración. Sus datos nunca serán vendidos a terceros.",
-        s4_title: "4. Sus Derechos",
-        s4_desc: "Usted tiene derecho a acceder, rectificar o eliminar sus datos personales en cualquier momento. Puede ejercer estos derechos enviándonos un correo electrónico a través de nuestra sección de contacto.",
-        s5_title: "5. Cookies",
-        s5_desc: "Nuestro sitio utiliza cookies para mejorar su experiencia de navegación y analizar el tráfico de forma anónima. Puede configurar su navegador para rechazar las cookies si lo desea.",
+        s1_desc: "Protegemos tus datos personales.",
         updated: "Última actualización: Febrero 2024"
       }
     }
@@ -314,147 +258,121 @@ export const translations: any = {
       title: "Control Panel",
       subtitle: "CONTENT MANAGEMENT",
       accessTitle: "Administrative Access",
-      accessDesc: "Enter the master key to obtain administrative privileges.",
+      accessDesc: "Enter the master key.",
       accessPlaceholder: "Long admin password...",
       accessButton: "Validate Key",
       accessSuccess: "Access granted!",
-      accessError: "Incorrect key. Access denied.",
+      accessError: "Incorrect key.",
       imagesTab: "Images",
       pricesTab: "Prices",
       imagesTitle: "Image Management",
-      imagesDesc: "Change the images of any section by pasting a new URL.",
       pricesTitle: "Price Management",
-      pricesDesc: "Adjust service costs in real time.",
       imageLabel: "New Image URL",
       save: "Update",
       saving: "Updating...",
-      section: "Section",
-      preview: "Preview",
       logout: "Exit Panel"
     },
     hero: {
       title: "Elevate Your Well-being",
       subtitle: "BONANZA ART & WELLNESS",
-      description: "Discover a sanctuary of inner peace through our facial massages and sound healing therapies.",
+      description: "Discover a sanctuary of inner peace.",
       cta: "Book Your Appointment"
     },
     about: {
       subtitle: "Our Founder",
       title: "Meet Bonanza",
-      desc1: "With a passion for holistic well-being and years of study in ancient healing techniques, Bonanza founded this space as a refuge for the soul. Her mission is to guide you on a journey of self-discovery and healing, combining the art of touch with the power of vibration.",
-      desc2: "We believe that true beauty emanates from a state of inner balance. Our purpose is to help you find it."
-    },
-    benefits: {
-      natural: { title: "Natural Ingredients", desc: "We only use high-quality organic products." },
-      experts: { title: "Expert Therapists", desc: "Certified professionals with years of experience." },
-      holistic: { title: "Holistic Approach", desc: "We treat body, mind, and spirit as one." },
-      relaxing: { title: "Relaxing Ambiance", desc: "A space designed for your peace and tranquility." }
+      desc1: "A refuge for the soul.",
+      desc2: "True beauty emanates from a state of inner balance."
     },
     home: {
       facial: {
         subtitle: "ANCIENT TECHNIQUES",
         title: "Holistic Massages",
-        description: "Rejuvenate your skin and release tension with our personalized facial massages. We use techniques that combine lymphatic drainage, reflexology, and aromatherapy for radiant skin and deep relaxation.",
+        description: "Rejuvenate your skin and release tension.",
         button: "View Menu"
       },
       sound: {
         subtitle: "Healing Vibrations",
         title: "Sound Healing Therapy",
-        description: "Immerse yourself in a harmonic sound bath with Tibetan bowls and other instruments. Sessions available every day at 7:30 AM and 8:00 PM for total balance.",
+        description: "Immerse yourself in a harmonic sound bath.",
         button: "Book Session"
       }
     },
     services: {
       title: "Our Experiences",
       subtitle: "PREMIUM WELLNESS",
-      desc: "Each treatment is a personalized ritual designed to restore your inner harmony.",
-      facial: {
-        title: "Holistic Massages",
-        subtitle: "ANCIENT TECHNIQUES",
-        desc: "Rejuvenate your skin and release tension with our personalized facial massages."
-      },
-      sound: {
-        title: "Sound Healing Therapy",
-        subtitle: "Healing Vibrations",
-        desc: "Immerse yourself in a harmonic sound bath with Tibetan bowls. Daily sessions."
-      },
-      cta: "View Menu",
-      book: "Book Session",
-      add: "Add to Cart",
-      buy: "Buy Now",
-      added: "Added",
+      desc: "Restore your inner harmony.",
       min: "min"
     },
     massages: {
       purification: {
         title: "Subtle Purification",
         sub: "Drainage",
-        desc: "Gentle movements to reduce inflammation and promote lightness.",
+        desc: "Gentle movements to reduce inflammation.",
         prices: [
-          { amount: 900, duration: 60, priceId: "price_1T8FFQ3RNCg5Dgsjy0Ayflxs" },
-          { amount: 1100, duration: 90, priceId: "price_1T8FFQ3RNCg5DgsjTyrf20S9" }
+          { amount: 900, duration: 60, paymentLink: "https://buy.stripe.com/placeholder_p1_en" },
+          { amount: 1100, duration: 90, paymentLink: "https://buy.stripe.com/placeholder_p2_en" }
         ]
       },
       fluidity: {
         title: "Essential Fluidity",
         sub: "Swedish",
-        desc: "Continuous movements to release tension and induce deep calm.",
+        desc: "Continuous movements to release tension.",
         prices: [
-            { amount: 800, duration: 60, priceId: "price_1T8D7X3RNCg5DgsjkEfyBwl0" },
-            { amount: 1000, duration: 90, priceId: "price_1T8FTu3RNCg5DgsjKIn3zg1g" }
+            { amount: 800, duration: 60, paymentLink: "https://buy.stripe.com/placeholder_f1_en" },
+            { amount: 1000, duration: 90, paymentLink: "https://buy.stripe.com/placeholder_f2_en" }
         ]
       },
       release: {
         title: "Tension Release",
         sub: "Deep Tissue",
-        desc: "Deep technique for rigid muscle areas and tension relief.",
+        desc: "Deep technique for rigid muscle areas.",
         prices: [
-            { amount: 900, duration: 60, priceId: "price_1T8DBl3RNCg5DgsjnpuzTSKX" },
-            { amount: 1100, duration: 90, priceId: "price_1T8FRe3RNCg5DgsjFJ01Ib4p" }
+            { amount: 900, duration: 60, paymentLink: "https://buy.stripe.com/placeholder_l1_en" },
+            { amount: 1100, duration: 90, paymentLink: "https://buy.stripe.com/placeholder_l2_en" }
         ]
       },
       awakening: {
         title: "Vital Awakening",
         sub: "Chiromassage",
-        desc: "Intuitive hands releasing back and shoulder emotions.",
+        desc: "Intuitive hands releasing emotions.",
         prices: [
-            { amount: 800, duration: 60, priceId: "price_1T8DFC3RNCg5DgsjHPaZ4xVo" },
-            { amount: 1000, duration: 90, priceId: "price_1T8FKS3RNCg5DgsjRTfXjkEf" }
+            { amount: 800, duration: 60, paymentLink: "https://buy.stripe.com/placeholder_a1_en" },
+            { amount: 1000, duration: 90, paymentLink: "https://buy.stripe.com/placeholder_a2_en" }
         ]
       },
       reset: {
         title: "Mind Reset",
         sub: "Craniofacial",
-        desc: "Profound treatment to dissolve deep-seated tensions.",
+        desc: "Profound treatment to dissolve tensions.",
         prices: [
-            { amount: 700, duration: 60, priceId: "price_1T8DXj3RNCg5DgsjdVdjGSTK" }
+            { amount: 700, duration: 60, paymentLink: "https://buy.stripe.com/placeholder_r1_en" }
         ]
       },
       sculpt: {
         title: "Body Sculpting",
         sub: "Reductive",
-        desc: "Intense massage to activate the body and define figure.",
+        desc: "Intense massage to define figure.",
         prices: [
-            { amount: 900, duration: 60, priceId: "price_1T8FMS3RNCg5DgsjfswAJ8qG" }
+            { amount: 900, duration: 60, paymentLink: "https://buy.stripe.com/placeholder_s1_en" }
         ]
       }
     },
     ai: {
       title: "Your Digital Oracle",
-      desc: "Tell us how you feel and our artificial wisdom will reveal the ritual your soul needs today.",
-      placeholder: "E.g.: 'I feel a lot of mental load and neck tension'...",
+      desc: "Our artificial wisdom will reveal the ritual your soul needs today.",
+      placeholder: "E.g.: 'I feel a lot of mental load'...",
       cta: "Consult AI Wisdom",
-      thinking: "Tuning your energy...",
       ritual: "Ritual Revealed",
       purpose: "Ritual Purpose",
       intuition: "Our Intuition",
       next: "Deepen your well-being",
-      error: "Our AI channels are experiencing high vibration. Please try again.",
-      menuCta: "Explore Details in Menu"
+      error: "Our AI channels are experiencing high vibration.",
+      menuCta: "Explore Details"
     },
     contact: {
       title: "Book Your Experience",
-      desc: "Begin your journey towards deep well-being. Choose your ideal date.",
+      desc: "Begin your journey towards deep well-being.",
       bannerTitle: "Sound Healing Sessions",
       bannerDesc: "Sessions every day at 7:30 AM and 8:00 PM",
       whatsapp: "Book via WhatsApp",
@@ -467,13 +385,13 @@ export const translations: any = {
       morning: "Morning",
       evening: "Evening",
       message: "Message or Preferences",
-      messagePlaceholder: "Tell us about what you're looking for...",
+      messagePlaceholder: "Tell us what you're looking for...",
       security: "ACTIVE HUMAN PROTECTION",
       submit: "Request Availability"
     },
     auth: {
       title: "My Account",
-      description: "Log in to manage your appointments and purchases.",
+      description: "Log in to manage your appointments.",
       loginTab: "Login",
       registerTab: "Register",
       email: "Email address",
@@ -484,29 +402,23 @@ export const translations: any = {
       successLoginTitle: "Welcome back!",
       successLoginDesc: "You have successfully logged in.",
       errorLoginTitle: "Login Error",
-      errorLoginDesc: "Incorrect credentials. Please try again.",
       successRegisterTitle: "Account Created!",
-      successRegisterDesc: "Welcome to Bonanza Art & Wellness.",
       errorRegisterTitle: "Registration Error",
-      errorRegisterDesc: "The account could not be created.",
       forgotPassword: "Forgot your password?",
       resetTitle: "Reset Password",
-      resetDesc: "Enter your email to receive a recovery link.",
+      resetDesc: "Enter your email for a recovery link.",
       sendReset: "Send Link",
       resetSuccess: "Link sent. Check your email.",
-      confirmResetTitle: "New Password",
-      confirmResetDesc: "Enter your new password to regain access.",
       newPassword: "New Password",
       confirmNewPassword: "Confirm Password",
       updatePassword: "Update Password",
-      passwordSuccess: "Password updated successfully.",
-      passwordError: "There was an error updating your password.",
+      passwordSuccess: "Password updated.",
       matchError: "Passwords do not match."
     },
     profile: {
       title: "My Profile",
       subtitle: "ACCOUNT MANAGEMENT",
-      desc: "Keep your information updated for a better experience.",
+      desc: "Keep your information updated.",
       firstName: "First Name",
       lastName: "Last Name",
       email: "Email Address (Not editable)",
@@ -514,15 +426,13 @@ export const translations: any = {
       save: "Save Changes",
       saving: "Saving...",
       success: "Profile updated",
-      successDesc: "Your details have been saved successfully.",
       error: "Update error",
-      errorDesc: "Could not update the profile.",
       noAuth: "You must log in to view your profile."
     },
     appointments: {
       title: "My Appointments",
       subtitle: "HISTORY AND BOOKINGS",
-      desc: "Check the status of your wellness rituals.",
+      desc: "Check the status of your rituals.",
       upcoming: "Upcoming",
       history: "History",
       noUpcoming: "You have no upcoming appointments.",
@@ -539,25 +449,9 @@ export const translations: any = {
       total: "Total",
       details: "Details"
     },
-    cart: {
-      title: "Your Cart",
-      empty: "Your cart is empty",
-      emptyDesc: "Add services to see them here.",
-      continue: "Continue shopping",
-      subtotal: "Subtotal",
-      processing: "Processing payment...",
-      success: "Payment successful!",
-      successDesc: "Your purchase has been processed correctly.",
-      error: "Payment error",
-      errorGeneric: "There was an error processing the payment.",
-      errorRetry: "The transaction could not be completed. Please try again.",
-      authPrompt: "Want to save your history?",
-      authDesc: "Log in to register your services and accumulate benefits.",
-      login: "Log In"
-    },
     footer: {
       newsletter: "Newsletter",
-      newsDesc: "Receive news and promotions in your email.",
+      newsDesc: "Receive news and promotions.",
       subscribe: "Subscribe",
       nav: "Navigation",
       legal: "Legal",
@@ -567,29 +461,11 @@ export const translations: any = {
       terms: {
         title: "Terms and Conditions",
         s1_title: "1. Acceptance of Terms",
-        s1_desc: "By accessing and using the services of Bonanza Arte & Bienestar, you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, please do not use our services.",
-        s2_title: "2. Description of Services",
-        s2_desc: "Bonanza Arte & Bienestar offers facial and body massage treatments and sound therapies (Sound Healing). We reserve the right to modify or discontinue any service at any time without prior notice.",
-        s3_title: "3. Bookings and Cancellations",
-        s3_desc: "To ensure availability, advance booking is recommended. Cancellations must be made at least 24 hours in advance. Late cancellations or no-shows may be subject to a service fee.",
-        s4_title: "4. Health and Well-being",
-        s4_desc: "It is the client's responsibility to inform the therapist of any medical condition, allergy, or pregnancy before the start of the treatment. Bonanza is not responsible for adverse reactions derived from omitted information.",
-        s5_title: "5. Payments",
-        s5_desc: "All payments must be made at the time of booking or immediately after receiving the service. We accept cash, cards, and authorized digital payments on our platform.",
         updated: "Last updated: February 2024"
       },
       privacy: {
         title: "Privacy Policy",
         s1_title: "1. Information Collection",
-        s1_desc: "At Bonanza Arte & Bienestar, we collect basic personal information such as your name, email, and phone number only when you voluntarily provide it when booking an appointment or subscribing to our newsletter.",
-        s2_title: "2. Use of Information",
-        s2_desc: "The information collected is used exclusively to manage your appointments, process payments, improve our services, and send you communications related to your well-being and Bonanza promotions.",
-        s3_title: "3. Data Protection",
-        s3_desc: "We implement technical and organizational security measures to protect your personal data against unauthorized access, loss, or alteration. Your data will never be sold to third parties.",
-        s4_title: "4. Your Rights",
-        s4_desc: "You have the right to access, rectify, or delete your personal data at any time. You can exercise these rights by sending us an email through our contact section.",
-        s5_title: "5. Cookies",
-        s5_desc: "Our site uses cookies to improve your browsing experience and analyze traffic anonymously. You can configure your browser to reject cookies if you wish.",
         updated: "Last updated: February 2024"
       }
     }

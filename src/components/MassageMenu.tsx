@@ -1,7 +1,6 @@
 
 "use client";
 
-import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -9,15 +8,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useCart } from "@/context/CartContext";
 import { useLanguage } from "@/context/LanguageContext";
-import { Plus, Clock, Sparkles, Check } from "lucide-react";
+import { Plus, Clock, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function MassageMenu() {
     const { t } = useLanguage();
-    const { addToCart } = useCart();
-    const [addedId, setAddedId] = useState<string | null>(null);
 
     const massageIds = ['purification', 'fluidity', 'release', 'awakening', 'reset', 'sculpt'];
 
@@ -29,11 +25,10 @@ export default function MassageMenu() {
         prices: t(`massages.${id}.prices`) || [],
     }));
 
-    const handleAddToCart = (item: any) => {
-        const uniqueId = item.priceId || `${item.title}-${item.duration}`;
-        addToCart(item);
-        setAddedId(uniqueId);
-        setTimeout(() => setAddedId(null), 2000);
+    const handleRedirectToStripe = (link: string) => {
+        if (link) {
+            window.location.href = link;
+        }
     };
 
     return (
@@ -42,11 +37,11 @@ export default function MassageMenu() {
                 <div className="text-center mb-16 animate-fadeIn opacity-0" style={{ animationDelay: '200ms' }}>
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/5 text-primary text-xs font-bold tracking-[0.2em] uppercase mb-6 border border-primary/10">
                         <Sparkles className="w-3.5 h-3.5" />
-                        {t('services.subtitle')}
+                        {t('services.subtitle') || 'BIENESTAR PREMIUM'}
                     </div>
                     <h1 className="text-5xl sm:text-7xl font-bold text-gray-900 mb-8 font-headline leading-tight">{t('services.title')}</h1>
                     <p className="mt-4 text-gray-500 max-w-2xl mx-auto text-lg leading-relaxed font-light italic">
-                        {t('services.desc')}
+                        {t('services.desc') || 'Cada tratamiento es un ritual personalizado diseñado para tu armonía.'}
                     </p>
                 </div>
                 
@@ -69,42 +64,27 @@ export default function MassageMenu() {
                                     
                                     <div className="space-y-4 mt-auto">
                                         {massage.prices.map((p: any, i: number) => {
-                                            const uniqueId = p.priceId || `${massage.title}-${p.duration}`;
-                                            const isAdded = addedId === uniqueId;
-                                            
                                             return (
                                                 <div 
                                                     key={i} 
                                                     className={cn(
                                                         "flex items-center justify-between p-5 rounded-[2.5rem] bg-white border-2 transition-all duration-500 cursor-pointer group/item",
-                                                        isAdded ? "border-accent shadow-xl scale-[1.03]" : "border-transparent shadow-sm hover:border-primary/20"
+                                                        "border-transparent shadow-sm hover:border-primary/20 hover:scale-[1.03] active:scale-95"
                                                     )}
-                                                    onClick={() => handleAddToCart({
-                                                        id: massage.id,
-                                                        title: massage.title,
-                                                        subtitle: massage.subtitle,
-                                                        price: p.amount,
-                                                        duration: p.duration,
-                                                        priceId: p.priceId,
-                                                        image: ''
-                                                    })}
+                                                    onClick={() => handleRedirectToStripe(p.paymentLink)}
                                                 >
-                                                    <div className="flex items-center gap-3">
-                                                        <Clock className="w-4 h-4 text-primary/40" />
-                                                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">{p.duration} {t('services.min')}</span>
+                                                    <div className="flex flex-col gap-1">
+                                                        <div className="flex items-center gap-2">
+                                                            <Clock className="w-3 h-3 text-primary/40" />
+                                                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">{p.duration} {t('services.min')}</span>
+                                                        </div>
+                                                        <span className="font-bold text-2xl text-primary font-headline">${p.amount.toLocaleString()}</span>
                                                     </div>
                                                     
-                                                    <div className="flex items-center gap-4">
-                                                        <span className="font-bold text-2xl text-primary font-headline">${p.amount.toLocaleString()}</span>
-                                                        
-                                                        <div 
-                                                            className={cn(
-                                                                "h-12 w-12 rounded-full flex items-center justify-center transition-all duration-700 shadow-lg",
-                                                                isAdded ? "bg-accent text-white rotate-[360deg]" : "bg-primary text-white group-hover/item:scale-110 active:scale-95"
-                                                            )}
-                                                        >
-                                                            {isAdded ? <Check className="w-6 h-6" /> : <Plus className="w-6 h-6" />}
-                                                        </div>
+                                                    <div 
+                                                        className="h-12 w-12 rounded-full flex items-center justify-center transition-all duration-700 shadow-lg bg-primary text-white group-hover/item:rotate-90 group-hover/item:scale-110"
+                                                    >
+                                                        <Plus className="w-6 h-6" />
                                                     </div>
                                                 </div>
                                             );

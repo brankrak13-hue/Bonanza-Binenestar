@@ -1,14 +1,12 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Search, ShoppingBag, User, Menu, X, LogOut, Languages, LayoutDashboard, ShieldCheck } from "lucide-react";
+import { User, Menu, X, LogOut, Languages, LayoutDashboard } from "lucide-react";
 import { LotusIcon } from "@/components/icons/LotusIcon";
-import { useCart } from "@/context/CartContext";
 import { useLanguage } from "@/context/LanguageContext";
-import CartSidebar from "@/components/CartSidebar";
 import AuthModal from "@/components/AuthModal";
-import { Badge } from "@/components/ui/badge";
 import { useUser, useAuth, useFirestore, useDoc, useMemoFirebase } from "@/firebase";
 import { signOut } from "firebase/auth";
 import { doc } from "firebase/firestore";
@@ -27,17 +25,14 @@ import { Button } from "@/components/ui/button";
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isBannerVisible, setIsBannerVisible] = useState(true);
-  const [isCartOpen, setIsCartOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { cartCount } = useCart();
   const { user, isUserLoading } = useUser();
   const { t, language, setLanguage } = useLanguage();
   const auth = useAuth();
   const db = useFirestore();
   const { toast } = useToast();
 
-  // Verificar si el usuario es administrador
   const adminRef = useMemoFirebase(() => (user && db ? doc(db, 'roles_admin', user.uid) : null), [user, db]);
   const { data: adminRole } = useDoc(adminRef);
 
@@ -58,9 +53,9 @@ export default function Header() {
   const handleSignOut = async () => {
     try {
       await signOut(auth);
-      toast({ title: t('nav.signOut'), description: "..." });
+      toast({ title: t('nav.signOut') });
     } catch (error) {
-      toast({ variant: "destructive", title: "Error", description: "..." });
+      toast({ variant: "destructive", title: "Error" });
     }
   };
 
@@ -133,19 +128,6 @@ export default function Header() {
               >
                 <span className="text-[10px] font-bold">{language.toUpperCase()}</span>
               </Button>
-
-              <button 
-                type="button" 
-                className="p-2 text-foreground/60 hover:text-primary transition-all duration-300 hover:scale-110 relative" 
-                onClick={() => setIsCartOpen(true)}
-              >
-                <ShoppingBag className="w-5 h-5" />
-                {cartCount > 0 && (
-                  <Badge variant="destructive" className="absolute -top-1 -right-1 h-4 w-4 p-0 flex items-center justify-center text-[8px] animate-in zoom-in-50 duration-300">
-                    {cartCount}
-                  </Badge>
-                )}
-              </button>
 
               {user ? (
                 <DropdownMenu>
@@ -263,7 +245,6 @@ export default function Header() {
         </div>
       </div>
       
-      <CartSidebar open={isCartOpen} onOpenChange={setIsCartOpen} />
       <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
     </>
   );

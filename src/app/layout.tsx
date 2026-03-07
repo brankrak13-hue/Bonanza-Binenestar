@@ -2,14 +2,13 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
-import { CartProvider } from '@/context/CartContext';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
 import { LanguageProvider } from '@/context/LanguageContext';
 import { SiteSettingsProvider } from '@/context/SiteSettingsContext';
 
 export const metadata: Metadata = {
   title: 'Bonanza - Arte y Bienestar',
-  description: 'Masajes facialis holísticos y terapia de sound healing.',
+  description: 'Masajes faciales holísticos y terapia de sound healing.',
 };
 
 export default function RootLayout({
@@ -31,10 +30,8 @@ export default function RootLayout({
         <FirebaseClientProvider>
           <LanguageProvider>
             <SiteSettingsProvider>
-              <CartProvider>
-                {children}
-                <Toaster />
-              </CartProvider>
+              {children}
+              <Toaster />
             </SiteSettingsProvider>
           </LanguageProvider>
         </FirebaseClientProvider>
