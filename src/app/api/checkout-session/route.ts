@@ -1,13 +1,36 @@
 
 import { NextResponse } from 'next/server';
+import Stripe from 'stripe';
 
-/**
- * RUTA ELIMINADA: Migrada a Enlaces de Pago Directos de Stripe (Stripe Payment Links).
- * Para evitar errores de validación y simplificar el flujo, ahora se usan 
- * los enlaces generados en el Dashboard de Stripe o el Stripe Buy Button.
- */
-export async function GET() {
-  return NextResponse.json({ 
-    message: "Utiliza los enlaces de pago directos para mayor seguridad." 
-  }, { status: 404 });
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+  apiVersion: '2025-01-27',
+});
+
+export async function POST(req: Request) {
+  try {
+    const { priceId } = await req.json();
+
+    if (!priceId) {
+      return NextResponse.json({ error: 'Falta el ID de precio' }, { status: 400 });
+    }
+
+    const origin = req.headers.get('origin') || 'http://localhost:9002';
+
+    const session = await stripe.checkout.sessions.create({
+      line_items: [
+        {
+          price: priceId,
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+      success_url: `${origin}/pedidos?status=success`,
+      cancel_url: `${origin}/servicios?status=cancelled`,
+    });
+
+    return NextResponse.json({ url: session.url });
+  } catch (err: any) {
+    console.error('Error al crear sesión de Stripe:', err.message);
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
 }

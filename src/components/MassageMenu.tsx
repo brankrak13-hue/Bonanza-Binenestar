@@ -13,14 +13,17 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { useSiteSettings } from "@/context/SiteSettingsContext";
-import { Plus, Clock, Sparkles, Check, ExternalLink } from "lucide-react";
+import { Plus, Clock, Sparkles, Check, ExternalLink, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useToast } from "@/hooks/use-toast";
 
 export default function MassageMenu() {
     const { t } = useLanguage();
     const { addToCart } = useCart();
     const { getPrice } = useSiteSettings();
+    const { toast } = useToast();
     const [addedId, setAddedId] = useState<string | null>(null);
+    const [loadingId, setLoadingId] = useState<string | null>(null);
 
     const massages = [
         {
@@ -29,6 +32,7 @@ export default function MassageMenu() {
             subtitle: t('massages.purification.sub'),
             description: t('massages.purification.desc'),
             stripeUrl: t('massages.purification.stripeUrl'),
+            priceId: t('massages.purification.priceId'),
             prices: [
                 { price: getPrice('purification-90', 1100), duration: 90 },
                 { price: getPrice('purification-60', 900), duration: 60 }
@@ -40,6 +44,7 @@ export default function MassageMenu() {
             subtitle: t('massages.fluidity.sub'),
             description: t('massages.fluidity.desc'),
             stripeUrl: t('massages.fluidity.stripeUrl'),
+            priceId: t('massages.fluidity.priceId'),
             prices: [
                 { price: getPrice('fluidity-60', 800), duration: 60 },
                 { price: getPrice('fluidity-90', 1000), duration: 90 }
@@ -51,6 +56,7 @@ export default function MassageMenu() {
             subtitle: t('massages.release.sub'),
             description: t('massages.release.desc'),
             stripeUrl: t('massages.release.stripeUrl'),
+            priceId: t('massages.release.priceId'),
             prices: [
                 { price: getPrice('release-90', 1100), duration: 90 },
                 { price: getPrice('release-60', 900), duration: 60 }
@@ -62,6 +68,7 @@ export default function MassageMenu() {
             subtitle: t('massages.awakening.sub'),
             description: t('massages.awakening.desc'),
             stripeUrl: t('massages.awakening.stripeUrl'),
+            priceId: t('massages.awakening.priceId'),
             prices: [
                 { price: getPrice('awakening-60', 800), duration: 60 },
                 { price: getPrice('awakening-90', 1000), duration: 90 }
@@ -73,6 +80,7 @@ export default function MassageMenu() {
             subtitle: t('massages.reset.sub'),
             description: t('massages.reset.desc'),
             stripeUrl: t('massages.reset.stripeUrl'),
+            priceId: t('massages.reset.priceId'),
             prices: [
                 { price: getPrice('reset-60', 700), duration: 60 }
             ]
@@ -83,6 +91,7 @@ export default function MassageMenu() {
             subtitle: t('massages.sculpt.sub'),
             description: t('massages.sculpt.desc'),
             stripeUrl: t('massages.sculpt.stripeUrl'),
+            priceId: t('massages.sculpt.priceId'),
             prices: [
                 { price: getPrice('sculpt-60', 900), duration: 60 }
             ]
@@ -94,6 +103,38 @@ export default function MassageMenu() {
         addToCart(item);
         setAddedId(uniqueId);
         setTimeout(() => setAddedId(null), 2000);
+    };
+
+    const handleDirectBuy = async (massage: any) => {
+        if (!massage.priceId) {
+            // Si no hay ID de precio, intentamos usar la URL manual
+            window.open(massage.stripeUrl, '_blank');
+            return;
+        }
+
+        setLoadingId(massage.id);
+        try {
+            const response = await fetch('/api/checkout-session', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ priceId: massage.priceId }),
+            });
+
+            const data = await response.json();
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                throw new Error(data.error || 'Error al conectar con Stripe');
+            }
+        } catch (err: any) {
+            toast({
+                variant: "destructive",
+                title: "Error de pago",
+                description: err.message,
+            });
+        } finally {
+            setLoadingId(null);
+        }
     };
 
     return (
@@ -127,11 +168,20 @@ export default function MassageMenu() {
                                 </CardDescription>
                                 
                                 <div className="space-y-4 mt-auto">
-                                    <Button asChild variant="outline" className="w-full rounded-2xl h-12 border-primary/20 text-primary hover:bg-primary hover:text-white transition-all font-bold text-[10px] tracking-widest uppercase mb-4">
-                                        <a href={massage.stripeUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
-                                            {t('services.buy')}
-                                            <ExternalLink className="w-3 h-3" />
-                                        </a>
+                                    <Button 
+                                        variant="outline" 
+                                        className="w-full rounded-2xl h-12 border-primary/20 text-primary hover:bg-primary hover:text-white transition-all font-bold text-[10px] tracking-widest uppercase mb-4"
+                                        disabled={loadingId === massage.id}
+                                        onClick={() => handleDirectBuy(massage)}
+                                    >
+                                        {loadingId === massage.id ? (
+                                            <Loader2 className="w-4 h-4 animate-spin" />
+                                        ) : (
+                                            <span className="flex items-center gap-2">
+                                                {t('services.buy')}
+                                                <ExternalLink className="w-3 h-3" />
+                                            </span>
+                                        )}
                                     </Button>
 
                                     <div className="border-t border-gray-100 pt-4 space-y-3">

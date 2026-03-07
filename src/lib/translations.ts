@@ -93,37 +93,43 @@ export const translations: any = {
         title: "Purificación Sutil",
         sub: "Drenaje",
         desc: "Movimientos suaves para reducir inflamación y dar ligereza.",
-        stripeUrl: "https://buy.stripe.com/test_purification"
+        stripeUrl: "https://buy.stripe.com/test_purification",
+        priceId: "" // Pegar aquí el price_ de Stripe
       },
       fluidity: {
         title: "Fluidez Esencial",
         sub: "Sueco",
         desc: "Movimientos continuos para soltar tensión y dar calma profunda.",
-        stripeUrl: "https://buy.stripe.com/test_fluidity"
+        stripeUrl: "https://buy.stripe.com/test_fluidity",
+        priceId: "" 
       },
       release: {
         title: "Liberación de Tensión",
         sub: "Tejido Profundo",
         desc: "Técnica profunda para alivio de tensión muscular rígida.",
-        stripeUrl: "https://buy.stripe.com/test_release"
+        stripeUrl: "https://buy.stripe.com/test_release",
+        priceId: ""
       },
       awakening: {
         title: "Despertar Vital",
         sub: "Quiromasaje",
         desc: "Manos intuitivas que liberan emociones en espalda y hombros.",
-        stripeUrl: "https://buy.stripe.com/test_awakening"
+        stripeUrl: "https://buy.stripe.com/test_awakening",
+        priceId: ""
       },
       reset: {
         title: "Re-inicia tu Mente",
         sub: "Cráneo Facial",
         desc: "Tratamiento profundo para disolver tensiones arraigadas.",
-        stripeUrl: "https://buy.stripe.com/test_reset"
+        stripeUrl: "https://buy.stripe.com/test_reset",
+        priceId: ""
       },
       sculpt: {
         title: "Moldea tu figura",
         sub: "Reductivo",
         desc: "Masaje intenso para activar el cuerpo y definir figura.",
-        stripeUrl: "https://buy.stripe.com/test_sculpt"
+        stripeUrl: "https://buy.stripe.com/test_sculpt",
+        priceId: "price_1T8FMS3RNCg5DgsjfswAJ8qG" 
       }
     },
     ai: {
@@ -374,37 +380,43 @@ export const translations: any = {
         title: "Subtle Purification",
         sub: "Drainage",
         desc: "Gentle movements to reduce inflammation and promote lightness.",
-        stripeUrl: "https://buy.stripe.com/test_purification_en"
+        stripeUrl: "https://buy.stripe.com/test_purification_en",
+        priceId: ""
       },
       fluidity: {
         title: "Essential Fluidity",
         sub: "Swedish",
         desc: "Continuous movements to release tension and induce deep calm.",
-        stripeUrl: "https://buy.stripe.com/test_fluidity_en"
+        stripeUrl: "https://buy.stripe.com/test_fluidity_en",
+        priceId: ""
       },
       release: {
         title: "Tension Release",
         sub: "Deep Tissue",
         desc: "Deep technique for rigid muscle areas and tension relief.",
-        stripeUrl: "https://buy.stripe.com/test_release_en"
+        stripeUrl: "https://buy.stripe.com/test_release_en",
+        priceId: ""
       },
       awakening: {
         title: "Vital Awakening",
         sub: "Chiromassage",
         desc: "Intuitive hands releasing back and shoulder emotions.",
-        stripeUrl: "https://buy.stripe.com/test_awakening_en"
+        stripeUrl: "https://buy.stripe.com/test_awakening_en",
+        priceId: ""
       },
       reset: {
         title: "Mind Reset",
         sub: "Craniofacial",
         desc: "Profound treatment to dissolve deep-seated tensions.",
-        stripeUrl: "https://buy.stripe.com/test_reset_en"
+        stripeUrl: "https://buy.stripe.com/test_reset_en",
+        priceId: ""
       },
       sculpt: {
         title: "Body Sculpting",
         sub: "Reductive",
         desc: "Intense massage to activate the body and define figure.",
-        stripeUrl: "https://buy.stripe.com/test_sculpt_en"
+        stripeUrl: "https://buy.stripe.com/test_sculpt_en",
+        priceId: "price_1T8FMS3RNCg5DgsjfswAJ8qG"
       }
     },
     ai: {
