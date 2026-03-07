@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
-import { Minus, Plus, Trash2, ShoppingCart, Loader2, User, CreditCard, ShieldCheck } from "lucide-react";
+import { Minus, Plus, Trash2, ShoppingCart, Loader2, User, CreditCard, ShieldCheck, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useUser, useFirestore } from "@/firebase";
 import AuthModal from "@/components/AuthModal";
@@ -27,10 +27,7 @@ const GooglePayButton = dynamic(
   }
 );
 
-interface CartSidebarProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}
+interface CartSidebarProps { open: boolean; onOpenChange: (open: boolean) => void; }
 
 export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
   const { cartItems, removeFromCart, updateQuantity, totalPrice, cartCount, clearCart } = useCart();
@@ -43,11 +40,10 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
 
   const handleOrderCreation = async () => {
     if (!user || !db) return;
-    
     const orderId = `order_${Date.now()}`;
     const orderRef = doc(db, 'userProfiles', user.uid, 'orders', orderId);
     
-    const orderData = {
+    await setDoc(orderRef, {
       id: orderId,
       userProfileId: user.uid,
       orderDate: new Date().toISOString(),
@@ -58,40 +54,30 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
       billingAddressId: 'digital_service',
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-    };
+    });
 
-    try {
-      await setDoc(orderRef, orderData);
-
-      for (const item of cartItems) {
-        const itemRef = doc(collection(orderRef, 'orderItems'));
-        await setDoc(itemRef, {
-          id: itemRef.id,
-          orderId: orderId,
-          productId: item.id,
-          productName: item.title,
-          quantity: item.quantity,
-          priceAtPurchase: item.price,
-          duration: item.duration,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        });
-      }
-    } catch (error) {
-      console.error("Error creating order in Firestore:", error);
+    for (const item of cartItems) {
+      const itemRef = doc(collection(orderRef, 'orderItems'));
+      await setDoc(itemRef, {
+        id: itemRef.id,
+        orderId: orderId,
+        productId: item.id,
+        productName: item.title,
+        quantity: item.quantity,
+        priceAtPurchase: item.price,
+        duration: item.duration,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
     }
   };
 
-  const handlePayment = async (paymentData: any) => {
-    if (totalPrice === 0) return;
+  const handlePaymentSuccess = async (paymentData?: any) => {
     setProcessingPayment(true);
-    
     try {
       const response = await fetch('/api/process-payment', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           paymentMethodData: paymentData?.paymentMethodData,
           amount: totalPrice,
@@ -100,48 +86,16 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
       });
 
       const result = await response.json();
-
-      if (response.ok && result.success) {
+      if (result.success) {
         await handleOrderCreation();
-        toast({
-          title: t('cart.success'),
-          description: t('cart.successDesc'),
-        });
+        toast({ title: "¡Ritual Confirmado!", description: "Tu reserva ha sido registrada con éxito." });
         clearCart();
         onOpenChange(false);
       } else {
-        throw new Error(result.message || t('cart.errorGeneric'));
+        throw new Error(result.message);
       }
     } catch (error: any) {
-      console.error("Payment error detail:", error);
-      toast({
-        variant: "destructive",
-        title: t('cart.error'),
-        description: error.message || t('cart.errorRetry'),
-      });
-      // En modo desarrollo, si el pago falla, permitimos la opción de simular el éxito
-    } finally {
-      setProcessingPayment(false);
-    }
-  };
-
-  const simulateSuccess = async () => {
-    if (totalPrice === 0) return;
-    setProcessingPayment(true);
-    
-    // Simular latencia de red
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    try {
-      await handleOrderCreation();
-      toast({
-        title: "¡Reserva Confirmada!",
-        description: "Tu pago ha sido procesado exitosamente en modo prueba.",
-      });
-      clearCart();
-      onOpenChange(false);
-    } catch (err) {
-      toast({ variant: "destructive", title: "Error al registrar el pedido" });
+      toast({ variant: "destructive", title: "Error en proceso", description: error.message });
     } finally {
       setProcessingPayment(false);
     }
@@ -156,168 +110,110 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
               <ShoppingCart className="w-6 h-6 text-primary" />
               {t('cart.title')}
               <span className="text-sm font-body font-normal text-muted-foreground ml-auto bg-white px-3 py-1 rounded-full border">
-                {cartCount} {cartCount === 1 ? 'item' : 'items'}
+                {cartCount} items
               </span>
             </SheetTitle>
           </SheetHeader>
           
           {cartItems.length === 0 ? (
-            <div className="flex-grow flex flex-col items-center justify-center text-center p-12 space-y-6">
-               <div className="bg-secondary/30 p-10 rounded-full animate-pulse">
-                <ShoppingCart className="w-20 h-20 text-primary/20"/>
-               </div>
-              <div>
-                <p className="text-2xl font-bold font-headline text-gray-800">{t('cart.empty')}</p>
-                <p className="text-muted-foreground mt-2 italic max-w-[240px] mx-auto">{t('cart.emptyDesc')}</p>
-              </div>
+            <div className="flex-grow flex flex-col items-center justify-center p-12 text-center">
+              <ShoppingCart className="w-20 h-20 text-primary/10 mb-6"/>
+              <p className="text-2xl font-bold font-headline text-gray-800">{t('cart.empty')}</p>
               <SheetClose asChild>
-                  <Button variant="outline" className="mt-4 rounded-full px-10 h-14 border-primary/20 text-primary hover:bg-primary hover:text-white transition-all font-bold tracking-widest uppercase text-xs">
-                    {t('cart.continue')}
-                  </Button>
+                <Button variant="outline" className="mt-6 rounded-full px-10 h-12 border-primary/20 text-primary">
+                  {t('cart.continue')}
+                </Button>
               </SheetClose>
             </div>
           ) : (
             <>
-              <div className="flex-grow overflow-y-auto p-6 space-y-6 custom-scrollbar">
+              <div className="flex-grow overflow-y-auto p-6 space-y-6">
                 {!user && (
-                  <div className="p-6 bg-amber-50/50 border border-amber-200 rounded-[2rem] animate-fadeIn">
-                    <div className="flex items-start gap-4">
-                      <div className="bg-white p-2.5 rounded-full shadow-sm">
-                        <User className="w-5 h-5 text-amber-600" />
-                      </div>
-                      <div className="space-y-3">
-                        <p className="text-sm font-bold text-amber-900">{t('cart.authPrompt')}</p>
-                        <p className="text-xs text-amber-700/70 leading-relaxed">{t('cart.authDesc')}</p>
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          className="h-10 rounded-xl text-[10px] font-bold tracking-[0.2em] uppercase border-amber-200 text-amber-700 hover:bg-amber-600 hover:text-white transition-all bg-white"
-                          onClick={() => setIsAuthModalOpen(true)}
-                        >
-                          {t('cart.login')}
-                        </Button>
-                      </div>
+                  <div className="p-6 bg-amber-50 border border-amber-200 rounded-[2rem] flex gap-4 items-start">
+                    <AlertCircle className="w-5 h-5 text-amber-600 mt-1" />
+                    <div className="space-y-2">
+                      <p className="text-sm font-bold text-amber-900">Inicia sesión para guardar tu historial</p>
+                      <Button variant="link" className="p-0 h-auto text-amber-700 font-bold underline" onClick={() => setIsAuthModalOpen(true)}>ENTRAR AQUÍ</Button>
                     </div>
                   </div>
                 )}
                 
                 <div className="space-y-4">
                   {cartItems.map(item => (
-                    <div key={item.id} className="flex items-center justify-between gap-4 p-5 rounded-[2rem] bg-secondary/10 border border-transparent hover:border-primary/10 transition-all group relative overflow-hidden">
-                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary/20" />
+                    <div key={item.id} className="p-5 rounded-[2rem] bg-secondary/10 border border-transparent hover:border-primary/10 flex items-center justify-between">
                       <div className="flex-grow">
-                        <h4 className="font-bold text-gray-900 tracking-tight text-lg">{item.title}</h4>
-                        <p className="text-[10px] text-primary/60 uppercase tracking-[0.2em] font-bold mt-1">
-                          {item.subtitle} • {item.duration} {t('services.min')}
-                        </p>
-                        <div className="flex items-center gap-4 mt-4">
-                           <div className="flex items-center gap-2 bg-white rounded-full p-1.5 border border-gray-100 shadow-sm">
-                            <Button 
-                              variant="ghost" 
-                              size="icon" 
-                              className="h-8 w-8 rounded-full hover:bg-secondary" 
-                              onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                            >
-                              <Minus className="h-3 w-3" />
-                            </Button>
-                            <span className="w-6 text-center text-sm font-bold">{item.quantity}</span>
-                            <Button 
-                              variant="ghost" 
-                              size="icon" 
-                              className="h-8 w-8 rounded-full hover:bg-secondary" 
-                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                            >
-                              <Plus className="h-3 w-3" />
-                            </Button>
+                        <h4 className="font-bold text-gray-900">{item.title}</h4>
+                        <p className="text-[10px] text-primary/60 uppercase font-bold">{item.duration} {t('services.min')}</p>
+                        <div className="flex items-center gap-4 mt-3">
+                          <div className="flex items-center gap-2 bg-white rounded-full border p-1">
+                            <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full" onClick={() => updateQuantity(item.id, item.quantity - 1)}><Minus className="h-3 w-3"/></Button>
+                            <span className="text-xs font-bold w-4 text-center">{item.quantity}</span>
+                            <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full" onClick={() => updateQuantity(item.id, item.quantity + 1)}><Plus className="h-3 w-3"/></Button>
                           </div>
-                          <p className="text-lg font-bold text-primary font-headline">${(item.price * item.quantity).toLocaleString()}</p>
+                          <p className="text-lg font-bold text-primary">${(item.price * item.quantity).toLocaleString()}</p>
                         </div>
                       </div>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="text-gray-300 hover:text-destructive hover:bg-destructive/5 rounded-full h-12 w-12 transition-all" 
-                        onClick={() => removeFromCart(item.id)}
-                      >
-                        <Trash2 className="h-5 w-5" />
-                      </Button>
+                      <Button variant="ghost" size="icon" className="text-gray-300 hover:text-destructive" onClick={() => removeFromCart(item.id)}><Trash2 className="h-5 w-5" /></Button>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <SheetFooter className="mt-auto p-8 border-t bg-gray-50/50 space-y-6 flex flex-col">
-                <div className="w-full space-y-6">
-                  <div className="flex justify-between items-end border-b border-dashed border-gray-200 pb-4">
-                    <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400">{t('cart.subtotal')}</span>
-                    <span className="text-4xl font-bold font-headline text-primary">${totalPrice.toLocaleString()} <span className="text-xs font-body font-normal text-gray-400 ml-1">MXN</span></span>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 gap-4">
-                    <GooglePayButton
-                      environment="TEST"
-                      buttonType="checkout"
-                      buttonColor="black"
-                      buttonSizeMode="fill"
-                      className="w-full h-16 rounded-2xl overflow-hidden shadow-xl hover:shadow-primary/20 transition-all"
-                      paymentRequest={{
-                        apiVersion: 2,
-                        apiVersionMinor: 0,
-                        allowedPaymentMethods: [
-                          {
-                            type: 'CARD',
-                            parameters: {
-                              allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
-                              allowedCardNetworks: ['AMEX', 'DISCOVER', 'INTERAC', 'JCB', 'MASTERCARD', 'VISA'],
-                            },
-                            tokenizationSpecification: {
-                              type: 'PAYMENT_GATEWAY',
-                              parameters: {
-                                gateway: 'stripe',
-                                'stripe:version': '2020-08-27',
-                                'stripe:publishableKey': process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_TYooMQauvdEDq54NiTphI7jx',
-                              },
-                            },
-                          },
-                        ],
-                        merchantInfo: {
-                          merchantName: 'Bonanza Arte & Bienestar',
+              <SheetFooter className="p-8 border-t bg-gray-50/50 flex flex-col gap-4">
+                <div className="flex justify-between items-end border-b border-dashed pb-4">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Total a pagar</span>
+                  <span className="text-4xl font-bold font-headline text-primary">${totalPrice.toLocaleString()} <span className="text-xs font-body font-normal">MXN</span></span>
+                </div>
+                
+                <div className="space-y-3">
+                  <GooglePayButton
+                    environment="TEST"
+                    buttonType="buy"
+                    buttonColor="black"
+                    buttonSizeMode="fill"
+                    className="w-full h-14 rounded-2xl overflow-hidden shadow-lg"
+                    paymentRequest={{
+                      apiVersion: 2,
+                      apiVersionMinor: 0,
+                      allowedPaymentMethods: [{
+                        type: 'CARD',
+                        parameters: {
+                          allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
+                          allowedCardNetworks: ['VISA', 'MASTERCARD', 'AMEX'],
                         },
-                        transactionInfo: {
-                          totalPriceStatus: 'FINAL',
-                          totalPriceLabel: 'Total',
-                          totalPrice: totalPrice.toFixed(2),
-                          currencyCode: 'MXN',
-                          countryCode: 'MX',
-                        },
-                      }}
-                      onLoadPaymentData={handlePayment}
-                      onError={(err) => {
-                        console.error("Google Pay Internal Error:", err);
-                        // No mostramos el toast destructivo aquí porque a veces el error BIBED_08 se puede ignorar
-                      }}
-                    />
+                        tokenizationSpecification: {
+                          type: 'PAYMENT_GATEWAY',
+                          parameters: {
+                            'gateway': 'stripe',
+                            'stripe:version': '2020-08-27',
+                            'stripe:publishableKey': process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_TYooMQauvdEDq54NiTphI7jx'
+                          }
+                        }
+                      }],
+                      merchantInfo: { merchantName: 'Bonanza Bienestar' },
+                      transactionInfo: {
+                        totalPriceStatus: 'FINAL',
+                        totalPriceLabel: 'Total',
+                        totalPrice: totalPrice.toFixed(2),
+                        currencyCode: 'MXN',
+                        countryCode: 'MX',
+                      },
+                    }}
+                    onLoadPaymentData={handlePaymentSuccess}
+                    onError={(err) => console.log("Google Pay log:", err)}
+                  />
 
-                    <Button 
-                      onClick={simulateSuccess} 
-                      className="w-full h-14 rounded-2xl bg-white border-2 border-primary/20 text-primary hover:bg-primary/5 hover:border-primary transition-all flex items-center justify-center gap-3 group shadow-sm"
-                      disabled={processingPayment}
-                    >
-                      {processingPayment ? (
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                      ) : (
-                        <>
-                          <CreditCard className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                          <span className="text-xs font-bold tracking-[0.2em] uppercase">Pagar con Tarjeta (TEST)</span>
-                        </>
-                      )}
-                    </Button>
-                  </div>
-
-                  <div className="flex items-center justify-center gap-3 opacity-40">
-                    <ShieldCheck className="w-4 h-4 text-primary" />
-                    <span className="text-[8px] font-bold tracking-[0.4em] uppercase">Secure Ritual Encryption</span>
-                  </div>
+                  <Button 
+                    onClick={() => handlePaymentSuccess()} 
+                    className="w-full h-14 rounded-2xl bg-white border-2 border-primary/20 text-primary hover:bg-primary/5 transition-all flex items-center justify-center gap-3 font-bold uppercase text-[10px] tracking-widest"
+                    disabled={processingPayment}
+                  >
+                    {processingPayment ? <Loader2 className="animate-spin w-5 h-5" /> : <><CreditCard className="w-5 h-5" /> Pago con Tarjeta (TEST)</>}
+                  </Button>
+                </div>
+                <div className="flex justify-center items-center gap-2 opacity-30 mt-2">
+                  <ShieldCheck className="w-4 h-4 text-primary" />
+                  <span className="text-[8px] font-bold uppercase tracking-widest">Ritual de Pago Encriptado</span>
                 </div>
               </SheetFooter>
             </>
