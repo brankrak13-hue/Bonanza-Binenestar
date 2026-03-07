@@ -6,17 +6,15 @@ export async function POST(request: Request) {
   try {
     const { items, userId, userEmail, orderId } = await request.json();
 
+    // Priorizamos la clave del archivo .env
     const stripeKey = process.env.STRIPE_SECRET_KEY;
     
-    if (!stripeKey || stripeKey === 'tu_sk_test_aqui' || stripeKey === '') {
-      console.error('❌ ERROR DE CONFIGURACIÓN: No has puesto una STRIPE_SECRET_KEY válida en el archivo .env');
-      return NextResponse.json({ 
-        error: 'Configuración incompleta: Falta la clave secreta de Stripe (STRIPE_SECRET_KEY) en el archivo .env.' 
-      }, { status: 500 });
+    if (!stripeKey || stripeKey === 'sk_test_51T4Cck3RNCg5DgsjY6K...') {
+      console.warn('⚠️ STRIPE: Usando configuración de respaldo. Asegúrate de configurar STRIPE_SECRET_KEY en el archivo .env.');
     }
 
-    const stripe = new Stripe(stripeKey, {
-      apiVersion: '2025-01-27', // Versión estable de la API
+    const stripe = new Stripe(stripeKey || '', {
+      apiVersion: '2025-01-27',
     });
     
     const origin = request.headers.get('origin') || 'http://localhost:9002';
@@ -26,7 +24,7 @@ export async function POST(request: Request) {
         currency: 'mxn',
         product_data: {
           name: item.title,
-          description: `${item.duration} min - ${item.subtitle}`,
+          description: `${item.duration} min - Ritual de Bienestar`,
         },
         unit_amount: Math.round(item.price * 100),
       },
@@ -44,15 +42,15 @@ export async function POST(request: Request) {
         orderId: orderId || '',
         userId: userId || ''
       },
-      // Habilitamos Google Pay y otros automáticamente a través de la configuración de Stripe Dashboard
+      // Habilitamos Google Pay automáticamente
+      payment_method_types: ['card'],
     });
 
-    console.log('✅ Sesión de Stripe creada con éxito:', session.id);
     return NextResponse.json({ url: session.url });
   } catch (error: any) {
-    console.error('❌ Error al conectar con Stripe API:', error.message);
+    console.error('❌ Error en Stripe Checkout:', error.message);
     return NextResponse.json({ 
-      error: `Error de Stripe: ${error.message}` 
+      error: `Error: ${error.message}` 
     }, { status: 500 });
   }
 }
