@@ -8,14 +8,17 @@ export async function POST(request: Request) {
 
     const stripeKey = process.env.STRIPE_SECRET_KEY;
     
-    if (!stripeKey || stripeKey.includes('tu_sk_test')) {
+    if (!stripeKey || stripeKey === 'tu_sk_test_aqui' || stripeKey === '') {
       console.error('❌ ERROR DE CONFIGURACIÓN: No has puesto una STRIPE_SECRET_KEY válida en el archivo .env');
       return NextResponse.json({ 
-        error: 'Falta la clave secreta de Stripe. Por favor, revisa el archivo .env del proyecto.' 
+        error: 'Configuración incompleta: Falta la clave secreta de Stripe (STRIPE_SECRET_KEY) en el archivo .env.' 
       }, { status: 500 });
     }
 
-    const stripe = new Stripe(stripeKey);
+    const stripe = new Stripe(stripeKey, {
+      apiVersion: '2025-01-27', // Versión estable de la API
+    });
+    
     const origin = request.headers.get('origin') || 'http://localhost:9002';
 
     const line_items = items.map((item: any) => ({
@@ -41,12 +44,13 @@ export async function POST(request: Request) {
         orderId: orderId || '',
         userId: userId || ''
       },
+      // Habilitamos Google Pay y otros automáticamente a través de la configuración de Stripe Dashboard
     });
 
-    console.log('✅ Sesión de Stripe creada:', session.id);
+    console.log('✅ Sesión de Stripe creada con éxito:', session.id);
     return NextResponse.json({ url: session.url });
   } catch (error: any) {
-    console.error('❌ Error al conectar con Stripe:', error.message);
+    console.error('❌ Error al conectar con Stripe API:', error.message);
     return NextResponse.json({ 
       error: `Error de Stripe: ${error.message}` 
     }, { status: 500 });
