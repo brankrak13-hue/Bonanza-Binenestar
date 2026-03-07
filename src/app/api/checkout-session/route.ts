@@ -6,26 +6,18 @@ export async function POST(request: Request) {
   try {
     const { items, userId, userEmail, orderId } = await request.json();
 
-    if (!items || items.length === 0) {
-      return NextResponse.json({ error: 'El carrito está vacío' }, { status: 400 });
-    }
-
-    // Verificación estricta de la llave secreta en el momento de la petición
     const stripeKey = process.env.STRIPE_SECRET_KEY;
     
-    if (!stripeKey || stripeKey === 'tu_sk_test_aqui') {
-      console.error('❌ Error Crítico: STRIPE_SECRET_KEY no configurada correctamente en .env');
+    if (!stripeKey || stripeKey.includes('tu_sk_test')) {
+      console.error('❌ ERROR DE CONFIGURACIÓN: No has puesto una STRIPE_SECRET_KEY válida en el archivo .env');
       return NextResponse.json({ 
-        error: 'Error de configuración en el servidor: La clave secreta de Stripe es inválida. Por favor, verifica tu archivo .env.' 
+        error: 'Falta la clave secreta de Stripe. Por favor, revisa el archivo .env del proyecto.' 
       }, { status: 500 });
     }
 
-    // Inicializamos Stripe dentro del handler para asegurar que use la llave fresca
     const stripe = new Stripe(stripeKey);
+    const origin = request.headers.get('origin') || 'http://localhost:9002';
 
-    const origin = request.headers.get('origin') || request.headers.get('referer') || 'http://localhost:9002';
-
-    // Mapeamos los items del carrito a line_items de Stripe Checkout
     const line_items = items.map((item: any) => ({
       price_data: {
         currency: 'mxn',
@@ -33,12 +25,11 @@ export async function POST(request: Request) {
           name: item.title,
           description: `${item.duration} min - ${item.subtitle}`,
         },
-        unit_amount: Math.round(item.price * 100), // Stripe usa centavos
+        unit_amount: Math.round(item.price * 100),
       },
       quantity: item.quantity,
     }));
 
-    // Creamos la sesión de Checkout siguiendo el blueprint
     const session = await stripe.checkout.sessions.create({
       line_items,
       mode: 'payment',
@@ -52,12 +43,12 @@ export async function POST(request: Request) {
       },
     });
 
-    console.log('✅ Sesión de Stripe creada con éxito:', session.id);
+    console.log('✅ Sesión de Stripe creada:', session.id);
     return NextResponse.json({ url: session.url });
   } catch (error: any) {
-    console.error('❌ Error crítico al crear sesión de Stripe:', error);
+    console.error('❌ Error al conectar con Stripe:', error.message);
     return NextResponse.json({ 
-      error: `Error de la API de Stripe: ${error.message}` 
+      error: `Error de Stripe: ${error.message}` 
     }, { status: 500 });
   }
 }
