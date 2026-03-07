@@ -112,7 +112,6 @@ export default function Header() {
                   key={item.name}
                   href={item.href}
                   className="nav-link text-[11px] tracking-[0.2em] font-bold text-foreground/60 hover:text-primary py-2"
-                  {...(item.href === "/nosotros" ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                 >
                   {item.name}
                 </Link>
@@ -220,7 +219,6 @@ export default function Header() {
                 className="text-xl font-headline font-semibold tracking-wide text-foreground/80 hover:text-primary transition-colors animate-fadeIn"
                 style={{ animationDelay: `${idx * 100}ms` }}
                 onClick={() => setIsMenuOpen(false)}
-                {...(item.href === "/nosotros" ? { target: "_blank", rel: "noopener noreferrer" } : {})}
               >
                 {item.name}
               </Link>

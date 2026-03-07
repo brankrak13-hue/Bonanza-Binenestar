@@ -55,7 +55,6 @@ export default function Footer() {
                                             <Link 
                                                 href={link.href} 
                                                 className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                                                {...(link.href === "/nosotros" ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                                             >
                                                 {link.title}
                                             </Link>
