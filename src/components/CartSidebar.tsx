@@ -69,7 +69,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                 <ShoppingCart className="w-5 h-5 text-primary" />
               </div>
               {t('cart.title')}
-              <span className="text-[10px] font-bold text-primary bg-white px-3 py-1 rounded-full border border-primary/10 ml-auto uppercase tracking-widest">
+              <span className="text-xl font-bold text-primary ml-auto uppercase tracking-widest">
                 {cartCount} items
               </span>
             </SheetTitle>
@@ -165,7 +165,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                       <Loader2 className="w-5 h-5 animate-spin" />
                     ) : (
                       <>
-                        CONFIRMAR Y PAGAR
+                        PROCEDER AL PAGO
                         <ArrowRight className="w-4 h-4" />
                       </>
                     )}
