@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -116,7 +117,9 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
             setTimeout(() => setView('auth'), 300); // Reset view after closing
         }
     }}>
-      <DialogContent className="w-[calc(100%-2rem)] sm:max-w-[440px] rounded-3xl sm:rounded-[2.5rem] border-none shadow-[0_40px_100px_-20px_rgba(41,102,84,0.3)] glass-card overflow-hidden animate-in fade-in zoom-in-95 duration-500 p-0">
+      <DialogContent 
+        className="w-[calc(100%-2rem)] sm:max-w-[440px] rounded-3xl sm:rounded-[2.5rem] border-none shadow-[0_40px_100px_-20px_rgba(41,102,84,0.3)] glass-card overflow-hidden animate-in fade-in zoom-in-95 duration-500 p-0"
+      >
         <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-primary/20 via-primary to-primary/20" />
         
         <div className="p-6 sm:p-10 max-h-[90vh] overflow-y-auto custom-scrollbar">

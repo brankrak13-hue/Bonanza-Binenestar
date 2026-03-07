@@ -8,7 +8,8 @@ import {
   SheetHeader,
   SheetTitle,
   SheetFooter,
-  SheetClose
+  SheetClose,
+  SheetDescription
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
@@ -74,7 +75,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
       const orderId = await handleOrderCreation();
       if (!orderId) throw new Error("No se pudo iniciar el proceso de reserva.");
 
-      // 2. Solicitamos la sesión de Stripe Checkout (Paso 2 del blueprint)
+      // 2. Solicitamos la sesión de Stripe Checkout
       const response = await fetch('/api/checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -89,13 +90,8 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
       const data = await response.json();
       
       if (data.url) {
-        // Redirección a la URL de Stripe (Componente de UI del blueprint)
+        // Redirección a la URL de Stripe
         window.location.href = data.url;
-        
-        // Limpiamos el carrito si estamos en modo simulación
-        if (data.message) {
-            clearCart();
-        }
       } else {
         throw new Error(data.error || 'Error al conectar con la pasarela de pagos.');
       }
@@ -112,7 +108,10 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
   return (
     <>
       <Sheet open={open} onOpenChange={onOpenChange}>
-        <SheetContent className="flex flex-col sm:max-w-md w-full border-none shadow-2xl rounded-l-[2rem] bg-white p-0 overflow-hidden">
+        <SheetContent 
+          className="flex flex-col sm:max-w-md w-full border-none shadow-2xl rounded-l-[2rem] bg-white p-0 overflow-hidden"
+          aria-describedby={undefined}
+        >
           <SheetHeader className="p-8 border-b bg-primary/5">
             <SheetTitle className="text-3xl font-headline font-bold flex items-center gap-3">
               <ShoppingCart className="w-6 h-6 text-primary" />
@@ -121,6 +120,9 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                 {cartCount} items
               </span>
             </SheetTitle>
+            <SheetDescription className="sr-only">
+              Resumen de los servicios de bienestar seleccionados para tu ritual.
+            </SheetDescription>
           </SheetHeader>
           
           {cartItems.length === 0 ? (

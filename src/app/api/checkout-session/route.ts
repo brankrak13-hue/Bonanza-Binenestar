@@ -1,8 +1,6 @@
+
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
-
-// Inicializamos Stripe sin versión fija para usar la de la cuenta (según blueprint)
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '');
 
 export async function POST(request: Request) {
   try {
@@ -12,17 +10,22 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'El carrito está vacío' }, { status: 400 });
     }
 
-    // Verificación estricta de la llave secreta
-    if (!process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY === 'tu_sk_test_aqui') {
-      console.error('❌ Error: STRIPE_SECRET_KEY no configurada correctamente en .env');
+    // Verificación estricta de la llave secreta en el momento de la petición
+    const stripeKey = process.env.STRIPE_SECRET_KEY;
+    
+    if (!stripeKey || stripeKey === 'tu_sk_test_aqui') {
+      console.error('❌ Error Crítico: STRIPE_SECRET_KEY no configurada correctamente en .env');
       return NextResponse.json({ 
-        error: 'Error de configuración: La clave secreta de Stripe es inválida o no ha sido cargada. Revisa tu archivo .env.' 
+        error: 'Error de configuración en el servidor: La clave secreta de Stripe es inválida. Por favor, verifica tu archivo .env.' 
       }, { status: 500 });
     }
 
+    // Inicializamos Stripe dentro del handler para asegurar que use la llave fresca
+    const stripe = new Stripe(stripeKey);
+
     const origin = request.headers.get('origin') || request.headers.get('referer') || 'http://localhost:9002';
 
-    // Mapeamos los items del carrito a line_items de Stripe Checkout (Paso 2 del blueprint)
+    // Mapeamos los items del carrito a line_items de Stripe Checkout
     const line_items = items.map((item: any) => ({
       price_data: {
         currency: 'mxn',
