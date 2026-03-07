@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
@@ -11,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Loader2, Lock, CheckCircle2, ShieldCheck, Stars, ArrowRight, ShieldAlert, Sparkles } from 'lucide-react';
+import { Loader2, Lock, CheckCircle2, ShieldCheck, ArrowRight, ShieldAlert, Sparkles } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
@@ -214,7 +213,7 @@ function RestablecerContent() {
             <div className="text-center py-12 animate-in fade-in zoom-in-95 duration-1000">
                 <div className="flex justify-center mb-8">
                     <div className="relative">
-                        <Stars className="w-12 h-12 text-accent animate-spin-slow" />
+                        <Sparkles className="w-12 h-12 text-accent animate-spin-slow" />
                         <Sparkles className="w-6 h-6 text-primary absolute -top-2 -right-2 animate-pulse" />
                     </div>
                 </div>

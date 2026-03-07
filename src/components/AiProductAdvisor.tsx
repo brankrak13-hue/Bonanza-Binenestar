@@ -1,9 +1,8 @@
-
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { Sparkles, MessageSquare, ArrowRight, Loader2, Brain, Stars, Sparkle, Wind, XCircle } from 'lucide-react';
+import { Sparkles, MessageSquare, ArrowRight, Loader2, Brain, Sparkle, Wind, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -65,7 +64,6 @@ export default function AiProductAdvisor() {
 
   const handleNextQuestion = (q: string) => {
     setQuery(q);
-    // Usamos un pequeño delay para asegurar que el estado de query se actualice antes del submit
     setTimeout(() => {
         const fakeEvent = { preventDefault: () => {} } as React.FormEvent;
         handleSubmit(fakeEvent);
@@ -85,7 +83,7 @@ export default function AiProductAdvisor() {
             <CardHeader className="text-center pt-12 pb-8">
               <div className="mx-auto bg-primary/10 rounded-full p-5 w-fit mb-6 relative group">
                   <div className="absolute inset-0 bg-primary/20 rounded-full animate-ping group-hover:animate-none opacity-40" />
-                  <Stars className="w-8 h-8 text-primary relative z-10 animate-spin-slow" />
+                  <Sparkles className="w-8 h-8 text-primary relative z-10 animate-spin-slow" />
               </div>
               <CardTitle className="text-4xl md:text-5xl font-bold mb-4 tracking-tight font-headline text-gray-900">{t('ai.title')}</CardTitle>
               <CardDescription className="max-w-md mx-auto text-base text-gray-500 leading-relaxed font-body italic">
@@ -153,7 +151,7 @@ export default function AiProductAdvisor() {
               {result && (
                 <div className="mt-12 p-8 sm:p-10 rounded-[2.5rem] bg-white shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-primary/5 animate-scaleIn">
                   <div className="flex items-center gap-3 text-[10px] font-bold tracking-[0.4em] text-primary/60 uppercase mb-6">
-                    <Stars className="w-4 h-4 animate-spin-slow text-accent" />
+                    <Sparkles className="w-4 h-4 animate-spin-slow text-accent" />
                     {t('ai.ritual')}
                   </div>
                   

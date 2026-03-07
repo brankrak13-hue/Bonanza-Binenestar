@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 import { useSiteSettings } from "@/context/SiteSettingsContext";
-import { Users, Wind, Sparkles, ShieldCheck, Stars } from "lucide-react";
+import { Users, Wind, Sparkles, ShieldCheck } from "lucide-react";
 import { WobbleCard } from "@/components/ui/wobble-card";
 
 export default function About() {
@@ -34,7 +34,7 @@ export default function About() {
 
           <div className="space-y-8">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/5 text-primary text-xs font-bold tracking-[0.2em] uppercase border border-primary/10">
-              <Stars className="w-3.5 h-3.5" />
+              <Sparkles className="w-3.5 h-3.5" />
               {t('about.subtitle')}
             </div>
             <h2 className="text-5xl lg:text-7xl font-bold text-gray-900 font-headline leading-tight">
@@ -126,7 +126,7 @@ export default function About() {
                 "Excelencia certificada en el sector del bienestar holístico."
               </p>
             </div>
-            <Stars className="absolute -right-8 -top-8 w-32 h-32 text-white/10" />
+            <Sparkles className="absolute -right-8 -top-8 w-32 h-32 text-white/10" />
           </WobbleCard>
 
           <WobbleCard 
