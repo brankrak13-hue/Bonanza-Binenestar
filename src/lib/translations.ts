@@ -73,8 +73,8 @@ export const translations: any = {
         sub: "Drenaje",
         desc: "Movimientos suaves para reducir inflamación y dar ligereza.",
         prices: [
-          { amount: 900, duration: 60, paymentLink: "https://buy.stripe.com/placeholder_p1" },
-          { amount: 1100, duration: 90, paymentLink: "https://buy.stripe.com/placeholder_p2" }
+          { amount: 900, duration: 60, paymentLink: "https://buy.stripe.com/6oU8wIgnG46C0whf5z3oA04" },
+          { amount: 1100, duration: 90, paymentLink: "https://buy.stripe.com/7sY9AM7Ra46CceZf5z3oA05" }
         ]
       },
       fluidity: {
@@ -82,8 +82,8 @@ export const translations: any = {
         sub: "Sueco",
         desc: "Movimientos continuos para soltar tensión y dar calma profunda.",
         prices: [
-            { amount: 800, duration: 60, paymentLink: "https://buy.stripe.com/placeholder_f1" },
-            { amount: 1000, duration: 90, paymentLink: "https://buy.stripe.com/placeholder_f2" }
+            { amount: 800, duration: 60, paymentLink: "https://buy.stripe.com/00wfZa3AU5aG2Ep6z33oA01" },
+            { amount: 1000, duration: 90, paymentLink: "https://buy.stripe.com/5kQ7sEefy7iO5QBe1v3oA02" }
         ]
       },
       release: {
@@ -91,8 +91,8 @@ export const translations: any = {
         sub: "Tejido Profundo",
         desc: "Técnica profunda para alivio de tensión muscular rígida.",
         prices: [
-            { amount: 900, duration: 60, paymentLink: "https://buy.stripe.com/placeholder_l1" },
-            { amount: 1100, duration: 90, paymentLink: "https://buy.stripe.com/placeholder_l2" }
+            { amount: 900, duration: 60, paymentLink: "https://buy.stripe.com/00w28k5J2dHc3It3mR3oA09" },
+            { amount: 1100, duration: 90, paymentLink: "https://buy.stripe.com/00w28k6N60Uqgvf1eJ3oA0a" }
         ]
       },
       awakening: {
@@ -100,8 +100,8 @@ export const translations: any = {
         sub: "Quiromasaje",
         desc: "Manos intuitivas que liberan emociones en espalda y hombros.",
         prices: [
-            { amount: 800, duration: 60, paymentLink: "https://buy.stripe.com/placeholder_a1" },
-            { amount: 1000, duration: 90, paymentLink: "https://buy.stripe.com/placeholder_a2" }
+            { amount: 800, duration: 60, paymentLink: "https://buy.stripe.com/dRmeV68Ve1Yu2Epf5z3oA07" },
+            { amount: 1000, duration: 90, paymentLink: "https://buy.stripe.com/00w28k5J2dHc3It3mR3oA09" }
         ]
       },
       reset: {
@@ -109,7 +109,7 @@ export const translations: any = {
         sub: "Cráneo Facial",
         desc: "Tratamiento profundo para disolver tensiones arraigadas.",
         prices: [
-            { amount: 700, duration: 60, paymentLink: "https://buy.stripe.com/placeholder_r1" }
+            { amount: 700, duration: 60, paymentLink: "https://buy.stripe.com/aFa6oAdbu1Yufrb4qV3oA06" }
         ]
       },
       sculpt: {
@@ -117,7 +117,7 @@ export const translations: any = {
         sub: "Reductivo",
         desc: "Masaje intenso para activar el cuerpo y definir figura.",
         prices: [
-            { amount: 900, duration: 60, paymentLink: "https://buy.stripe.com/placeholder_s1" }
+            { amount: 900, duration: 60, paymentLink: "https://buy.stripe.com/00w3coefyav04Mx6z33oA03" }
         ]
       }
     },
@@ -310,8 +310,8 @@ export const translations: any = {
         sub: "Drainage",
         desc: "Gentle movements to reduce inflammation.",
         prices: [
-          { amount: 900, duration: 60, paymentLink: "https://buy.stripe.com/placeholder_p1_en" },
-          { amount: 1100, duration: 90, paymentLink: "https://buy.stripe.com/placeholder_p2_en" }
+          { amount: 900, duration: 60, paymentLink: "https://buy.stripe.com/6oU8wIgnG46C0whf5z3oA04" },
+          { amount: 1100, duration: 90, paymentLink: "https://buy.stripe.com/7sY9AM7Ra46CceZf5z3oA05" }
         ]
       },
       fluidity: {
@@ -319,8 +319,8 @@ export const translations: any = {
         sub: "Swedish",
         desc: "Continuous movements to release tension.",
         prices: [
-            { amount: 800, duration: 60, paymentLink: "https://buy.stripe.com/placeholder_f1_en" },
-            { amount: 1000, duration: 90, paymentLink: "https://buy.stripe.com/placeholder_f2_en" }
+            { amount: 800, duration: 60, paymentLink: "https://buy.stripe.com/00wfZa3AU5aG2Ep6z33oA01" },
+            { amount: 1000, duration: 90, paymentLink: "https://buy.stripe.com/5kQ7sEefy7iO5QBe1v3oA02" }
         ]
       },
       release: {
@@ -328,8 +328,8 @@ export const translations: any = {
         sub: "Deep Tissue",
         desc: "Deep technique for rigid muscle areas.",
         prices: [
-            { amount: 900, duration: 60, paymentLink: "https://buy.stripe.com/placeholder_l1_en" },
-            { amount: 1100, duration: 90, paymentLink: "https://buy.stripe.com/placeholder_l2_en" }
+            { amount: 900, duration: 60, paymentLink: "https://buy.stripe.com/00w28k5J2dHc3It3mR3oA09" },
+            { amount: 1100, duration: 90, paymentLink: "https://buy.stripe.com/00w28k6N60Uqgvf1eJ3oA0a" }
         ]
       },
       awakening: {
@@ -337,8 +337,8 @@ export const translations: any = {
         sub: "Chiromassage",
         desc: "Intuitive hands releasing emotions.",
         prices: [
-            { amount: 800, duration: 60, paymentLink: "https://buy.stripe.com/placeholder_a1_en" },
-            { amount: 1000, duration: 90, paymentLink: "https://buy.stripe.com/placeholder_a2_en" }
+            { amount: 800, duration: 60, paymentLink: "https://buy.stripe.com/dRmeV68Ve1Yu2Epf5z3oA07" },
+            { amount: 1000, duration: 90, paymentLink: "https://buy.stripe.com/00w28k5J2dHc3It3mR3oA09" }
         ]
       },
       reset: {
@@ -346,7 +346,7 @@ export const translations: any = {
         sub: "Craniofacial",
         desc: "Profound treatment to dissolve tensions.",
         prices: [
-            { amount: 700, duration: 60, paymentLink: "https://buy.stripe.com/placeholder_r1_en" }
+            { amount: 700, duration: 60, paymentLink: "https://buy.stripe.com/aFa6oAdbu1Yufrb4qV3oA06" }
         ]
       },
       sculpt: {
@@ -354,7 +354,7 @@ export const translations: any = {
         sub: "Reductive",
         desc: "Intense massage to define figure.",
         prices: [
-            { amount: 900, duration: 60, paymentLink: "https://buy.stripe.com/placeholder_s1_en" }
+            { amount: 900, duration: 60, paymentLink: "https://buy.stripe.com/00w3coefyav04Mx6z33oA03" }
         ]
       }
     },

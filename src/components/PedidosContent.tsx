@@ -18,7 +18,6 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
-import { useCart } from '@/context/CartContext';
 
 function PedidosContent() {
   const { user, isUserLoading } = useUser();
@@ -26,20 +25,18 @@ function PedidosContent() {
   const { t, language } = useLanguage();
   const searchParams = useSearchParams();
   const { toast } = useToast();
-  const { clearCart } = useCart();
   
   const currentLocale = language === 'es' ? es : enUS;
 
   useEffect(() => {
     const status = searchParams.get('status');
     if (status === 'success') {
-      clearCart();
       toast({
-        title: t('cart.success'),
-        description: t('cart.successDesc'),
+        title: t('auth.successLoginTitle') || '¡Éxito!',
+        description: 'Tu reserva ha sido procesada con éxito.',
       });
     }
-  }, [searchParams, clearCart, toast, t]);
+  }, [searchParams, toast, t]);
 
   const ordersQuery = useMemoFirebase(() => {
     if (!db || !user) return null;
