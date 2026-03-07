@@ -13,22 +13,49 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
-import { Minus, Plus, Trash2, ShoppingCart, ShieldCheck, AlertCircle, Sparkles } from "lucide-react";
+import { Minus, Plus, Trash2, ShoppingCart, ShieldCheck, AlertCircle, Sparkles, Loader2, ArrowRight } from "lucide-react";
 import { useUser } from "@/firebase";
 import AuthModal from "@/components/AuthModal";
 import { useLanguage } from "@/context/LanguageContext";
-import StripeBuyButton from "@/components/StripeBuyButton";
+import { useToast } from "@/hooks/use-toast";
 
 interface CartSidebarProps { open: boolean; onOpenChange: (open: boolean) => void; }
 
 export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
   const { cartItems, removeFromCart, updateQuantity, totalPrice, cartCount } = useCart();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const { user } = useUser();
   const { t } = useLanguage();
+  const { toast } = useToast();
 
-  const stripeButtonId = "buy_btn_1T8Egc3RNCg5Dgsj5HcwJeIN";
-  const stripePubKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "pk_live_51T4Cck3RNCg5DgsjcSYMdryVssd0TIIZhJS1Suh38gZhDeHaHXdwptI3ou42x90huN7jMjonmZ4FGMBVwA7Dcn2A00pSB2Z1uH";
+  const handleCheckout = async () => {
+    if (cartItems.length === 0) return;
+    
+    setIsProcessing(true);
+    try {
+      const response = await fetch('/api/checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: cartItems }),
+      });
+
+      const data = await response.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error(data.error || 'Error al conectar con Stripe');
+      }
+    } catch (err: any) {
+      toast({
+        variant: "destructive",
+        title: "Error de pago",
+        description: err.message,
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   return (
     <>
@@ -107,8 +134,20 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                     <Sparkles className="w-3 h-3" />
                   </p>
                   
-                  {/* Botón de Compra Directo de Stripe */}
-                  <StripeBuyButton buttonId={stripeButtonId} publishableKey={stripePubKey} />
+                  <Button 
+                    className="w-full btn-primary h-16 rounded-2xl text-xs flex items-center justify-center gap-3" 
+                    disabled={isProcessing}
+                    onClick={handleCheckout}
+                  >
+                    {isProcessing ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      <>
+                        PROCEDER AL PAGO
+                        <ArrowRight className="w-4 h-4" />
+                      </>
+                    )}
+                  </Button>
                   
                   <p className="text-[9px] text-gray-400 italic mt-2">
                     "Al pagar, serás redirigido a la pasarela oficial de Stripe."

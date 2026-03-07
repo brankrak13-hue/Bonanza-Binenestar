@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { createContext, useContext, useState, ReactNode, useMemo } from 'react';
@@ -10,6 +11,7 @@ export interface CartItem {
   price: number;
   duration: number;
   quantity: number;
+  priceId: string;
 }
 
 interface CartContextType {
@@ -30,14 +32,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const addToCart = (itemToAdd: Omit<CartItem, 'quantity' | 'id'>) => {
     setCartItems(prevItems => {
-      const uniqueId = `${itemToAdd.title}-${itemToAdd.duration}`;
+      // Usamos el priceId como parte de la identidad única para evitar mezclar duraciones
+      const uniqueId = itemToAdd.priceId || `${itemToAdd.title}-${itemToAdd.duration}`;
       const existingItem = prevItems.find(item => item.id === uniqueId);
       if (existingItem) {
         return prevItems.map(item =>
           item.id === uniqueId ? { ...item, quantity: item.quantity + 1 } : item
         );
       }
-      return [...prevItems, { ...itemToAdd, id: uniqueId, quantity: 1 }];
+      return [...prevItems, { ...itemToAdd, id: uniqueId, quantity: 1, priceId: itemToAdd.priceId || '' }];
     });
     toast({
         title: "Servicio agregado",

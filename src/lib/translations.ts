@@ -93,43 +93,53 @@ export const translations: any = {
         title: "Purificación Sutil",
         sub: "Drenaje",
         desc: "Movimientos suaves para reducir inflamación y dar ligereza.",
-        stripeUrl: "https://buy.stripe.com/test_purification",
-        priceId: "" // Pegar aquí el price_ de Stripe
+        prices: [
+          { amount: 900, duration: 60, priceId: "price_1T8FFQ3RNCg5Dgsjy0Ayflxs" },
+          { amount: 1100, duration: 90, priceId: "price_1T8FFQ3RNCg5DgsjTyrf20S9" }
+        ]
       },
       fluidity: {
         title: "Fluidez Esencial",
         sub: "Sueco",
         desc: "Movimientos continuos para soltar tensión y dar calma profunda.",
-        stripeUrl: "https://buy.stripe.com/test_fluidity",
-        priceId: "" 
+        prices: [
+            { amount: 800, duration: 60, priceId: "price_1T8D7X3RNCg5DgsjkEfyBwl0" },
+            { amount: 1000, duration: 90, priceId: "price_1T8FTu3RNCg5DgsjKIn3zg1g" }
+        ]
       },
       release: {
         title: "Liberación de Tensión",
         sub: "Tejido Profundo",
         desc: "Técnica profunda para alivio de tensión muscular rígida.",
-        stripeUrl: "https://buy.stripe.com/test_release",
-        priceId: ""
+        prices: [
+            { amount: 900, duration: 60, priceId: "price_1T8DBl3RNCg5DgsjnpuzTSKX" },
+            { amount: 1100, duration: 90, priceId: "price_1T8FRe3RNCg5DgsjFJ01Ib4p" }
+        ]
       },
       awakening: {
         title: "Despertar Vital",
         sub: "Quiromasaje",
         desc: "Manos intuitivas que liberan emociones en espalda y hombros.",
-        stripeUrl: "https://buy.stripe.com/test_awakening",
-        priceId: ""
+        prices: [
+            { amount: 800, duration: 60, priceId: "price_1T8DFC3RNCg5DgsjHPaZ4xVo" },
+            { amount: 1000, duration: 90, priceId: "price_1T8FKS3RNCg5DgsjRTfXjkEf" }
+        ]
       },
       reset: {
         title: "Re-inicia tu Mente",
         sub: "Cráneo Facial",
         desc: "Tratamiento profundo para disolver tensiones arraigadas.",
-        stripeUrl: "https://buy.stripe.com/test_reset",
-        priceId: ""
+        prices: [
+            { amount: 700, duration: 60, priceId: "price_1T8DXj3RNCg5DgsjdVdjGSTK" }
+        ]
       },
       sculpt: {
         title: "Moldea tu figura",
         sub: "Reductivo",
         desc: "Masaje intenso para activar el cuerpo y definir figura.",
-        stripeUrl: "https://buy.stripe.com/test_sculpt",
-        priceId: "price_1T8FMS3RNCg5DgsjfswAJ8qG" 
+        prices: [
+            { amount: 900, duration: 60, priceId: "price_1T8FMS3RNCg5DgsjfswAJ8qG" }
+        ]
       }
     },
     ai: {
@@ -240,7 +250,7 @@ export const translations: any = {
       subtotal: "Subtotal",
       processing: "Procesando pago...",
       success: "¡Pago exitoso!",
-      successDesc: "Tu compra ha sido procesada correctamente (simulación).",
+      successDesc: "Tu compra ha sido procesada correctamente.",
       error: "Error en el pago",
       errorGeneric: "Hubo un error al procesar el pago.",
       errorRetry: "No se pudo completar la transacción. Por favor, intenta de nuevo.",
@@ -380,43 +390,53 @@ export const translations: any = {
         title: "Subtle Purification",
         sub: "Drainage",
         desc: "Gentle movements to reduce inflammation and promote lightness.",
-        stripeUrl: "https://buy.stripe.com/test_purification_en",
-        priceId: ""
+        prices: [
+          { amount: 900, duration: 60, priceId: "price_1T8FFQ3RNCg5Dgsjy0Ayflxs" },
+          { amount: 1100, duration: 90, priceId: "price_1T8FFQ3RNCg5DgsjTyrf20S9" }
+        ]
       },
       fluidity: {
         title: "Essential Fluidity",
         sub: "Swedish",
         desc: "Continuous movements to release tension and induce deep calm.",
-        stripeUrl: "https://buy.stripe.com/test_fluidity_en",
-        priceId: ""
+        prices: [
+            { amount: 800, duration: 60, priceId: "price_1T8D7X3RNCg5DgsjkEfyBwl0" },
+            { amount: 1000, duration: 90, priceId: "price_1T8FTu3RNCg5DgsjKIn3zg1g" }
+        ]
       },
       release: {
         title: "Tension Release",
         sub: "Deep Tissue",
         desc: "Deep technique for rigid muscle areas and tension relief.",
-        stripeUrl: "https://buy.stripe.com/test_release_en",
-        priceId: ""
+        prices: [
+            { amount: 900, duration: 60, priceId: "price_1T8DBl3RNCg5DgsjnpuzTSKX" },
+            { amount: 1100, duration: 90, priceId: "price_1T8FRe3RNCg5DgsjFJ01Ib4p" }
+        ]
       },
       awakening: {
         title: "Vital Awakening",
         sub: "Chiromassage",
         desc: "Intuitive hands releasing back and shoulder emotions.",
-        stripeUrl: "https://buy.stripe.com/test_awakening_en",
-        priceId: ""
+        prices: [
+            { amount: 800, duration: 60, priceId: "price_1T8DFC3RNCg5DgsjHPaZ4xVo" },
+            { amount: 1000, duration: 90, priceId: "price_1T8FKS3RNCg5DgsjRTfXjkEf" }
+        ]
       },
       reset: {
         title: "Mind Reset",
         sub: "Craniofacial",
         desc: "Profound treatment to dissolve deep-seated tensions.",
-        stripeUrl: "https://buy.stripe.com/test_reset_en",
-        priceId: ""
+        prices: [
+            { amount: 700, duration: 60, priceId: "price_1T8DXj3RNCg5DgsjdVdjGSTK" }
+        ]
       },
       sculpt: {
         title: "Body Sculpting",
         sub: "Reductive",
         desc: "Intense massage to activate the body and define figure.",
-        stripeUrl: "https://buy.stripe.com/test_sculpt_en",
-        priceId: "price_1T8FMS3RNCg5DgsjfswAJ8qG"
+        prices: [
+            { amount: 900, duration: 60, priceId: "price_1T8FMS3RNCg5DgsjfswAJ8qG" }
+        ]
       }
     },
     ai: {
@@ -527,7 +547,7 @@ export const translations: any = {
       subtotal: "Subtotal",
       processing: "Processing payment...",
       success: "Payment successful!",
-      successDesc: "Your purchase has been processed correctly (simulation).",
+      successDesc: "Your purchase has been processed correctly.",
       error: "Payment error",
       errorGeneric: "There was an error processing the payment.",
       errorRetry: "The transaction could not be completed. Please try again.",
