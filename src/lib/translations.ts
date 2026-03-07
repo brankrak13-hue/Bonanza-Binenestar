@@ -2,16 +2,16 @@
 export const translations: any = {
   es: {
     nav: {
-      home: "INICIO",
-      services: "SERVICIOS",
-      advisor: "ASESOR IA",
-      about: "NOSOTROS",
-      contact: "CONTACTO",
-      myAccount: "MI CUENTA",
-      myProfile: "MI PERFIL",
-      myAppointments: "MIS CITAS",
-      signOut: "CERRAR SESIÓN",
-      admin: "ADMIN"
+      home: "Inicio",
+      services: "Servicios",
+      advisor: "Agente Virtual",
+      about: "Nosotros",
+      contact: "Contacto",
+      myAccount: "Mi Cuenta",
+      myProfile: "Mi Perfil",
+      myAppointments: "Mis Citas",
+      signOut: "Cerrar Sesión",
+      admin: "Admin"
     },
     admin: {
       title: "Panel de Control",
@@ -42,10 +42,10 @@ export const translations: any = {
       cta: "Agenda tu Cita"
     },
     about: {
-      subtitle: "Nuestra Fundadora",
-      title: "Conoce a Bonanza",
-      desc1: "Con una pasión por el bienestar integral y años de estudio en técnicas de sanación ancestrales, Bonanza fundó este espacio como un refugio para el alma. Su misión es guiarte en un viaje de autodescubrimiento y sanación, combinando el arte del tacto con el poder de la vibración.",
-      desc2: "Creemos que la verdadera belleza emana de un estado de equilibrio interior. Nuestro propósito es ayudarte a encontrarlo."
+      subtitle: "Nuestra Esencia",
+      title: "Santuario de Paz Interior",
+      desc1: "Bonanza es un ecosistema dedicado al arte del bienestar integral, diseñado para fomentar el autodescubrimiento y las conexiones significativas. Unimos nuestra red de terapeutas certificados para ofrecer experiencias transformadoras directamente en hoteles, villas privadas y nuestro propio santuario físico.",
+      desc2: "Nuestra filosofía se basa en la co-creación, la resonancia empática y la sostenibilidad del alma, honrando los ritmos naturales de cada ser para elevar el espíritu y restaurar la armonía."
     },
     home: {
       facial: {
@@ -224,7 +224,8 @@ export const translations: any = {
       subscribe: "Suscribir",
       nav: "Navegación",
       legal: "Legal",
-      rights: "Todos los derechos reservados."
+      rights: "Todos los derechos reservados.",
+      menu: "Menú"
     },
     legal: {
       terms: {
@@ -259,16 +260,16 @@ export const translations: any = {
   },
   en: {
     nav: {
-      home: "HOME",
-      services: "SERVICES",
-      advisor: "AI ADVISOR",
-      about: "ABOUT US",
-      contact: "CONTACT",
-      myAccount: "MY ACCOUNT",
-      myProfile: "MY PROFILE",
-      myAppointments: "MY APPOINTMENTS",
-      signOut: "SIGN OUT",
-      admin: "ADMIN"
+      home: "Home",
+      services: "Services",
+      advisor: "Virtual Agent",
+      about: "About Us",
+      contact: "Contact",
+      myAccount: "My Account",
+      myProfile: "My Profile",
+      myAppointments: "My Appointments",
+      signOut: "Sign Out",
+      admin: "Admin"
     },
     admin: {
       title: "Control Panel",
@@ -291,40 +292,40 @@ export const translations: any = {
     hero: {
       title: "Elevate Your Well-being",
       subtitle: "BONANZA ART & WELLNESS",
-      description: "Discover a sanctuary of inner peace.",
+      description: "Discover a sanctuary of inner peace through our holistic facial massages and sound healing therapies.",
       cta: "Book Your Appointment"
     },
     about: {
-      subtitle: "Our Founder",
-      title: "Meet Bonanza",
-      desc1: "A refuge for the soul.",
-      desc2: "True beauty emanates from a state of inner balance."
+      subtitle: "Our Essence",
+      title: "Sanctuary of Inner Peace",
+      desc1: "Bonanza is an ecosystem dedicated to the art of holistic well-being, designed to foster self-discovery and meaningful connections. We unite our network of top-tier certified therapists to provide transformative experiences in hotels, private villas, and our own physical sanctuary.",
+      desc2: "Our identity is built on co-creation, empathic resonance, and 'Soul Sustainability', honoring natural rhythms to elevate the spirit and restore harmony."
     },
     home: {
       facial: {
         subtitle: "ANCIENT TECHNIQUES",
         title: "Holistic Massages",
-        description: "Rejuvenate your skin and release tension.",
+        description: "Rejuvenate your skin and release tension with our customized facial massages. We use techniques combining lymphatic drainage, reflexology, and aromatherapy for radiant skin and deep relaxation.",
         button: "View Menu"
       },
       sound: {
         subtitle: "Healing Vibrations",
         title: "Sound Healing Therapy",
-        description: "Immerse yourself in a harmonic sound bath.",
+        description: "Immerse yourself in a harmonic sound bath with Tibetan bowls and other instruments. Sessions available daily at 7:30 AM and 8:00 PM for total balance.",
         button: "Book Session"
       }
     },
     services: {
       title: "Our Experiences",
       subtitle: "PREMIUM WELLNESS",
-      desc: "Restore your inner harmony.",
+      desc: "Every treatment is a customized ritual designed to restore your inner harmony.",
       min: "min"
     },
     massages: {
       purification: {
         title: "Subtle Purification",
         sub: "Drainage",
-        desc: "Gentle movements to reduce inflammation.",
+        desc: "Gentle movements to reduce inflammation and provide lightness.",
         prices: [
           { amount: 900, duration: 60, paymentLink: "https://buy.stripe.com/6oU8wIgnG46C0whf5z3oA04" },
           { amount: 1100, duration: 90, paymentLink: "https://buy.stripe.com/7sY9AM7Ra46CceZf5z3oA05" }
@@ -333,7 +334,7 @@ export const translations: any = {
       fluidity: {
         title: "Essential Fluidity",
         sub: "Swedish",
-        desc: "Continuous movements to release tension.",
+        desc: "Continuous movements to release tension and provide deep calm.",
         prices: [
             { amount: 800, duration: 60, paymentLink: "https://buy.stripe.com/00wfZa3AU5aG2Ep6z33oA01" },
             { amount: 1000, duration: 90, paymentLink: "https://buy.stripe.com/5kQ7sEefy7iO5QBe1v3oA02" }
@@ -342,7 +343,7 @@ export const translations: any = {
       release: {
         title: "Tension Release",
         sub: "Deep Tissue",
-        desc: "Deep technique for rigid muscle areas.",
+        desc: "Deep technique for rigid muscle areas relief.",
         prices: [
             { amount: 900, duration: 60, paymentLink: "https://buy.stripe.com/00w28k5J2dHc3It3mR3oA09" },
             { amount: 1100, duration: 90, paymentLink: "https://buy.stripe.com/00w28k6N60Uqgvf1eJ3oA0a" }
@@ -351,7 +352,7 @@ export const translations: any = {
       awakening: {
         title: "Vital Awakening",
         sub: "Chiromassage",
-        desc: "Intuitive hands releasing emotions.",
+        desc: "Intuitive hands releasing emotions in back and shoulders.",
         prices: [
             { amount: 800, duration: 60, paymentLink: "https://buy.stripe.com/dRmeV68Ve1Yu2Epf5z3oA07" },
             { amount: 1000, duration: 90, paymentLink: "https://buy.stripe.com/00w28k5J2dHc3It3mR3oA09" }
@@ -360,7 +361,7 @@ export const translations: any = {
       reset: {
         title: "Mind Reset",
         sub: "Craniofacial",
-        desc: "Profound treatment to dissolve tensions.",
+        desc: "Profound treatment to dissolve deep-seated tensions.",
         prices: [
             { amount: 700, duration: 60, paymentLink: "https://buy.stripe.com/aFa6oAdbu1Yufrb4qV3oA06" }
         ]
@@ -368,7 +369,7 @@ export const translations: any = {
       sculpt: {
         title: "Body Sculpting",
         sub: "Reductive",
-        desc: "Intense massage to define figure.",
+        desc: "Intense massage to activate the body and define figure.",
         prices: [
             { amount: 900, duration: 60, paymentLink: "https://buy.stripe.com/00w3coefyav04Mx6z33oA03" }
         ]
@@ -376,19 +377,19 @@ export const translations: any = {
     },
     ai: {
       title: "Your Digital Oracle",
-      desc: "Our artificial wisdom will reveal the ritual your soul needs today.",
-      placeholder: "E.g.: 'I feel a lot of mental load'...",
+      desc: "Tell us how you feel and our artificial wisdom will reveal the ritual your soul needs today.",
+      placeholder: "E.g.: 'I feel a lot of mental load and neck tension'...",
       cta: "Consult AI Wisdom",
       ritual: "Ritual Revealed",
       purpose: "Ritual Purpose",
       intuition: "Our Intuition",
       next: "Deepen your well-being",
-      error: "Our AI channels are experiencing high vibration.",
-      menuCta: "Explore Details"
+      error: "Our AI channels are experiencing high vibration. Please try again.",
+      menuCta: "Explore Details in Menu"
     },
     contact: {
       title: "Book Your Experience",
-      desc: "Begin your journey towards deep well-being.",
+      desc: "Begin your journey towards deep well-being. Choose your ideal date.",
       bannerTitle: "Sound Healing Sessions",
       bannerDesc: "Sessions every day at 7:30 AM and 8:00 PM",
       whatsapp: "Book via WhatsApp",
@@ -418,8 +419,11 @@ export const translations: any = {
       successLoginTitle: "Welcome back!",
       successLoginDesc: "You have successfully logged in.",
       errorLoginTitle: "Login Error",
+      errorLoginDesc: "Incorrect credentials.",
       successRegisterTitle: "Account Created!",
+      successRegisterDesc: "Welcome to Bonanza.",
       errorRegisterTitle: "Registration Error",
+      errorRegisterDesc: "Could not create account.",
       forgotPassword: "Forgot your password?",
       resetTitle: "Reset Password",
       resetDesc: "Enter your email for a recovery link.",
@@ -429,6 +433,7 @@ export const translations: any = {
       confirmNewPassword: "Confirm Password",
       updatePassword: "Update Password",
       passwordSuccess: "Password updated.",
+      passwordError: "There was an error.",
       matchError: "Passwords do not match."
     },
     profile: {
@@ -442,7 +447,9 @@ export const translations: any = {
       save: "Save Changes",
       saving: "Saving...",
       success: "Profile updated",
+      successDesc: "Your data has been saved successfully.",
       error: "Update error",
+      errorDesc: "Could not update profile.",
       noAuth: "You must log in to view your profile."
     },
     appointments: {
@@ -471,7 +478,8 @@ export const translations: any = {
       subscribe: "Subscribe",
       nav: "Navigation",
       legal: "Legal",
-      rights: "All rights reserved."
+      rights: "All rights reserved.",
+      menu: "Menu"
     },
     legal: {
       terms: {
@@ -505,5 +513,3 @@ export const translations: any = {
     }
   }
 };
-
-    

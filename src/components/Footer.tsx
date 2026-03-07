@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -18,15 +19,14 @@ export default function Footer() {
 
     const footerLinks = {
         [t('footer.nav')]: [
-            { title: t('nav.home'), href: '#home' },
-            { title: t('nav.services'), href: '/#services' },
-            { title: t('nav.about'), href: '#about' },
-            { title: t('nav.contact'), href: '#contact' },
+            { title: t('nav.home'), href: '/' },
+            { title: t('nav.services'), href: '/servicios' },
+            { title: t('nav.about'), href: '/#about' },
+            { title: t('nav.contact'), href: '/#contact' },
         ],
         [t('nav.services')]: [
-            { title: t('nav.services'), href: '/servicios' },
-            { title: t('massages.purification.title'), href: '/servicios' },
-            { title: t('services.sound.title'), href: '/#contact' },
+            { title: t('footer.menu'), href: '/servicios' },
+            { title: t('nav.advisor'), href: '/agente-virtual' },
         ],
         [t('footer.legal')]: [
             { title: t('legal.terms.title'), href: '/terminos' },
