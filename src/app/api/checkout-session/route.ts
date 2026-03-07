@@ -7,7 +7,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
 
 export async function POST(request: Request) {
   try {
-    const { items, userId, userEmail } = await request.json();
+    const { items, userId, userEmail, orderId } = await request.json();
 
     if (!items || items.length === 0) {
       return NextResponse.json({ error: 'El carrito está vacío' }, { status: 400 });
@@ -26,17 +26,19 @@ export async function POST(request: Request) {
       quantity: item.quantity,
     }));
 
-    // Creamos la sesión de Checkout
+    // Creamos la sesión de Checkout hospedada en Stripe
+    // Esto maneja automáticamente Google Pay, Apple Pay y Tarjetas.
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
+      payment_method_types: ['card'], // Puedes añadir 'google_pay' si está activado en tu dashboard
       line_items,
       mode: 'payment',
       customer_email: userEmail,
       client_reference_id: userId,
-      success_url: `${request.headers.get('origin')}/pedidos?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${request.headers.get('origin')}/pedidos?session_id={CHECKOUT_SESSION_ID}&order_id=${orderId}`,
       cancel_url: `${request.headers.get('origin')}/servicios`,
       metadata: {
         userId: userId || 'guest',
+        orderId: orderId || ''
       },
     });
 

@@ -21,7 +21,7 @@ import { collection, doc, setDoc } from "firebase/firestore";
 interface CartSidebarProps { open: boolean; onOpenChange: (open: boolean) => void; }
 
 export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
-  const { cartItems, removeFromCart, updateQuantity, totalPrice, cartCount, clearCart } = useCart();
+  const { cartItems, removeFromCart, updateQuantity, totalPrice, cartCount } = useCart();
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const { user } = useUser();
@@ -29,40 +29,44 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
   const { toast } = useToast();
   const { t } = useLanguage();
 
+  /**
+   * Crea un registro de pedido preventivo en Firestore antes de ir a Stripe.
+   * Esto nos permite rastrear intentos de compra y asociarlos con la sesión.
+   */
   const handleOrderCreation = async () => {
-    if (!user || !db) return;
+    if (!user || !db) return null;
     const orderId = `order_${Date.now()}`;
     const orderRef = doc(db, 'userProfiles', user.uid, 'orders', orderId);
     
-    await setDoc(orderRef, {
+    const orderData = {
       id: orderId,
       userProfileId: user.uid,
       orderDate: new Date().toISOString(),
       totalAmount: totalPrice,
-      status: 'pending',
-      paymentStatus: 'paid',
-      shippingAddressId: 'digital_service',
-      billingAddressId: 'digital_service',
+      status: 'pending', // Se actualizará a 'shipped' (confirmada) vía Webhook o redirección exitosa
+      paymentStatus: 'pending_stripe',
+      items: cartItems.map(item => ({
+        productId: item.id,
+        name: item.title,
+        quantity: item.quantity,
+        price: item.price
+      })),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-    });
+    };
 
-    for (const item of cartItems) {
-      const itemRef = doc(collection(orderRef, 'orderItems'));
-      await setDoc(itemRef, {
-        id: itemRef.id,
-        orderId: orderId,
-        productId: item.id,
-        productName: item.title,
-        quantity: item.quantity,
-        priceAtPurchase: item.price,
-        duration: item.duration,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      });
+    try {
+      await setDoc(orderRef, orderData);
+      return orderId;
+    } catch (err) {
+      console.error("Error al pre-registrar pedido:", err);
+      return null;
     }
   };
 
+  /**
+   * Inicia el flujo de Stripe Checkout (Página de pago hospedada)
+   */
   const handleStripeCheckout = async () => {
     if (!user) {
       setIsAuthModalOpen(true);
@@ -70,11 +74,13 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
     }
 
     setIsRedirecting(true);
+    
     try {
-      // 1. Crear el pedido en Firestore (Pendiente)
-      await handleOrderCreation();
+      // 1. Pre-registramos el pedido en nuestra base de datos
+      const orderId = await handleOrderCreation();
+      if (!orderId) throw new Error("No se pudo iniciar el proceso de reserva.");
 
-      // 2. Llamar a nuestra API para obtener la URL de Stripe Checkout
+      // 2. Solicitamos a nuestra API la URL de la página de pago de Stripe
       const response = await fetch('/api/checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -82,21 +88,23 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
           items: cartItems,
           userId: user.uid,
           userEmail: user.email,
+          orderId: orderId
         }),
       });
 
       const data = await response.json();
+      
       if (data.url) {
-        // Redirigir a la página segura de Stripe
+        // Redirigimos al usuario a la pasarela segura de Stripe
         window.location.href = data.url;
       } else {
-        throw new Error(data.error || 'No se pudo generar la sesión de pago');
+        throw new Error(data.error || 'Error al conectar con la pasarela de pagos.');
       }
     } catch (error: any) {
       toast({ 
         variant: "destructive", 
         title: "Error de Conexión", 
-        description: error.message 
+        description: error.message || "No se pudo conectar con Stripe. Intenta de nuevo."
       });
       setIsRedirecting(false);
     }
@@ -175,19 +183,19 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                     {isRedirecting ? (
                       <>
                         <Loader2 className="animate-spin w-5 h-5" />
-                        Abriendo Portal de Pago...
+                        Abriendo Pasarela de Pago...
                       </>
                     ) : (
                       <>
                         <CreditCard className="w-5 h-5" /> 
-                        Finalizar Compra
+                        Proceder al Pago
                         <ArrowRight className="w-4 h-4 ml-1" />
                       </>
                     )}
                   </Button>
                   
                   <p className="text-[9px] text-center text-gray-400 uppercase tracking-widest px-4">
-                    Al continuar serás redirigido a la plataforma segura de Stripe para procesar tu pago.
+                    Serás redirigido a la plataforma segura de Stripe para completar tu pago con Tarjeta o Google Pay.
                   </p>
                 </div>
                 <div className="flex justify-center items-center gap-2 opacity-30 mt-2">
