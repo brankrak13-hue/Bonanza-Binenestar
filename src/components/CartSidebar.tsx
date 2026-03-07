@@ -146,18 +146,11 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                 </div>
               </div>
 
-              <SheetFooter className="p-10 border-t bg-white flex flex-col gap-10 min-h-[280px]">
-                <div className="space-y-2">
-                  <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400 block">Inversión Total</span>
-                  <div className="flex items-baseline gap-3">
-                    <span className="text-5xl font-bold font-headline text-primary">${totalPrice.toLocaleString()}</span>
-                    <span className="text-sm font-bold text-gray-400">MXN</span>
-                  </div>
-                </div>
-                
-                <div className="space-y-6">
+              <SheetFooter className="p-8 border-t bg-white flex items-center justify-between gap-4 min-h-[200px]">
+                {/* Izquierda: Botón y Info Stripe */}
+                <div className="flex flex-col items-start gap-4 flex-1">
                   <Button 
-                    className="w-full btn-primary h-16 rounded-2xl text-xs flex items-center justify-center gap-3 shadow-[0_20px_40px_-10px_rgba(41,102,84,0.3)] hover:shadow-[0_25px_50px_-12px_rgba(41,102,84,0.4)] transition-all" 
+                    className="w-full btn-primary h-14 rounded-2xl text-[10px] tracking-[0.2em] flex items-center justify-center gap-2 shadow-lg transition-all" 
                     disabled={isProcessing}
                     onClick={handleCheckout}
                   >
@@ -171,14 +164,18 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                     )}
                   </Button>
                   
-                  <div className="flex flex-col items-center gap-4">
-                    <p className="text-[10px] text-gray-400 italic text-center px-6 leading-relaxed">
-                      "Al proceder, serás redirigido al portal seguro de Stripe para finalizar tu ritual."
-                    </p>
-                    <div className="flex justify-center items-center gap-2 opacity-40">
-                      <ShieldCheck className="w-4 h-4 text-primary" />
-                      <span className="text-[9px] font-black uppercase tracking-[0.2em]">Secured by Stripe</span>
-                    </div>
+                  <div className="flex items-center gap-2 opacity-40 ml-2">
+                    <ShieldCheck className="w-3 h-3 text-primary" />
+                    <span className="text-[8px] font-black uppercase tracking-[0.1em]">Secured by Stripe</span>
+                  </div>
+                </div>
+
+                {/* Derecha: Total y Precio */}
+                <div className="flex flex-col items-end text-right flex-1">
+                  <span className="text-3xl font-bold font-headline text-gray-900 leading-none mb-1">TOTAL</span>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-3xl font-bold font-headline text-primary">${totalPrice.toLocaleString()}</span>
+                    <span className="text-[10px] font-bold text-gray-400">MXN</span>
                   </div>
                 </div>
               </SheetFooter>
