@@ -1,10 +1,10 @@
-
 'use client';
 
 import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 import { useSiteSettings } from "@/context/SiteSettingsContext";
 import { Users, Wind, Sparkles, ShieldCheck, Stars } from "lucide-react";
+import { WobbleCard } from "@/components/ui/wobble-card";
 
 export default function About() {
   const { t } = useLanguage();
@@ -93,47 +93,64 @@ export default function About() {
           </div>
         </div>
 
-        {/* BLOQUE 3: Propuesta de Valor y Ecosistema */}
-        <div className="relative p-12 sm:p-20 rounded-[4rem] bg-primary text-white overflow-hidden shadow-2xl">
-          <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/10 rounded-full blur-2xl -translate-x-1/2 translate-y-1/2" />
-          
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-4xl md:text-5xl font-bold font-headline mb-6">
+        {/* BLOQUE 3: Propuesta de Valor y Ecosistema - ADAPTADO CON WOBBLE CARD */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-screen-xl mx-auto w-full">
+          <WobbleCard
+            containerClassName="col-span-1 lg:col-span-2 h-full bg-primary min-h-[400px]"
+            className="p-10 flex flex-col justify-center"
+          >
+            <div className="max-w-lg relative z-10">
+              <h2 className="text-left text-balance text-3xl md:text-4xl lg:text-5xl font-bold font-headline text-white mb-6 leading-tight">
                 {t('about.ecosystem_t')}
               </h2>
-              <p className="text-primary-foreground/80 text-lg leading-relaxed mb-8 italic">
+              <p className="text-left text-lg text-white/80 italic leading-relaxed">
                 {t('about.ecosystem_d')}
               </p>
-              <div className="flex items-center gap-4 py-4 px-6 bg-white/10 rounded-2xl border border-white/10 w-fit">
-                <ShieldCheck className="w-8 h-8 text-accent" />
-                <div>
-                  <p className="text-xs uppercase tracking-widest font-bold text-white/60">Trayectoria Garantizada</p>
-                  <p className="text-xl font-bold font-headline">17+ Años de Experiencia</p>
+            </div>
+            <ShieldCheck className="absolute -right-10 -bottom-10 w-64 h-64 text-white/10 z-0" />
+          </WobbleCard>
+
+          <WobbleCard 
+            containerClassName="col-span-1 bg-accent min-h-[400px]" 
+            className="p-10 flex flex-col justify-center"
+          >
+            <div className="relative z-10">
+              <h2 className="text-left text-balance text-2xl font-bold font-headline text-white mb-6">
+                Trayectoria Garantizada
+              </h2>
+              <div className="flex flex-col gap-2 mb-8">
+                 <p className="text-6xl font-bold text-white font-headline">17+</p>
+                 <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-white/60">Años de Experiencia</p>
+              </div>
+              <p className="text-left text-sm text-white/90 leading-relaxed italic">
+                "Excelencia certificada en el sector del bienestar holístico."
+              </p>
+            </div>
+            <Stars className="absolute -right-8 -top-8 w-32 h-32 text-white/10" />
+          </WobbleCard>
+
+          <WobbleCard 
+            containerClassName="col-span-1 lg:col-span-3 bg-secondary min-h-[250px]" 
+            className="p-10 flex items-center justify-center"
+          >
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16 w-full max-w-5xl">
+              {[
+                { val: "100%", label: "Personalizado" },
+                { val: "Elite", label: "Terapeutas" },
+                { val: "Flex", label: "Ubicaciones" },
+                { val: "24/7", label: "Sintonía" },
+              ].map((item, i) => (
+                <div key={i} className="flex flex-col items-center text-center group/item">
+                  <p className="text-4xl md:text-5xl font-bold font-headline text-primary mb-2 transition-transform duration-500 group-hover/item:scale-110">
+                    {item.val}
+                  </p>
+                  <p className="text-[10px] md:text-xs uppercase tracking-[0.3em] font-black text-gray-400">
+                    {item.label}
+                  </p>
                 </div>
-              </div>
+              ))}
             </div>
-            
-            <div className="grid grid-cols-2 gap-4">
-              <div className="aspect-square rounded-3xl bg-white/5 border border-white/10 flex flex-col items-center justify-center p-6 text-center backdrop-blur-sm">
-                <p className="text-3xl font-bold font-headline mb-1">100%</p>
-                <p className="text-[10px] uppercase tracking-widest font-medium opacity-60">Personalizado</p>
-              </div>
-              <div className="aspect-square rounded-3xl bg-accent/20 border border-white/10 flex flex-col items-center justify-center p-6 text-center backdrop-blur-sm">
-                <p className="text-3xl font-bold font-headline mb-1">Elite</p>
-                <p className="text-[10px] uppercase tracking-widest font-medium opacity-60">Terapeutas</p>
-              </div>
-              <div className="aspect-square rounded-3xl bg-white/5 border border-white/10 flex flex-col items-center justify-center p-6 text-center backdrop-blur-sm">
-                <p className="text-3xl font-bold font-headline mb-1">Flex</p>
-                <p className="text-[10px] uppercase tracking-widest font-medium opacity-60">Ubicaciones</p>
-              </div>
-              <div className="aspect-square rounded-3xl bg-white/5 border border-white/10 flex flex-col items-center justify-center p-6 text-center backdrop-blur-sm">
-                <p className="text-3xl font-bold font-headline mb-1">24/7</p>
-                <p className="text-[10px] uppercase tracking-widest font-medium opacity-60">Sintonía</p>
-              </div>
-            </div>
-          </div>
+          </WobbleCard>
         </div>
 
       </div>
