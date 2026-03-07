@@ -87,7 +87,7 @@ export default function ProductShowcase({
                 style={{ animationDelay: '400ms' }}
               >
                 <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
-                <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-white px-10 py-1 text-[10px] font-bold tracking-[0.2em] uppercase text-primary backdrop-blur-3xl transition-all duration-500 hover:bg-slate-950 hover:text-white">
+                <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-10 py-1 text-[10px] font-bold tracking-[0.2em] uppercase text-white backdrop-blur-3xl transition-all duration-500">
                   {buttonText}
                 </span>
               </Link>
@@ -97,7 +97,7 @@ export default function ProductShowcase({
                 style={{ animationDelay: '400ms' }}
               >
                 <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
-                <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-white px-10 py-1 text-[10px] font-bold tracking-[0.2em] uppercase text-primary backdrop-blur-3xl transition-all duration-500 hover:bg-slate-950 hover:text-white">
+                <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-10 py-1 text-[10px] font-bold tracking-[0.2em] uppercase text-white backdrop-blur-3xl transition-all duration-500">
                   {buttonText}
                 </span>
               </button>
