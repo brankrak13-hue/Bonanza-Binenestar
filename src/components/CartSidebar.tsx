@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from "react";
-import dynamic from 'next/dynamic';
 import {
   Sheet,
   SheetContent,
@@ -12,26 +11,18 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
-import { Minus, Plus, Trash2, ShoppingCart, Loader2, User, CreditCard, ShieldCheck, AlertCircle } from "lucide-react";
+import { Minus, Plus, Trash2, ShoppingCart, Loader2, CreditCard, ShieldCheck, AlertCircle, ArrowRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useUser, useFirestore } from "@/firebase";
 import AuthModal from "@/components/AuthModal";
 import { useLanguage } from "@/context/LanguageContext";
 import { collection, doc, setDoc } from "firebase/firestore";
 
-const GooglePayButton = dynamic(
-  () => import('@google-pay/button-react'),
-  { 
-    ssr: false,
-    loading: () => <div className="w-full h-14 rounded-2xl animate-pulse bg-secondary/50" />
-  }
-);
-
 interface CartSidebarProps { open: boolean; onOpenChange: (open: boolean) => void; }
 
 export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
   const { cartItems, removeFromCart, updateQuantity, totalPrice, cartCount, clearCart } = useCart();
-  const [processingPayment, setProcessingPayment] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const { user } = useUser();
   const db = useFirestore();
@@ -72,32 +63,42 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
     }
   };
 
-  const handlePaymentSuccess = async (paymentData?: any) => {
-    setProcessingPayment(true);
+  const handleStripeCheckout = async () => {
+    if (!user) {
+      setIsAuthModalOpen(true);
+      return;
+    }
+
+    setIsRedirecting(true);
     try {
-      const response = await fetch('/api/process-payment', {
+      // 1. Crear el pedido en Firestore (Pendiente)
+      await handleOrderCreation();
+
+      // 2. Llamar a nuestra API para obtener la URL de Stripe Checkout
+      const response = await fetch('/api/checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          paymentMethodData: paymentData?.paymentMethodData,
-          amount: totalPrice,
-          userId: user?.uid || 'guest',
+          items: cartItems,
+          userId: user.uid,
+          userEmail: user.email,
         }),
       });
 
-      const result = await response.json();
-      if (result.success) {
-        await handleOrderCreation();
-        toast({ title: "¡Ritual Confirmado!", description: "Tu reserva ha sido registrada con éxito." });
-        clearCart();
-        onOpenChange(false);
+      const data = await response.json();
+      if (data.url) {
+        // Redirigir a la página segura de Stripe
+        window.location.href = data.url;
       } else {
-        throw new Error(result.message);
+        throw new Error(data.error || 'No se pudo generar la sesión de pago');
       }
     } catch (error: any) {
-      toast({ variant: "destructive", title: "Error en proceso", description: error.message });
-    } finally {
-      setProcessingPayment(false);
+      toast({ 
+        variant: "destructive", 
+        title: "Error de Conexión", 
+        description: error.message 
+      });
+      setIsRedirecting(false);
     }
   };
 
@@ -129,10 +130,10 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
             <>
               <div className="flex-grow overflow-y-auto p-6 space-y-6">
                 {!user && (
-                  <div className="p-6 bg-amber-50 border border-amber-200 rounded-[2rem] flex gap-4 items-start">
+                  <div className="p-6 bg-amber-50 border border-amber-200 rounded-[2rem] flex gap-4 items-start animate-in fade-in slide-in-from-top-4">
                     <AlertCircle className="w-5 h-5 text-amber-600 mt-1" />
                     <div className="space-y-2">
-                      <p className="text-sm font-bold text-amber-900">Inicia sesión para guardar tu historial</p>
+                      <p className="text-sm font-bold text-amber-900">Inicia sesión para finalizar tu reserva</p>
                       <Button variant="link" className="p-0 h-auto text-amber-700 font-bold underline" onClick={() => setIsAuthModalOpen(true)}>ENTRAR AQUÍ</Button>
                     </div>
                   </div>
@@ -140,7 +141,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                 
                 <div className="space-y-4">
                   {cartItems.map(item => (
-                    <div key={item.id} className="p-5 rounded-[2rem] bg-secondary/10 border border-transparent hover:border-primary/10 flex items-center justify-between">
+                    <div key={item.id} className="p-5 rounded-[2rem] bg-secondary/10 border border-transparent hover:border-primary/10 flex items-center justify-between transition-all group">
                       <div className="flex-grow">
                         <h4 className="font-bold text-gray-900">{item.title}</h4>
                         <p className="text-[10px] text-primary/60 uppercase font-bold">{item.duration} {t('services.min')}</p>
@@ -153,7 +154,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                           <p className="text-lg font-bold text-primary">${(item.price * item.quantity).toLocaleString()}</p>
                         </div>
                       </div>
-                      <Button variant="ghost" size="icon" className="text-gray-300 hover:text-destructive" onClick={() => removeFromCart(item.id)}><Trash2 className="h-5 w-5" /></Button>
+                      <Button variant="ghost" size="icon" className="text-gray-300 hover:text-destructive transition-colors" onClick={() => removeFromCart(item.id)}><Trash2 className="h-5 w-5" /></Button>
                     </div>
                   ))}
                 </div>
@@ -166,54 +167,32 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                 </div>
                 
                 <div className="space-y-3">
-                  <GooglePayButton
-                    environment="TEST"
-                    buttonType="buy"
-                    buttonColor="black"
-                    buttonSizeMode="fill"
-                    className="w-full h-14 rounded-2xl overflow-hidden shadow-lg"
-                    paymentRequest={{
-                      apiVersion: 2,
-                      apiVersionMinor: 0,
-                      allowedPaymentMethods: [{
-                        type: 'CARD',
-                        parameters: {
-                          allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
-                          allowedCardNetworks: ['VISA', 'MASTERCARD', 'AMEX'],
-                        },
-                        tokenizationSpecification: {
-                          type: 'PAYMENT_GATEWAY',
-                          parameters: {
-                            'gateway': 'stripe',
-                            'stripe:version': '2020-08-27',
-                            'stripe:publishableKey': process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_TYooMQauvdEDq54NiTphI7jx'
-                          }
-                        }
-                      }],
-                      merchantInfo: { merchantName: 'Bonanza Bienestar' },
-                      transactionInfo: {
-                        totalPriceStatus: 'FINAL',
-                        totalPriceLabel: 'Total',
-                        totalPrice: totalPrice.toFixed(2),
-                        currencyCode: 'MXN',
-                        countryCode: 'MX',
-                      },
-                    }}
-                    onLoadPaymentData={handlePaymentSuccess}
-                    onError={(err) => console.log("Google Pay log:", err)}
-                  />
-
                   <Button 
-                    onClick={() => handlePaymentSuccess()} 
-                    className="w-full h-14 rounded-2xl bg-white border-2 border-primary/20 text-primary hover:bg-primary/5 transition-all flex items-center justify-center gap-3 font-bold uppercase text-[10px] tracking-widest"
-                    disabled={processingPayment}
+                    onClick={handleStripeCheckout} 
+                    className="w-full h-16 rounded-2xl btn-primary shadow-[0_20px_40px_-10px_rgba(41,102,84,0.4)] flex items-center justify-center gap-3"
+                    disabled={isRedirecting || cartItems.length === 0}
                   >
-                    {processingPayment ? <Loader2 className="animate-spin w-5 h-5" /> : <><CreditCard className="w-5 h-5" /> Pago con Tarjeta (TEST)</>}
+                    {isRedirecting ? (
+                      <>
+                        <Loader2 className="animate-spin w-5 h-5" />
+                        Abriendo Portal de Pago...
+                      </>
+                    ) : (
+                      <>
+                        <CreditCard className="w-5 h-5" /> 
+                        Finalizar Compra
+                        <ArrowRight className="w-4 h-4 ml-1" />
+                      </>
+                    )}
                   </Button>
+                  
+                  <p className="text-[9px] text-center text-gray-400 uppercase tracking-widest px-4">
+                    Al continuar serás redirigido a la plataforma segura de Stripe para procesar tu pago.
+                  </p>
                 </div>
                 <div className="flex justify-center items-center gap-2 opacity-30 mt-2">
                   <ShieldCheck className="w-4 h-4 text-primary" />
-                  <span className="text-[8px] font-bold uppercase tracking-widest">Ritual de Pago Encriptado</span>
+                  <span className="text-[8px] font-bold uppercase tracking-widest">Ritual de Pago Encriptado por Stripe</span>
                 </div>
               </SheetFooter>
             </>
