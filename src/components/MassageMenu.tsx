@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -8,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
 import { useLanguage } from "@/context/LanguageContext";
 import { Plus, Clock, Sparkles, Check } from "lucide-react";
@@ -76,38 +76,35 @@ export default function MassageMenu() {
                                                 <div 
                                                     key={i} 
                                                     className={cn(
-                                                        "flex flex-col p-5 rounded-[2rem] bg-white border-2 transition-all duration-500 gap-4",
-                                                        isAdded ? "border-accent shadow-xl scale-[1.03]" : "border-transparent shadow-sm"
+                                                        "flex items-center justify-between p-5 rounded-[2rem] bg-white border-2 transition-all duration-500 cursor-pointer group/item",
+                                                        isAdded ? "border-accent shadow-xl scale-[1.03]" : "border-transparent shadow-sm hover:border-primary/20"
                                                     )}
+                                                    onClick={() => handleAddToCart({
+                                                        id: massage.id,
+                                                        title: massage.title,
+                                                        subtitle: massage.subtitle,
+                                                        price: p.amount,
+                                                        duration: p.duration,
+                                                        priceId: p.priceId,
+                                                        image: ''
+                                                    })}
                                                 >
-                                                    <div className="flex justify-between items-center px-1">
+                                                    <div className="flex flex-col gap-1">
                                                         <div className="flex items-center gap-2">
-                                                            <div className="bg-primary/5 p-1.5 rounded-full">
-                                                                <Clock className="w-3.5 h-3.5 text-primary" />
-                                                            </div>
+                                                            <Clock className="w-3.5 h-3.5 text-gray-400" />
                                                             <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{p.duration} {t('services.min')}</span>
                                                         </div>
                                                         <span className="font-bold text-2xl text-primary font-headline">${p.amount.toLocaleString()}</span>
                                                     </div>
                                                     
-                                                    <Button 
+                                                    <div 
                                                         className={cn(
-                                                            "w-full rounded-2xl h-12 text-[10px] font-black tracking-widest uppercase transition-all duration-500 shadow-lg shadow-primary/5",
-                                                            isAdded ? "bg-accent text-white border-accent" : "btn-primary border-2 border-primary"
+                                                            "h-12 w-12 rounded-full flex items-center justify-center transition-all duration-700 shadow-lg",
+                                                            isAdded ? "bg-accent text-white rotate-[360deg]" : "bg-primary text-white group-hover/item:scale-110 active:scale-95"
                                                         )}
-                                                        onClick={() => handleAddToCart({
-                                                            id: massage.id,
-                                                            title: massage.title,
-                                                            subtitle: massage.subtitle,
-                                                            price: p.amount,
-                                                            duration: p.duration,
-                                                            priceId: p.priceId,
-                                                            image: ''
-                                                        })}
                                                     >
-                                                        {isAdded ? <Check className="w-4 h-4 mr-2" /> : <Plus className="w-4 h-4 mr-2" />}
-                                                        {isAdded ? t('services.added') : t('services.add')}
-                                                    </Button>
+                                                        {isAdded ? <Check className="w-6 h-6" /> : <Plus className="w-6 h-6" />}
+                                                    </div>
                                                 </div>
                                             );
                                         })}
