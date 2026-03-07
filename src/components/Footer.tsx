@@ -20,7 +20,6 @@ export default function Footer() {
     const footerLinks = {
         [t('footer.nav')]: [
             { title: t('nav.home'), href: '/' },
-            { title: t('nav.services'), href: '/servicios' },
             { title: t('nav.about'), href: '/#about' },
             { title: t('nav.contact'), href: '/#contact' },
         ],
