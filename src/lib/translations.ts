@@ -43,9 +43,20 @@ export const translations: any = {
     },
     about: {
       subtitle: "Nuestra Esencia",
-      title: "Santuario de Paz Interior",
-      desc1: "Bonanza es un ecosistema dedicado al arte del bienestar integral, diseñado para fomentar el autodescubrimiento y las conexiones significativas. Unimos nuestra red de terapeutas certificados para ofrecer experiencias transformadoras directamente en hoteles, villas privadas y nuestro propio santuario físico.",
-      desc2: "Nuestra filosofía se basa en la co-creación, la resonancia empática y la sostenibilidad del alma, honrando los ritmos naturales de cada ser para elevar el espíritu y restaurar la armonía."
+      title: "Santuario de Bienestar y Creatividad",
+      identity_q: "¿Qué es Bonanza?",
+      identity_a: "Bonanza es un proyecto dedicado a crear experiencias de bienestar y creatividad, integrando servicios personalizados, espacios físicos y una red de profesionales certificados. Nuestro objetivo es ofrecer soluciones flexibles para clientes locales, viajeros y empresas.",
+      vision_t: "Nuestra Visión",
+      vision_d: "Crear una comunidad vibrante donde cada persona explore su interior a través de rituales que fomentan el autodescubrimiento y las conexiones significativas.",
+      values_t: "Filosofía Bonanza",
+      v1_t: "Conexión Humana",
+      v1_d: "Basada en la co-creación y la resonancia empática; escuchamos para vibrar con la experiencia del otro.",
+      v2_t: "Sostenibilidad del Alma",
+      v2_d: "Respetamos los ritmos naturales y el descanso consciente.",
+      v3_t: "Presencia Plena",
+      v3_d: "Un compromiso con el 'aquí y ahora', desconectando de lo digital para reconectar con lo sensorial.",
+      ecosystem_t: "Ecosistema de Bienestar",
+      ecosystem_d: "Un modelo donde ganan los clientes, los terapeutas y los aliados (Hoteles/Airbnb). Garantizamos excelencia con más de 17 años de trayectoria en el sector."
     },
     home: {
       facial: {
@@ -297,9 +308,20 @@ export const translations: any = {
     },
     about: {
       subtitle: "Our Essence",
-      title: "Sanctuary of Inner Peace",
-      desc1: "Bonanza is an ecosystem dedicated to the art of holistic well-being, designed to foster self-discovery and meaningful connections. We unite our network of top-tier certified therapists to provide transformative experiences in hotels, private villas, and our own physical sanctuary.",
-      desc2: "Our identity is built on co-creation, empathic resonance, and 'Soul Sustainability', honoring natural rhythms to elevate the spirit and restore harmony."
+      title: "Sanctuary of Wellness and Creativity",
+      identity_q: "What is Bonanza?",
+      identity_a: "Bonanza is a project dedicated to creating wellness and creativity experiences, integrating personalized services, physical spaces, and a network of certified professionals. Our goal is to offer flexible solutions for locals, travelers, and businesses.",
+      vision_t: "Our Vision",
+      vision_d: "To create a vibrant community where each person explores their interior through rituals that foster self-discovery and meaningful connections.",
+      values_t: "Bonanza Philosophy",
+      v1_t: "Human Connection",
+      v1_d: "Based on co-creation and empathic resonance; we listen to vibrate with the experience of the other.",
+      v2_t: "Soul Sustainability",
+      v2_d: "We respect natural rhythms and conscious rest.",
+      v3_t: "Full Presence",
+      v3_d: "A commitment to the 'here and now', disconnecting from the digital to reconnect with the sensory.",
+      ecosystem_t: "Wellness Ecosystem",
+      ecosystem_d: "A model where clients, therapists, and partners (Hotels/Airbnb) win. We guarantee excellence with over 17 years of experience in the sector."
     },
     home: {
       facial: {
