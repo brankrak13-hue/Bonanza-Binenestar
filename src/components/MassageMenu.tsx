@@ -76,7 +76,7 @@ export default function MassageMenu() {
                                                 <div 
                                                     key={i} 
                                                     className={cn(
-                                                        "flex items-center justify-between p-5 rounded-[2rem] bg-white border-2 transition-all duration-500 cursor-pointer group/item",
+                                                        "flex items-center justify-between p-5 rounded-[2.5rem] bg-white border-2 transition-all duration-500 cursor-pointer group/item",
                                                         isAdded ? "border-accent shadow-xl scale-[1.03]" : "border-transparent shadow-sm hover:border-primary/20"
                                                     )}
                                                     onClick={() => handleAddToCart({
@@ -89,21 +89,22 @@ export default function MassageMenu() {
                                                         image: ''
                                                     })}
                                                 >
-                                                    <div className="flex flex-col gap-1">
-                                                        <div className="flex items-center gap-2">
-                                                            <Clock className="w-3.5 h-3.5 text-gray-400" />
-                                                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{p.duration} {t('services.min')}</span>
-                                                        </div>
-                                                        <span className="font-bold text-2xl text-primary font-headline">${p.amount.toLocaleString()}</span>
+                                                    <div className="flex items-center gap-3">
+                                                        <Clock className="w-4 h-4 text-primary/40" />
+                                                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">{p.duration} {t('services.min')}</span>
                                                     </div>
                                                     
-                                                    <div 
-                                                        className={cn(
-                                                            "h-12 w-12 rounded-full flex items-center justify-center transition-all duration-700 shadow-lg",
-                                                            isAdded ? "bg-accent text-white rotate-[360deg]" : "bg-primary text-white group-hover/item:scale-110 active:scale-95"
-                                                        )}
-                                                    >
-                                                        {isAdded ? <Check className="w-6 h-6" /> : <Plus className="w-6 h-6" />}
+                                                    <div className="flex items-center gap-4">
+                                                        <span className="font-bold text-2xl text-primary font-headline">${p.amount.toLocaleString()}</span>
+                                                        
+                                                        <div 
+                                                            className={cn(
+                                                                "h-12 w-12 rounded-full flex items-center justify-center transition-all duration-700 shadow-lg",
+                                                                isAdded ? "bg-accent text-white rotate-[360deg]" : "bg-primary text-white group-hover/item:scale-110 active:scale-95"
+                                                            )}
+                                                        >
+                                                            {isAdded ? <Check className="w-6 h-6" /> : <Plus className="w-6 h-6" />}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             );
