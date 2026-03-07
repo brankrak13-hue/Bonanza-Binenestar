@@ -11,16 +11,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
 import { useLanguage } from "@/context/LanguageContext";
-import { Plus, Clock, Sparkles, Check, ExternalLink, Loader2, ShoppingBag } from "lucide-react";
+import { Plus, Clock, Sparkles, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useToast } from "@/hooks/use-toast";
 
 export default function MassageMenu() {
     const { t } = useLanguage();
     const { addToCart } = useCart();
-    const { toast } = useToast();
     const [addedId, setAddedId] = useState<string | null>(null);
-    const [loadingId, setLoadingId] = useState<string | null>(null);
 
     const massageIds = ['purification', 'fluidity', 'release', 'awakening', 'reset', 'sculpt'];
 
@@ -37,41 +34,6 @@ export default function MassageMenu() {
         addToCart(item);
         setAddedId(uniqueId);
         setTimeout(() => setAddedId(null), 2000);
-    };
-
-    const handleDirectBuy = async (priceId: string, uniqueId: string) => {
-        if (!priceId) {
-            toast({
-                variant: "destructive",
-                title: "Error",
-                description: "No hay un ID de producto para comprar.",
-            });
-            return;
-        }
-
-        setLoadingId(uniqueId);
-        try {
-            const response = await fetch('/api/checkout-session', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ priceId: priceId }),
-            });
-
-            const data = await response.json();
-            if (data.url) {
-                window.location.href = data.url;
-            } else {
-                throw new Error(data.error || 'Error al conectar con Stripe');
-            }
-        } catch (err: any) {
-            toast({
-                variant: "destructive",
-                title: "Error de pago",
-                description: err.message,
-            });
-        } finally {
-            setLoadingId(null);
-        }
     };
 
     return (
@@ -109,7 +71,6 @@ export default function MassageMenu() {
                                         {massage.prices.map((p: any, i: number) => {
                                             const uniqueId = p.priceId || `${massage.title}-${p.duration}`;
                                             const isAdded = addedId === uniqueId;
-                                            const isLoading = loadingId === uniqueId;
                                             
                                             return (
                                                 <div 
@@ -129,41 +90,24 @@ export default function MassageMenu() {
                                                         <span className="font-bold text-2xl text-primary font-headline">${p.amount.toLocaleString()}</span>
                                                     </div>
                                                     
-                                                    <div className="grid grid-cols-2 gap-3">
-                                                        <Button 
-                                                            variant="outline" 
-                                                            size="sm"
-                                                            className="rounded-2xl h-12 border-2 border-primary/20 text-primary hover:bg-primary hover:text-white transition-all duration-500 text-[10px] font-black tracking-widest uppercase"
-                                                            onClick={() => handleAddToCart({
-                                                                id: massage.id,
-                                                                title: massage.title,
-                                                                subtitle: massage.subtitle,
-                                                                price: p.amount,
-                                                                duration: p.duration,
-                                                                priceId: p.priceId,
-                                                                image: ''
-                                                            })}
-                                                        >
-                                                            {isAdded ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4 mr-1" />}
-                                                            {isAdded ? t('services.added') : t('services.add')}
-                                                        </Button>
-                                                        
-                                                        <Button 
-                                                            size="sm"
-                                                            className="rounded-2xl h-12 btn-primary border-2 border-primary p-0 text-[10px] font-black tracking-widest uppercase shadow-lg shadow-primary/10"
-                                                            disabled={isLoading}
-                                                            onClick={() => handleDirectBuy(p.priceId, uniqueId)}
-                                                        >
-                                                            {isLoading ? (
-                                                                <Loader2 className="w-4 h-4 animate-spin" />
-                                                            ) : (
-                                                                <span className="flex items-center gap-2">
-                                                                    {t('services.buy')}
-                                                                    <ExternalLink className="w-3.5 h-3.5" />
-                                                                </span>
-                                                            )}
-                                                        </Button>
-                                                    </div>
+                                                    <Button 
+                                                        className={cn(
+                                                            "w-full rounded-2xl h-12 text-[10px] font-black tracking-widest uppercase transition-all duration-500 shadow-lg shadow-primary/5",
+                                                            isAdded ? "bg-accent text-white border-accent" : "btn-primary border-2 border-primary"
+                                                        )}
+                                                        onClick={() => handleAddToCart({
+                                                            id: massage.id,
+                                                            title: massage.title,
+                                                            subtitle: massage.subtitle,
+                                                            price: p.amount,
+                                                            duration: p.duration,
+                                                            priceId: p.priceId,
+                                                            image: ''
+                                                        })}
+                                                    >
+                                                        {isAdded ? <Check className="w-4 h-4 mr-2" /> : <Plus className="w-4 h-4 mr-2" />}
+                                                        {isAdded ? t('services.added') : t('services.add')}
+                                                    </Button>
                                                 </div>
                                             );
                                         })}
