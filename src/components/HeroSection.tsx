@@ -1,6 +1,6 @@
-
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import type { ImagePlaceholder } from "@/lib/images";
 import Link from "next/link";
@@ -16,12 +16,33 @@ type HeroSectionProps = {
   image: ImagePlaceholder;
 };
 
+type Particle = {
+  x: string;
+  y: string;
+  duration: string;
+  left: string;
+  top: string;
+};
+
 export default function HeroSection({ title, subtitle, description, buttonText, buttonLink, image }: HeroSectionProps) {
   const { t } = useLanguage();
   const { getImage } = useSiteSettings();
+  const [particles, setParticles] = useState<Particle[]>([]);
   
   // Usar la imagen del contexto (posiblemente sobreescrita por el admin)
   const currentImage = getImage(image.id);
+
+  useEffect(() => {
+    // Generamos los datos de las 50 partículas para la animación magnética
+    const newParticles = Array.from({ length: 50 }).map(() => ({
+      x: `${Math.random() * 200 - 100}px`,
+      y: `${Math.random() * 200 - 100}px`,
+      duration: `${1 + Math.random() * 2}s`,
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+    }));
+    setParticles(newParticles);
+  }, []);
   
   return (
     <section className="relative w-full h-[calc(100vh-120px)] min-h-[600px] flex items-center justify-center overflow-hidden">
@@ -48,9 +69,29 @@ export default function HeroSection({ title, subtitle, description, buttonText, 
           {t('hero.description')}
         </p>
         <div className="animate-fadeIn opacity-0" style={{ animationDelay: '800ms' }}>
-          <Link href={buttonLink} className="bg-primary text-white border-2 border-primary px-10 py-4 text-sm tracking-[0.2em] uppercase font-bold transition-all duration-500 rounded-full hover:bg-accent hover:border-accent hover:shadow-2xl hover:-translate-y-1 group inline-flex items-center gap-2">
-            {t('hero.cta')}
-            <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+          <Link 
+            href={buttonLink} 
+            className="magnetic bg-primary text-white border-2 border-primary px-10 py-4 text-sm tracking-[0.2em] uppercase font-bold transition-all duration-500 rounded-full hover:bg-accent hover:border-accent hover:shadow-2xl hover:-translate-y-1 group inline-flex items-center gap-2"
+          >
+            <span className="relative z-10">{t('hero.cta')}</span>
+            <span className="relative z-10 transition-transform duration-300 group-hover:translate-x-1">→</span>
+            
+            {/* Particle Field Logic */}
+            <div className="particles-field">
+              {particles.map((p, i) => (
+                <div
+                  key={i}
+                  className="particle"
+                  style={{
+                    '--x': p.x,
+                    '--y': p.y,
+                    animation: `particleFloat ${p.duration} infinite`,
+                    left: p.left,
+                    top: p.top,
+                  } as React.CSSProperties}
+                />
+              ))}
+            </div>
           </Link>
         </div>
       </div>

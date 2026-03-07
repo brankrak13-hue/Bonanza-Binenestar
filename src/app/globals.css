@@ -55,6 +55,29 @@
   .animate-spin-slow {
     animation: spin 8s linear infinite;
   }
+
+  /* Magnetic Particles Animation */
+  .magnetic {
+    @apply relative overflow-visible transition-all duration-500;
+  }
+
+  .particles-field {
+    @apply absolute -inset-full opacity-0 transition-opacity duration-300 pointer-events-none;
+  }
+
+  .particle {
+    @apply absolute w-1 h-1 bg-white/60 rounded-full;
+  }
+
+  .magnetic:hover .particles-field {
+    @apply opacity-100;
+  }
+}
+
+@keyframes particleFloat {
+  0% { transform: translate(var(--x), var(--y)) scale(0); }
+  50% { transform: translate(calc(var(--x) * -1), calc(var(--y) * -1)) scale(1); }
+  100% { transform: translate(var(--x), var(--y)) scale(0); }
 }
 
 @keyframes scaleIn {
