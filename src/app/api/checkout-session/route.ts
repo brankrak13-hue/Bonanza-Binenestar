@@ -6,9 +6,9 @@ export async function POST(req: Request) {
   const secretKey = process.env.STRIPE_SECRET_KEY;
 
   if (!secretKey) {
-    console.error('❌ ERROR: STRIPE_SECRET_KEY no encontrada en el archivo .env');
+    console.error('❌ ERROR: STRIPE_SECRET_KEY no encontrada en el archivo .env. Por favor añádela y reinicia el servidor.');
     return NextResponse.json(
-      { error: 'Configuración del servidor incompleta. Falta la API Key de Stripe.' },
+      { error: 'Configuración de Stripe incompleta en el servidor.' },
       { status: 500 }
     );
   }
@@ -18,38 +18,28 @@ export async function POST(req: Request) {
   });
 
   try {
-    const { priceId, items } = await req.json();
+    const { items } = await req.json();
     const origin = req.headers.get('origin') || 'http://localhost:9002';
     
-    let line_items = [];
-
-    // Lógica para Compra Directa (un solo ID)
-    if (priceId) {
-      line_items = [{ price: priceId, quantity: 1 }];
-    } 
-    // Lógica para Carrito Completo
-    else if (items && Array.isArray(items)) {
-      line_items = items.map((item: any) => {
-        if (!item.priceId) {
-          throw new Error(`El servicio "${item.title}" no tiene un ID de precio válido.`);
-        }
-        return {
-          price: item.priceId,
-          quantity: item.quantity,
-        };
-      });
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return NextResponse.json({ error: 'No se enviaron servicios para comprar' }, { status: 400 });
     }
 
-    if (line_items.length === 0) {
-      return NextResponse.json({ error: 'No se enviaron productos para comprar' }, { status: 400 });
-    }
+    const line_items = items.map((item: any) => {
+      if (!item.priceId) {
+        throw new Error(`El servicio "${item.title}" no tiene un Price ID válido de Stripe.`);
+      }
+      return {
+        price: item.priceId,
+        quantity: item.quantity || 1,
+      };
+    });
 
     const session = await stripe.checkout.sessions.create({
       line_items,
       mode: 'payment',
       success_url: `${origin}/pedidos?status=success`,
       cancel_url: `${origin}/servicios?status=cancelled`,
-      // Permitir que el usuario ponga su teléfono en la pasarela
       phone_number_collection: { enabled: true },
     });
 

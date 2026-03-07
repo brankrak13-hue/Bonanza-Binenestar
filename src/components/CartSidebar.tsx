@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
-import { Minus, Plus, Trash2, ShoppingCart, ShieldCheck, AlertCircle, Sparkles, Loader2, ArrowRight } from "lucide-react";
+import { Minus, Plus, Trash2, ShoppingCart, ShieldCheck, AlertCircle, Loader2, ArrowRight } from "lucide-react";
 import { useUser } from "@/firebase";
 import AuthModal from "@/components/AuthModal";
 import { useLanguage } from "@/context/LanguageContext";
@@ -69,7 +69,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                 <ShoppingCart className="w-5 h-5 text-primary" />
               </div>
               {t('cart.title')}
-              <span className="text-xl font-bold text-primary ml-auto uppercase tracking-widest">
+              <span className="text-xs font-bold text-primary ml-auto uppercase tracking-widest bg-white px-3 py-1 rounded-full shadow-sm">
                 {cartCount} items
               </span>
             </SheetTitle>
@@ -106,7 +106,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                 
                 <div className="space-y-4">
                   {cartItems.map(item => (
-                    <div key={item.id} className="p-5 rounded-[2rem] bg-secondary/10 border border-transparent hover:border-primary/20 hover:bg-white hover:shadow-xl hover:shadow-primary/5 flex items-center justify-between transition-all duration-500 group">
+                    <div key={item.id} className="p-6 rounded-[2rem] bg-secondary/10 border border-transparent hover:border-primary/20 hover:bg-white hover:shadow-xl hover:shadow-primary/5 flex items-center justify-between transition-all duration-500 group">
                       <div className="flex-grow">
                         <h4 className="font-bold text-lg text-gray-900 tracking-tight leading-tight">{item.title}</h4>
                         <p className="text-[10px] text-primary/60 uppercase font-black tracking-widest mt-1 mb-3">{item.duration} {t('services.min')}</p>
@@ -130,7 +130,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                               <Plus className="h-3 w-3"/>
                             </Button>
                           </div>
-                          <p className="text-xl font-bold text-primary font-headline">${(item.price * item.quantity).toLocaleString()}</p>
+                          <p className="text-2xl font-bold text-primary font-headline">${(item.price * item.quantity).toLocaleString()}</p>
                         </div>
                       </div>
                       <Button 
@@ -146,18 +146,18 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                 </div>
               </div>
 
-              <SheetFooter className="p-6 border-t bg-gray-50/50 flex flex-col gap-0">
-                <div className="flex justify-between items-center mb-6">
-                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">Inversión total</span>
-                  <div className="text-right">
-                    <span className="text-3xl font-bold font-headline text-primary block">${totalPrice.toLocaleString()}</span>
-                    <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Peso Mexicano (MXN)</span>
+              <SheetFooter className="p-10 border-t bg-white flex flex-col gap-10 min-h-[280px]">
+                <div className="space-y-2">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400 block">Inversión Total</span>
+                  <div className="flex items-baseline gap-3">
+                    <span className="text-5xl font-bold font-headline text-primary">${totalPrice.toLocaleString()}</span>
+                    <span className="text-sm font-bold text-gray-400">MXN</span>
                   </div>
                 </div>
                 
-                <div className="space-y-4">
+                <div className="space-y-6">
                   <Button 
-                    className="w-full btn-primary h-16 rounded-2xl text-xs flex items-center justify-center gap-3 shadow-[0_15px_30px_-5px_rgba(41,102,84,0.3)] border-2 border-white/20" 
+                    className="w-full btn-primary h-16 rounded-2xl text-xs flex items-center justify-center gap-3 shadow-[0_20px_40px_-10px_rgba(41,102,84,0.3)] hover:shadow-[0_25px_50px_-12px_rgba(41,102,84,0.4)] transition-all" 
                     disabled={isProcessing}
                     onClick={handleCheckout}
                   >
@@ -165,19 +165,19 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                       <Loader2 className="w-5 h-5 animate-spin" />
                     ) : (
                       <>
-                        PROCEDER AL PAGO
+                        CONFIRMAR Y PAGAR
                         <ArrowRight className="w-4 h-4" />
                       </>
                     )}
                   </Button>
                   
-                  <div className="flex flex-col items-center gap-3">
-                    <p className="text-[9px] text-gray-400 italic text-center px-4">
+                  <div className="flex flex-col items-center gap-4">
+                    <p className="text-[10px] text-gray-400 italic text-center px-6 leading-relaxed">
                       "Al proceder, serás redirigido al portal seguro de Stripe para finalizar tu ritual."
                     </p>
-                    <div className="flex justify-center items-center gap-2 opacity-40 bg-white/50 px-4 py-1.5 rounded-full border border-white">
-                      <ShieldCheck className="w-3.5 h-3.5 text-primary" />
-                      <span className="text-[8px] font-black uppercase tracking-[0.2em]">Secured by Stripe</span>
+                    <div className="flex justify-center items-center gap-2 opacity-40">
+                      <ShieldCheck className="w-4 h-4 text-primary" />
+                      <span className="text-[9px] font-black uppercase tracking-[0.2em]">Secured by Stripe</span>
                     </div>
                   </div>
                 </div>
