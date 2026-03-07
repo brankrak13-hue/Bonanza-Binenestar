@@ -70,3 +70,22 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+@keyframes revealSection {
+  0% { 
+    opacity: 0; 
+    transform: translateY(40px) scale(0.98);
+    filter: blur(8px);
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* Animación cuando se navega a una sección por su ID */
+#contact:target, #about:target, #services:target {
+  animation: revealSection 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  scroll-margin-top: 100px;
+}

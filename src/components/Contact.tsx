@@ -29,7 +29,7 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="bg-secondary/30 py-16 sm:py-24">
+    <section id="contact" className="bg-secondary/30 py-16 sm:py-24 scroll-mt-24">
       <div className="max-w-screen-md mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 animate-fadeIn">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground font-headline mb-4">{t('contact.title')}</h2>
