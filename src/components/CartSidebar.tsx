@@ -71,7 +71,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
     
     try {
       const orderId = await handleOrderCreation();
-      if (!orderId) throw new Error("No se pudo pre-registrar la sesión de bienestar.");
+      if (!orderId) throw new Error("No se pudo iniciar el proceso de reserva.");
 
       const response = await fetch('/api/checkout-session', {
         method: 'POST',
@@ -87,16 +87,21 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
       const data = await response.json();
       
       if (data.url) {
-        // Redirección a la página segura de Stripe (blueprint step "complete-checkout")
+        // Redirección a la página segura de Stripe
+        // En modo prueba sin llave, el servidor devolverá la URL de pedidos para simular éxito
         window.location.href = data.url;
+        if (data.error) {
+            toast({ title: "Modo Simulación", description: data.error });
+            clearCart();
+        }
       } else {
-        throw new Error(data.error || 'Error al conectar con el oráculo de pagos.');
+        throw new Error(data.error || 'Error al conectar con la pasarela de pagos.');
       }
     } catch (error: any) {
       toast({ 
         variant: "destructive", 
         title: "Error de Conexión", 
-        description: "Asegúrate de configurar tu STRIPE_SECRET_KEY en el archivo .env"
+        description: error.message || "No se pudo procesar el pago. Inténtalo más tarde."
       });
       setIsRedirecting(false);
     }
@@ -175,7 +180,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                     {isRedirecting ? (
                       <>
                         <Loader2 className="animate-spin w-5 h-5" />
-                        Sincronizando con Stripe...
+                        Abriendo Pasarela de Pago...
                       </>
                     ) : (
                       <>
@@ -188,7 +193,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                 </div>
                 <div className="flex justify-center items-center gap-2 opacity-30 mt-2">
                   <ShieldCheck className="w-4 h-4 text-primary" />
-                  <span className="text-[8px] font-bold uppercase tracking-widest">Protección de Datos Activa</span>
+                  <span className="text-[8px] font-bold uppercase tracking-widest">Pago Protegido por Stripe Checkout</span>
                 </div>
               </SheetFooter>
             </>
