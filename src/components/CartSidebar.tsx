@@ -17,7 +17,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useUser, useFirestore } from "@/firebase";
 import AuthModal from "@/components/AuthModal";
 import { useLanguage } from "@/context/LanguageContext";
-import { collection, doc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 
 interface CartSidebarProps { open: boolean; onOpenChange: (open: boolean) => void; }
 
@@ -71,7 +71,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
     
     try {
       const orderId = await handleOrderCreation();
-      if (!orderId) throw new Error("No se pudo iniciar el proceso de reserva.");
+      if (!orderId) throw new Error("No se pudo pre-registrar la sesión de bienestar.");
 
       const response = await fetch('/api/checkout-session', {
         method: 'POST',
@@ -87,16 +87,16 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
       const data = await response.json();
       
       if (data.url) {
-        // Redirigimos a la página de pago segura de Stripe
+        // Redirección a la página segura de Stripe (blueprint step "complete-checkout")
         window.location.href = data.url;
       } else {
-        throw new Error(data.error || 'Error al conectar con la pasarela de pagos.');
+        throw new Error(data.error || 'Error al conectar con el oráculo de pagos.');
       }
     } catch (error: any) {
       toast({ 
         variant: "destructive", 
-        title: "Error de Pago", 
-        description: error.message || "Asegúrate de haber configurado las llaves de Stripe en el archivo .env"
+        title: "Error de Conexión", 
+        description: "Asegúrate de configurar tu STRIPE_SECRET_KEY en el archivo .env"
       });
       setIsRedirecting(false);
     }
@@ -175,12 +175,12 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                     {isRedirecting ? (
                       <>
                         <Loader2 className="animate-spin w-5 h-5" />
-                        Abriendo Caja Segura...
+                        Sincronizando con Stripe...
                       </>
                     ) : (
                       <>
                         <CreditCard className="w-5 h-5" /> 
-                        Finalizar Compra
+                        Proceder al Pago
                         <ArrowRight className="w-4 h-4 ml-1" />
                       </>
                     )}
@@ -188,7 +188,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                 </div>
                 <div className="flex justify-center items-center gap-2 opacity-30 mt-2">
                   <ShieldCheck className="w-4 h-4 text-primary" />
-                  <span className="text-[8px] font-bold uppercase tracking-widest">Pago Protegido por Stripe</span>
+                  <span className="text-[8px] font-bold uppercase tracking-widest">Protección de Datos Activa</span>
                 </div>
               </SheetFooter>
             </>
