@@ -74,7 +74,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
       const orderId = await handleOrderCreation();
       if (!orderId) throw new Error("No se pudo iniciar el proceso de reserva.");
 
-      // 2. Solicitamos la sesión de Stripe Checkout
+      // 2. Solicitamos la sesión de Stripe Checkout (Paso 2 del blueprint)
       const response = await fetch('/api/checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -89,12 +89,11 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
       const data = await response.json();
       
       if (data.url) {
-        // Redirección a la página segura de Stripe (Hospedada)
+        // Redirección a la URL de Stripe (Componente de UI del blueprint)
         window.location.href = data.url;
         
-        // Si el servidor detectó que no hay llaves y simuló el éxito
+        // Limpiamos el carrito si estamos en modo simulación
         if (data.message) {
-            console.warn(data.message);
             clearCart();
         }
       } else {

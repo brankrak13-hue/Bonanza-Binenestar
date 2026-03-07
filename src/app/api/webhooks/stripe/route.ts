@@ -17,8 +17,8 @@ export async function POST(req: Request) {
 
   try {
     if (!endpointSecret || !sig) {
-      // En modo desarrollo sin secreto configurado, procesamos sin verificar firma
-      console.warn('⚠️ Webhook sin verificación de firma (configura STRIPE_WEBHOOK_SECRET)');
+      // En desarrollo sin secreto configurado, procesamos el evento directamente
+      console.warn('⚠️ Webhook sin verificación de firma activa.');
       event = JSON.parse(body);
     } else {
       event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
@@ -28,13 +28,16 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: `Webhook Error: ${err.message}` }, { status: 400 });
   }
 
-  // Manejamos el evento de éxito del blueprint
+  // Manejamos el evento de éxito (Paso 3 del blueprint)
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session;
-    console.log(`✅ Pago confirmado para la orden: ${session.metadata?.orderId}`);
+    const orderId = session.metadata?.orderId;
+    const userId = session.metadata?.userId;
+
+    console.log(`✅ Pago confirmado para la orden: ${orderId} del usuario ${userId}`);
     
-    // Aquí podrías actualizar el estado en Firestore a 'pagado'
-    // utilizando el orderId guardado en metadata.
+    // Aquí se actualizaría el estado de la orden en Firestore a 'pagado'
+    // Como esta es una función de servidor pura de NextJS, usaríamos el Admin SDK o similar.
   }
 
   return NextResponse.json({ received: true });

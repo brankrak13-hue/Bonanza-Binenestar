@@ -14,20 +14,18 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'El carrito está vacío' }, { status: 400 });
     }
 
+    const origin = request.headers.get('origin');
+
+    // Si no hay llave de Stripe, simulamos una respuesta de éxito para desarrollo
     if (!process.env.STRIPE_SECRET_KEY) {
-      console.error('Falta STRIPE_SECRET_KEY en el entorno.');
-      // Simulación de éxito para entornos de desarrollo sin llaves configuradas
-      const fallbackOrigin = request.headers.get('origin');
+      console.warn('⚠️ Falta STRIPE_SECRET_KEY. Simulando éxito para desarrollo.');
       return NextResponse.json({ 
-        url: `${fallbackOrigin}/pedidos?status=success&order_id=${orderId}`,
-        message: 'Modo simulación activo por falta de llaves.'
+        url: `${origin}/pedidos?status=success&order_id=${orderId}`,
+        message: 'Modo simulación activo.'
       }, { status: 200 });
     }
 
-    const origin = request.headers.get('origin');
-
     // Mapeamos los items del carrito a line_items de Stripe Checkout
-    // Usamos price_data para crear precios dinámicos según el carrito
     const line_items = items.map((item: any) => ({
       price_data: {
         currency: 'mxn',
@@ -42,7 +40,7 @@ export async function POST(request: Request) {
 
     // Creamos la sesión de Checkout (Paso authoritative del blueprint)
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
+      payment_method_types: ['card'], // Google Pay y Apple Pay se activan en el Dashboard de Stripe
       line_items,
       mode: 'payment',
       customer_email: userEmail,

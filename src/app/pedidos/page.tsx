@@ -1,6 +1,7 @@
 
 'use client';
 
+import { useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
@@ -9,19 +10,37 @@ import { collection, query, orderBy } from 'firebase/firestore';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, Calendar, CreditCard, ChevronRight, Package, ShoppingBag } from 'lucide-react';
+import { Loader2, Calendar, CreditCard, ChevronRight, Package, ShoppingBag, CheckCircle2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { es, enUS } from 'date-fns/locale';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useSearchParams } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
+import { useCart } from '@/context/CartContext';
 
 export default function PedidosPage() {
   const { user, isUserLoading } = useUser();
   const db = useFirestore();
   const { t, language } = useLanguage();
+  const searchParams = useSearchParams();
+  const { toast } = useToast();
+  const { clearCart } = useCart();
   
   const currentLocale = language === 'es' ? es : enUS;
+
+  // Efecto para manejar el retorno de un pago exitoso
+  useEffect(() => {
+    const status = searchParams.get('status');
+    if (status === 'success') {
+      clearCart();
+      toast({
+        title: t('cart.success'),
+        description: t('cart.successDesc'),
+      });
+    }
+  }, [searchParams, clearCart, toast, t]);
 
   const ordersQuery = useMemoFirebase(() => {
     if (!db || !user) return null;
@@ -98,7 +117,7 @@ export default function PedidosPage() {
             </div>
             <div className="flex items-center gap-2">
               <Package className="w-4 h-4 text-gray-400" />
-              <span className="capitalize">{order.paymentStatus}</span>
+              <span className="capitalize">{order.paymentStatus === 'paid' ? 'Pagado' : order.paymentStatus}</span>
             </div>
           </div>
         </CardContent>
@@ -115,6 +134,16 @@ export default function PedidosPage() {
     <main className="min-h-screen bg-background animate-in fade-in duration-1000">
       <Header />
       <div className="max-w-screen-lg mx-auto px-4 py-20 sm:py-32">
+        {searchParams.get('status') === 'success' && (
+          <div className="mb-12 p-8 rounded-[2.5rem] bg-green-50 border border-green-100 flex flex-col items-center text-center animate-in zoom-in-95 duration-700">
+            <div className="bg-white rounded-full p-4 mb-4 shadow-sm">
+                <CheckCircle2 className="w-10 h-10 text-green-500" />
+            </div>
+            <h2 className="text-2xl font-bold font-headline text-green-800 mb-2">¡Ritual Confirmado!</h2>
+            <p className="text-green-600 italic">Hemos recibido tu pago con éxito. Tu alma te lo agradecerá.</p>
+          </div>
+        )}
+
         <div className="text-center mb-12">
           <p className="text-sm tracking-widest uppercase text-primary font-bold mb-2">
             {t('appointments.subtitle')}
