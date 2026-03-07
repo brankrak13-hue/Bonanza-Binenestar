@@ -230,14 +230,30 @@ export const translations: any = {
       terms: {
         title: "Términos y Condiciones",
         s1_title: "1. Aceptación de los Términos",
-        s1_desc: "Al acceder y utilizar los servicios de Bonanza Arte & Bienestar, usted acepta estos Términos.",
-        updated: "Última actualización: Febrero 2024"
+        s1_desc: "Al acceder y utilizar este sitio web y los servicios de Bonanza Arte & Bienestar, usted acepta cumplir con estos términos. Nuestros servicios están destinados exclusivamente para fines de relajación y bienestar holístico.",
+        s2_title: "2. Reservas y Cancelaciones",
+        s2_desc: "Toda reserva está sujeta a disponibilidad. Las cancelaciones deben realizarse con al menos 24 horas de antelación para permitir la reasignación del espacio. Las sesiones de Sound Healing tienen horarios fijos (7:30 AM y 8:00 PM).",
+        s3_title: "3. Pagos y Seguridad (Stripe)",
+        s3_desc: "Para su seguridad, todos los pagos con tarjeta de crédito o débito se procesan a través de la plataforma externa Stripe. Bonanza Arte & Bienestar no almacena ni tiene acceso a los datos completos de su tarjeta. Al realizar un pago, usted acepta también los términos de servicio de Stripe.",
+        s4_title: "4. Política de Reembolsos",
+        s4_desc: "Los reembolsos se evaluarán caso por caso. En caso de no asistir a una cita confirmada sin aviso previo, Bonanza se reserva el derecho de no realizar la devolución del importe pagado.",
+        s5_title: "5. Salud y Responsabilidad",
+        s5_desc: "Es responsabilidad del cliente informar sobre cualquier condición médica, alergia o embarazo antes de iniciar un masaje o terapia. Nuestros tratamientos no sustituyen el asesoramiento médico profesional.",
+        updated: "Última actualización: Marzo 2024"
       },
       privacy: {
         title: "Política de Privacidad",
-        s1_title: "1. Recopilación de Información",
-        s1_desc: "Protegemos tus datos personales.",
-        updated: "Última actualización: Febrero 2024"
+        s1_title: "1. Recopilación de Datos",
+        s1_desc: "Recopilamos información personal básica (nombre, correo, teléfono) únicamente para gestionar sus reservas y mejorar su experiencia en Bonanza.",
+        s2_title: "2. Uso de la Información",
+        s2_desc: "Sus datos no se venden ni comparten con terceros con fines publicitarios. Los utilizamos exclusivamente para confirmaciones de citas y, si usted lo autoriza, envío de nuestro boletín de bienestar.",
+        s3_title: "3. Procesamiento de Pagos Seguro",
+        s3_desc: "Utilizamos Stripe para procesar pagos de forma segura. Stripe recopila información necesaria para completar la transacción bajo sus propios estándares de seguridad PCI-DSS. Puede consultar la política de privacidad de Stripe para más detalles.",
+        s4_title: "4. Derechos del Usuario",
+        s4_desc: "Usted tiene derecho a solicitar el acceso, corrección o eliminación de sus datos personales de nuestra base de datos en cualquier momento a través de nuestro formulario de contacto.",
+        s5_title: "5. Cookies",
+        s5_desc: "Utilizamos cookies esenciales para el funcionamiento técnico del sitio y para recordar sus preferencias de idioma, asegurando una navegación fluida.",
+        updated: "Última actualización: Marzo 2024"
       }
     }
   },
@@ -461,13 +477,33 @@ export const translations: any = {
       terms: {
         title: "Terms and Conditions",
         s1_title: "1. Acceptance of Terms",
-        updated: "Last updated: February 2024"
+        s1_desc: "By accessing this website and the services of Bonanza Arte & Bienestar, you agree to comply with these terms. Our services are intended solely for relaxation and holistic well-being purposes.",
+        s2_title: "2. Bookings and Cancellations",
+        s2_desc: "All bookings are subject to availability. Cancellations must be made at least 24 hours in advance. Sound Healing sessions have fixed schedules (7:30 AM and 8:00 PM).",
+        s3_title: "3. Payments and Security (Stripe)",
+        s3_desc: "For your security, all credit and debit card payments are processed through the external platform Stripe. Bonanza Arte & Bienestar does not store or have access to your full card details. By making a payment, you also accept Stripe's terms of service.",
+        s4_title: "4. Refund Policy",
+        s4_desc: "Refunds will be evaluated on a case-by-case basis. In case of no-show for a confirmed appointment without prior notice, Bonanza reserves the right to withhold the amount paid.",
+        s5_title: "5. Health and Liability",
+        s5_desc: "It is the client's responsibility to inform us of any medical conditions, allergies, or pregnancy before starting a treatment. Our services do not replace professional medical advice.",
+        updated: "Last updated: March 2024"
       },
       privacy: {
         title: "Privacy Policy",
-        s1_title: "1. Information Collection",
-        updated: "Last updated: February 2024"
+        s1_title: "1. Data Collection",
+        s1_desc: "We collect basic personal information (name, email, phone) solely to manage your bookings and improve your experience at Bonanza.",
+        s2_title: "2. Use of Information",
+        s2_desc: "Your data is not sold or shared with third parties for advertising purposes. We use it exclusively for appointment confirmations and, if you authorize it, our wellness newsletter.",
+        s3_title: "3. Secure Payment Processing",
+        s3_desc: "We use Stripe to process payments securely. Stripe collects information necessary to complete the transaction under its own PCI-DSS security standards. You can consult Stripe's privacy policy for more details.",
+        s4_title: "4. User Rights",
+        s4_desc: "You have the right to request access, correction, or deletion of your personal data from our database at any time through our contact form.",
+        s5_title: "5. Cookies",
+        s5_desc: "We use essential cookies for the technical operation of the site and to remember your language preferences, ensuring smooth navigation.",
+        updated: "Last updated: March 2024"
       }
     }
   }
 };
+
+    
