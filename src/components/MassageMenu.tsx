@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -79,34 +78,34 @@ export default function MassageMenu() {
         <section id="massage-menu" className="py-20 sm:py-32 bg-white overflow-hidden">
             <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-16 animate-fadeIn opacity-0" style={{ animationDelay: '200ms' }}>
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/5 text-primary text-xs font-bold tracking-[0.2em] uppercase mb-6">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/5 text-primary text-xs font-bold tracking-[0.2em] uppercase mb-6 border border-primary/10">
                         <Sparkles className="w-3.5 h-3.5" />
                         {t('services.subtitle')}
                     </div>
-                    <h1 className="text-5xl sm:text-7xl font-bold text-gray-900 mb-8 font-headline">{t('services.title')}</h1>
-                    <p className="mt-4 text-gray-500 max-w-2xl mx-auto text-lg leading-relaxed">
+                    <h1 className="text-5xl sm:text-7xl font-bold text-gray-900 mb-8 font-headline leading-tight">{t('services.title')}</h1>
+                    <p className="mt-4 text-gray-500 max-w-2xl mx-auto text-lg leading-relaxed font-light italic">
                         {t('services.desc')}
                     </p>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-12">
                     {massages.map((massage, index) => {
                         return (
                             <Card 
                                 key={massage.id} 
-                                className="group flex flex-col bg-secondary/20 border-none shadow-none hover-lift animate-fadeIn opacity-0 rounded-[2rem] overflow-hidden"
+                                className="group flex flex-col bg-secondary/20 border-none shadow-none hover-lift animate-fadeIn opacity-0 rounded-[2.5rem] overflow-hidden"
                                 style={{ animationDelay: `${400 + index * 100}ms` }}
                             >
-                                <CardHeader className="pb-4 pt-8 px-8">
-                                    <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary/60">{massage.subtitle}</p>
-                                    <CardTitle className="text-3xl font-bold text-gray-900 group-hover:text-primary transition-colors duration-500 font-headline leading-tight">{massage.title}</CardTitle>
+                                <CardHeader className="pb-4 pt-10 px-8">
+                                    <p className="text-[10px] uppercase tracking-[0.4em] font-black text-primary/60 mb-2">{massage.subtitle}</p>
+                                    <CardTitle className="text-3xl font-bold text-gray-900 group-hover:text-primary transition-colors duration-500 font-headline leading-[1.1]">{massage.title}</CardTitle>
                                 </CardHeader>
-                                <CardContent className="flex-grow flex flex-col px-8 pb-8">
-                                    <CardDescription className="flex-grow mb-6 text-gray-600 text-base leading-relaxed">
+                                <CardContent className="flex-grow flex flex-col px-8 pb-10">
+                                    <CardDescription className="flex-grow mb-8 text-gray-600 text-base leading-relaxed">
                                         {massage.description}
                                     </CardDescription>
                                     
-                                    <div className="space-y-3 mt-auto">
+                                    <div className="space-y-4 mt-auto">
                                         {massage.prices.map((p: any, i: number) => {
                                             const uniqueId = p.priceId || `${massage.title}-${p.duration}`;
                                             const isAdded = addedId === uniqueId;
@@ -116,23 +115,25 @@ export default function MassageMenu() {
                                                 <div 
                                                     key={i} 
                                                     className={cn(
-                                                        "flex flex-col p-4 rounded-3xl bg-white/80 border transition-all duration-500 gap-3",
-                                                        isAdded ? "border-accent shadow-md scale-[1.02]" : "border-transparent"
+                                                        "flex flex-col p-5 rounded-[2rem] bg-white border-2 transition-all duration-500 gap-4",
+                                                        isAdded ? "border-accent shadow-xl scale-[1.03]" : "border-transparent shadow-sm"
                                                     )}
                                                 >
-                                                    <div className="flex justify-between items-center">
+                                                    <div className="flex justify-between items-center px-1">
                                                         <div className="flex items-center gap-2">
-                                                            <Clock className="w-3.5 h-3.5 text-primary/50" />
-                                                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">{p.duration} {t('services.min')}</span>
+                                                            <div className="bg-primary/5 p-1.5 rounded-full">
+                                                                <Clock className="w-3.5 h-3.5 text-primary" />
+                                                            </div>
+                                                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{p.duration} {t('services.min')}</span>
                                                         </div>
-                                                        <span className="font-bold text-xl text-primary font-headline">${p.amount.toLocaleString()}</span>
+                                                        <span className="font-bold text-2xl text-primary font-headline">${p.amount.toLocaleString()}</span>
                                                     </div>
                                                     
-                                                    <div className="grid grid-cols-2 gap-2">
+                                                    <div className="grid grid-cols-2 gap-3">
                                                         <Button 
                                                             variant="outline" 
                                                             size="sm"
-                                                            className="rounded-xl h-10 border-primary/10 text-primary hover:bg-primary/5 text-[9px] font-bold tracking-widest uppercase"
+                                                            className="rounded-2xl h-12 border-2 border-primary/20 text-primary hover:bg-primary hover:text-white transition-all duration-500 text-[10px] font-black tracking-widest uppercase"
                                                             onClick={() => handleAddToCart({
                                                                 id: massage.id,
                                                                 title: massage.title,
@@ -143,22 +144,22 @@ export default function MassageMenu() {
                                                                 image: ''
                                                             })}
                                                         >
-                                                            {isAdded ? <Check className="w-3 h-3" /> : <Plus className="w-3 h-3 mr-1" />}
+                                                            {isAdded ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4 mr-1" />}
                                                             {isAdded ? t('services.added') : t('services.add')}
                                                         </Button>
                                                         
                                                         <Button 
                                                             size="sm"
-                                                            className="rounded-xl h-10 btn-primary p-0 text-[9px] font-bold"
+                                                            className="rounded-2xl h-12 btn-primary border-2 border-primary p-0 text-[10px] font-black tracking-widest uppercase shadow-lg shadow-primary/10"
                                                             disabled={isLoading}
                                                             onClick={() => handleDirectBuy(p.priceId, uniqueId)}
                                                         >
                                                             {isLoading ? (
-                                                                <Loader2 className="w-3 h-3 animate-spin" />
+                                                                <Loader2 className="w-4 h-4 animate-spin" />
                                                             ) : (
-                                                                <span className="flex items-center gap-1">
+                                                                <span className="flex items-center gap-2">
                                                                     {t('services.buy')}
-                                                                    <ExternalLink className="w-2.5 h-3" />
+                                                                    <ExternalLink className="w-3.5 h-3.5" />
                                                                 </span>
                                                             )}
                                                         </Button>

@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from "react";
@@ -61,14 +60,16 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
     <>
       <Sheet open={open} onOpenChange={onOpenChange}>
         <SheetContent 
-          className="flex flex-col sm:max-w-md w-full border-none shadow-2xl rounded-l-[2rem] bg-white p-0 overflow-hidden"
+          className="flex flex-col sm:max-w-md w-full border-none shadow-2xl rounded-l-[2.5rem] bg-white p-0 overflow-hidden"
           aria-describedby={undefined}
         >
-          <SheetHeader className="p-8 border-b bg-primary/5">
-            <SheetTitle className="text-3xl font-headline font-bold flex items-center gap-3">
-              <ShoppingCart className="w-6 h-6 text-primary" />
+          <SheetHeader className="p-6 border-b bg-primary/5">
+            <SheetTitle className="text-xl font-headline font-bold flex items-center gap-3">
+              <div className="bg-primary/10 p-2 rounded-full">
+                <ShoppingCart className="w-5 h-5 text-primary" />
+              </div>
               {t('cart.title')}
-              <span className="text-sm font-body font-normal text-muted-foreground ml-auto bg-white px-3 py-1 rounded-full border">
+              <span className="text-[10px] font-bold text-primary bg-white px-3 py-1 rounded-full border border-primary/10 ml-auto uppercase tracking-widest">
                 {cartCount} items
               </span>
             </SheetTitle>
@@ -79,10 +80,13 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
           
           {cartItems.length === 0 ? (
             <div className="flex-grow flex flex-col items-center justify-center p-12 text-center">
-              <ShoppingCart className="w-20 h-20 text-primary/10 mb-6"/>
-              <p className="text-2xl font-bold font-headline text-gray-800">{t('cart.empty')}</p>
+              <div className="relative mb-6">
+                <div className="absolute inset-0 bg-primary/5 blur-3xl rounded-full" />
+                <ShoppingCart className="w-20 h-20 text-primary/10 relative z-10"/>
+              </div>
+              <p className="text-xl font-bold font-headline text-gray-800">{t('cart.empty')}</p>
               <SheetClose asChild>
-                <Button variant="outline" className="mt-6 rounded-full px-10 h-12 border-primary/20 text-primary">
+                <Button variant="outline" className="mt-6 rounded-full px-10 h-12 border-primary/20 text-primary font-bold tracking-widest text-[10px] uppercase">
                   {t('cart.continue')}
                 </Button>
               </SheetClose>
@@ -91,51 +95,69 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
             <>
               <div className="flex-grow overflow-y-auto p-6 space-y-6">
                 {!user && (
-                  <div className="p-6 bg-amber-50 border border-amber-200 rounded-[2rem] flex gap-4 items-start">
-                    <AlertCircle className="w-5 h-5 text-amber-600 mt-1" />
-                    <div className="space-y-2">
-                      <p className="text-sm font-bold text-amber-900">Inicia sesión para guardar tu historial</p>
-                      <Button variant="link" className="p-0 h-auto text-amber-700 font-bold underline" onClick={() => setIsAuthModalOpen(true)}>ENTRAR AQUÍ</Button>
+                  <div className="p-5 bg-amber-50 border border-amber-200/50 rounded-2xl flex gap-4 items-start animate-in fade-in slide-in-from-top-2">
+                    <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                    <div className="space-y-1">
+                      <p className="text-xs font-bold text-amber-900 tracking-tight">Guarda tu ritual en tu cuenta</p>
+                      <button onClick={() => setIsAuthModalOpen(true)} className="text-[10px] text-amber-700 font-bold underline uppercase tracking-widest hover:text-amber-800 transition-colors">Iniciar sesión aquí</button>
                     </div>
                   </div>
                 )}
                 
                 <div className="space-y-4">
                   {cartItems.map(item => (
-                    <div key={item.id} className="p-5 rounded-[1.5rem] bg-secondary/10 border border-transparent hover:border-primary/10 flex items-center justify-between transition-all group">
+                    <div key={item.id} className="p-5 rounded-[2rem] bg-secondary/10 border border-transparent hover:border-primary/20 hover:bg-white hover:shadow-xl hover:shadow-primary/5 flex items-center justify-between transition-all duration-500 group">
                       <div className="flex-grow">
-                        <h4 className="font-bold text-gray-900">{item.title}</h4>
-                        <p className="text-[10px] text-primary/60 uppercase font-bold">{item.duration} {t('services.min')}</p>
-                        <div className="flex items-center gap-4 mt-3">
-                          <div className="flex items-center gap-2 bg-white rounded-full border p-1">
-                            <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full" onClick={() => updateQuantity(item.id, item.quantity - 1)}><Minus className="h-3 w-3"/></Button>
-                            <span className="text-xs font-bold w-4 text-center">{item.quantity}</span>
-                            <Button variant="ghost" size="icon" className="h-7 w-7 rounded-full" onClick={() => updateQuantity(item.id, item.quantity + 1)}><Plus className="h-3 w-3"/></Button>
+                        <h4 className="font-bold text-lg text-gray-900 tracking-tight leading-tight">{item.title}</h4>
+                        <p className="text-[10px] text-primary/60 uppercase font-black tracking-widest mt-1 mb-3">{item.duration} {t('services.min')}</p>
+                        <div className="flex items-center gap-5">
+                          <div className="flex items-center gap-2 bg-white rounded-full border border-gray-100 p-1 shadow-sm">
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-8 w-8 rounded-full hover:bg-primary/10 hover:text-primary transition-colors" 
+                              onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            >
+                              <Minus className="h-3 w-3"/>
+                            </Button>
+                            <span className="text-sm font-bold w-6 text-center">{item.quantity}</span>
+                            <Button 
+                              variant="ghost" 
+                              size="icon" 
+                              className="h-8 w-8 rounded-full hover:bg-primary/10 hover:text-primary transition-colors" 
+                              onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            >
+                              <Plus className="h-3 w-3"/>
+                            </Button>
                           </div>
-                          <p className="text-lg font-bold text-primary">${(item.price * item.quantity).toLocaleString()}</p>
+                          <p className="text-xl font-bold text-primary font-headline">${(item.price * item.quantity).toLocaleString()}</p>
                         </div>
                       </div>
-                      <Button variant="ghost" size="icon" className="text-gray-300 hover:text-destructive transition-colors" onClick={() => removeFromCart(item.id)}><Trash2 className="h-5 w-5" /></Button>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="text-gray-300 hover:text-destructive hover:bg-destructive/5 transition-all rounded-full shrink-0 h-10 w-10 ml-2" 
+                        onClick={() => removeFromCart(item.id)}
+                      >
+                        <Trash2 className="h-5 w-5" />
+                      </Button>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <SheetFooter className="p-8 border-t bg-gray-50/50 flex flex-col gap-4">
-                <div className="flex justify-between items-end border-b border-dashed pb-4">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Total a pagar</span>
-                  <span className="text-4xl font-bold font-headline text-primary">${totalPrice.toLocaleString()} <span className="text-xs font-body font-normal">MXN</span></span>
+              <SheetFooter className="p-6 border-t bg-gray-50/50 flex flex-col gap-0">
+                <div className="flex justify-between items-center mb-6">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">Inversión total</span>
+                  <div className="text-right">
+                    <span className="text-3xl font-bold font-headline text-primary block">${totalPrice.toLocaleString()}</span>
+                    <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Peso Mexicano (MXN)</span>
+                  </div>
                 </div>
                 
-                <div className="space-y-4 text-center">
-                  <p className="text-[10px] font-bold text-primary uppercase tracking-[0.3em] mb-4 flex items-center justify-center gap-2">
-                    <Sparkles className="w-3 h-3" />
-                    Completa tu reserva segura
-                    <Sparkles className="w-3 h-3" />
-                  </p>
-                  
+                <div className="space-y-4">
                   <Button 
-                    className="w-full btn-primary h-16 rounded-2xl text-xs flex items-center justify-center gap-3" 
+                    className="w-full btn-primary h-16 rounded-2xl text-xs flex items-center justify-center gap-3 shadow-[0_15px_30px_-5px_rgba(41,102,84,0.3)] border-2 border-white/20" 
                     disabled={isProcessing}
                     onClick={handleCheckout}
                   >
@@ -143,20 +165,21 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                       <Loader2 className="w-5 h-5 animate-spin" />
                     ) : (
                       <>
-                        PROCEDER AL PAGO
+                        CONFIRMAR Y PAGAR
                         <ArrowRight className="w-4 h-4" />
                       </>
                     )}
                   </Button>
                   
-                  <p className="text-[9px] text-gray-400 italic mt-2">
-                    "Al pagar, serás redirigido a la pasarela oficial de Stripe."
-                  </p>
-                </div>
-                
-                <div className="flex justify-center items-center gap-2 opacity-30 mt-4">
-                  <ShieldCheck className="w-4 h-4 text-primary" />
-                  <span className="text-[8px] font-bold uppercase tracking-widest">Protegido por Stripe Checkout</span>
+                  <div className="flex flex-col items-center gap-3">
+                    <p className="text-[9px] text-gray-400 italic text-center px-4">
+                      "Al proceder, serás redirigido al portal seguro de Stripe para finalizar tu ritual."
+                    </p>
+                    <div className="flex justify-center items-center gap-2 opacity-40 bg-white/50 px-4 py-1.5 rounded-full border border-white">
+                      <ShieldCheck className="w-3.5 h-3.5 text-primary" />
+                      <span className="text-[8px] font-black uppercase tracking-[0.2em]">Secured by Stripe</span>
+                    </div>
+                  </div>
                 </div>
               </SheetFooter>
             </>
