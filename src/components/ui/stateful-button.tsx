@@ -43,10 +43,11 @@ export const Button = ({
       onClick={handleClick}
       disabled={status === 'loading'}
       className={cn(
-        'relative h-14 min-w-[200px] overflow-hidden rounded-full px-8 py-2 font-bold tracking-[0.2em] uppercase text-[10px] transition-all duration-500',
-        status === 'idle' && 'bg-slate-950 text-white hover:bg-slate-900 shadow-xl',
-        status === 'loading' && 'bg-slate-800 text-white cursor-wait',
-        status === 'success' && 'bg-primary text-white',
+        'relative h-14 min-w-[200px] overflow-hidden rounded-full px-10 py-2 font-bold tracking-[0.2em] uppercase text-[10px] transition-all duration-500',
+        // Estado inicial: Verde Bonanza con efecto de borde (ring) al hacer hover
+        status === 'idle' && 'bg-primary text-white hover:bg-primary/90 shadow-xl border border-white/10 hover:ring-4 hover:ring-primary/20 hover:ring-offset-2',
+        status === 'loading' && 'bg-primary/80 text-white cursor-wait',
+        status === 'success' && 'bg-accent text-white',
         className
       )}
     >
