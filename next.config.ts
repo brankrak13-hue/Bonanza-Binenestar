@@ -15,6 +15,10 @@ const nextConfig: NextConfig = {
         destination: '/servicios',
       },
       {
+        source: '/about',
+        destination: '/nosotros',
+      },
+      {
         source: '/ai-advisor',
         destination: '/agente-virtual',
       },

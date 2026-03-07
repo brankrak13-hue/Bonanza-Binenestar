@@ -6,7 +6,6 @@ import Benefits from '@/components/Benefits';
 import Footer from '@/components/Footer';
 import ProductShowcase from '@/components/ProductShowcase';
 import { getPlaceholderImage } from '@/lib/images';
-import About from '@/components/About';
 import Contact from '@/components/Contact';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -46,7 +45,6 @@ export default function Home() {
           />
         </div>
       </div>
-      <About />
       <Contact />
       <Footer />
     </main>

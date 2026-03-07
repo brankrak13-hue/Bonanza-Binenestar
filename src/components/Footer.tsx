@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -20,7 +19,7 @@ export default function Footer() {
     const footerLinks = {
         [t('footer.nav')]: [
             { title: t('nav.home'), href: '/' },
-            { title: t('nav.about'), href: '/#about' },
+            { title: t('nav.about'), href: '/nosotros' },
             { title: t('nav.contact'), href: '/#contact' },
         ],
         [t('nav.services')]: [
@@ -53,7 +52,11 @@ export default function Footer() {
                                 <ul className="mt-4 space-y-3">
                                     {links.map(link => (
                                         <li key={link.title}>
-                                            <Link href={link.href} className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                                            <Link 
+                                                href={link.href} 
+                                                className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                                                {...(link.href === "/nosotros" ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                                            >
                                                 {link.title}
                                             </Link>
                                         </li>
