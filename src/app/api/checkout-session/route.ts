@@ -1,6 +1,8 @@
+
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
+// Inicializamos Stripe con la llave secreta del archivo .env
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
   apiVersion: '2025-01-27',
 });
@@ -26,16 +28,18 @@ export async function POST(request: Request) {
       quantity: item.quantity,
     }));
 
+    const origin = request.headers.get('origin');
+
     // Creamos la sesión de Checkout hospedada en Stripe
-    // Esto maneja automáticamente Google Pay, Apple Pay y Tarjetas.
+    // Stripe manejará automáticamente Google Pay si está configurado en tu dashboard
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'], // Puedes añadir 'google_pay' si está activado en tu dashboard
+      payment_method_types: ['card'], 
       line_items,
       mode: 'payment',
       customer_email: userEmail,
       client_reference_id: userId,
-      success_url: `${request.headers.get('origin')}/pedidos?session_id={CHECKOUT_SESSION_ID}&order_id=${orderId}`,
-      cancel_url: `${request.headers.get('origin')}/servicios`,
+      success_url: `${origin}/pedidos?session_id={CHECKOUT_SESSION_ID}&order_id=${orderId}&status=success`,
+      cancel_url: `${origin}/servicios?payment=cancelled`,
       metadata: {
         userId: userId || 'guest',
         orderId: orderId || ''
@@ -45,6 +49,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ url: session.url });
   } catch (error: any) {
     console.error('Error creando sesión de Stripe:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ 
+      error: 'No se pudo iniciar el pago. Verifica que la STRIPE_SECRET_KEY en el archivo .env sea correcta.' 
+    }, { status: 500 });
   }
 }

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from "react";
@@ -21,7 +22,7 @@ import { collection, doc, setDoc } from "firebase/firestore";
 interface CartSidebarProps { open: boolean; onOpenChange: (open: boolean) => void; }
 
 export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
-  const { cartItems, removeFromCart, updateQuantity, totalPrice, cartCount } = useCart();
+  const { cartItems, removeFromCart, updateQuantity, totalPrice, cartCount, clearCart } = useCart();
   const [isRedirecting, setIsRedirecting] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const { user } = useUser();
@@ -29,10 +30,6 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
   const { toast } = useToast();
   const { t } = useLanguage();
 
-  /**
-   * Crea un registro de pedido preventivo en Firestore antes de ir a Stripe.
-   * Esto nos permite rastrear intentos de compra y asociarlos con la sesión.
-   */
   const handleOrderCreation = async () => {
     if (!user || !db) return null;
     const orderId = `order_${Date.now()}`;
@@ -43,8 +40,8 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
       userProfileId: user.uid,
       orderDate: new Date().toISOString(),
       totalAmount: totalPrice,
-      status: 'pending', // Se actualizará a 'shipped' (confirmada) vía Webhook o redirección exitosa
-      paymentStatus: 'pending_stripe',
+      status: 'pending',
+      paymentStatus: 'awaiting_payment',
       items: cartItems.map(item => ({
         productId: item.id,
         name: item.title,
@@ -64,9 +61,6 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
     }
   };
 
-  /**
-   * Inicia el flujo de Stripe Checkout (Página de pago hospedada)
-   */
   const handleStripeCheckout = async () => {
     if (!user) {
       setIsAuthModalOpen(true);
@@ -76,11 +70,9 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
     setIsRedirecting(true);
     
     try {
-      // 1. Pre-registramos el pedido en nuestra base de datos
       const orderId = await handleOrderCreation();
       if (!orderId) throw new Error("No se pudo iniciar el proceso de reserva.");
 
-      // 2. Solicitamos a nuestra API la URL de la página de pago de Stripe
       const response = await fetch('/api/checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -95,7 +87,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
       const data = await response.json();
       
       if (data.url) {
-        // Redirigimos al usuario a la pasarela segura de Stripe
+        // Redirigimos a la página de pago segura de Stripe
         window.location.href = data.url;
       } else {
         throw new Error(data.error || 'Error al conectar con la pasarela de pagos.');
@@ -103,8 +95,8 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
     } catch (error: any) {
       toast({ 
         variant: "destructive", 
-        title: "Error de Conexión", 
-        description: error.message || "No se pudo conectar con Stripe. Intenta de nuevo."
+        title: "Error de Pago", 
+        description: error.message || "Asegúrate de haber configurado las llaves de Stripe en el archivo .env"
       });
       setIsRedirecting(false);
     }
@@ -113,7 +105,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
   return (
     <>
       <Sheet open={open} onOpenChange={onOpenChange}>
-        <SheetContent className="flex flex-col sm:max-w-md w-full border-none shadow-2xl rounded-l-[2.5rem] bg-white p-0 overflow-hidden">
+        <SheetContent className="flex flex-col sm:max-w-md w-full border-none shadow-2xl rounded-l-[2rem] bg-white p-0 overflow-hidden">
           <SheetHeader className="p-8 border-b bg-primary/5">
             <SheetTitle className="text-3xl font-headline font-bold flex items-center gap-3">
               <ShoppingCart className="w-6 h-6 text-primary" />
@@ -149,7 +141,7 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                 
                 <div className="space-y-4">
                   {cartItems.map(item => (
-                    <div key={item.id} className="p-5 rounded-[2rem] bg-secondary/10 border border-transparent hover:border-primary/10 flex items-center justify-between transition-all group">
+                    <div key={item.id} className="p-5 rounded-[1.5rem] bg-secondary/10 border border-transparent hover:border-primary/10 flex items-center justify-between transition-all group">
                       <div className="flex-grow">
                         <h4 className="font-bold text-gray-900">{item.title}</h4>
                         <p className="text-[10px] text-primary/60 uppercase font-bold">{item.duration} {t('services.min')}</p>
@@ -177,30 +169,26 @@ export default function CartSidebar({ open, onOpenChange }: CartSidebarProps) {
                 <div className="space-y-3">
                   <Button 
                     onClick={handleStripeCheckout} 
-                    className="w-full h-16 rounded-2xl btn-primary shadow-[0_20px_40px_-10px_rgba(41,102,84,0.4)] flex items-center justify-center gap-3"
+                    className="w-full h-16 rounded-2xl btn-primary shadow-xl flex items-center justify-center gap-3"
                     disabled={isRedirecting || cartItems.length === 0}
                   >
                     {isRedirecting ? (
                       <>
                         <Loader2 className="animate-spin w-5 h-5" />
-                        Abriendo Pasarela de Pago...
+                        Abriendo Caja Segura...
                       </>
                     ) : (
                       <>
                         <CreditCard className="w-5 h-5" /> 
-                        Proceder al Pago
+                        Finalizar Compra
                         <ArrowRight className="w-4 h-4 ml-1" />
                       </>
                     )}
                   </Button>
-                  
-                  <p className="text-[9px] text-center text-gray-400 uppercase tracking-widest px-4">
-                    Serás redirigido a la plataforma segura de Stripe para completar tu pago con Tarjeta o Google Pay.
-                  </p>
                 </div>
                 <div className="flex justify-center items-center gap-2 opacity-30 mt-2">
                   <ShieldCheck className="w-4 h-4 text-primary" />
-                  <span className="text-[8px] font-bold uppercase tracking-widest">Ritual de Pago Encriptado por Stripe</span>
+                  <span className="text-[8px] font-bold uppercase tracking-widest">Pago Protegido por Stripe</span>
                 </div>
               </SheetFooter>
             </>
