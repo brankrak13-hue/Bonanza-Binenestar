@@ -6,6 +6,7 @@ import type { ImagePlaceholder } from '@/lib/images';
 import { useRouter } from 'next/navigation';
 import { useSiteSettings } from '@/context/SiteSettingsContext';
 import { Button as StatefulButton } from '@/components/ui/stateful-button';
+import { CometCard } from '@/components/ui/comet-card';
 
 type ProductShowcaseProps = {
   id?: string;
@@ -54,16 +55,18 @@ export default function ProductShowcase({
               reverse ? 'md:order-2' : 'md:order-1'
             )}
           >
-            <div className="hover-zoom aspect-[4/3] relative">
-              <Image
-                src={currentImage.imageUrl}
-                alt={currentImage.description}
-                width={800}
-                height={600}
-                className="object-cover w-full h-full rounded-3xl shadow-2xl transition-transform duration-700 hover:scale-105"
-                data-ai-hint={currentImage.imageHint}
-              />
-            </div>
+            <CometCard>
+              <div className="aspect-[4/3] relative overflow-hidden rounded-3xl shadow-2xl">
+                <Image
+                  src={currentImage.imageUrl}
+                  alt={currentImage.description}
+                  width={800}
+                  height={600}
+                  className="object-cover w-full h-full"
+                  data-ai-hint={currentImage.imageHint}
+                />
+              </div>
+            </CometCard>
           </div>
           <div
             className={cn(
