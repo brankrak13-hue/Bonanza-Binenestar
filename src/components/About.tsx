@@ -1,3 +1,4 @@
+
 'use client';
 
 import Image from "next/image";
@@ -59,11 +60,12 @@ export default function About() {
                 </p>
               </div>
 
-              <div className="p-8 rounded-[2.5rem] bg-white shadow-xl border border-primary/5">
-                <h3 className="text-xl font-bold text-gray-900 font-headline mb-3">
+              <div>
+                <h3 className="text-xl font-bold text-primary font-headline mb-3 flex items-center gap-3">
+                  <div className="w-8 h-px bg-primary/30" />
                   {t('about.vision_t')}
                 </h3>
-                <p className="text-gray-600 italic leading-relaxed">
+                <p className="text-gray-600 italic leading-relaxed text-lg">
                   "{t('about.vision_d')}"
                 </p>
               </div>
@@ -123,14 +125,14 @@ export default function About() {
           >
             <div className="relative z-10">
               <h2 className="text-left text-balance text-2xl font-bold font-headline text-white mb-6">
-                Trayectoria Garantizada
+                {t('about.trayectory_t')}
               </h2>
               <div className="flex flex-col gap-2 mb-8">
                  <p className="text-6xl font-bold text-white font-headline">22+</p>
-                 <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-white/60">Años de Experiencia</p>
+                 <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-white/60">{t('about.trayectory_l')}</p>
               </div>
               <p className="text-left text-sm text-white/90 leading-relaxed italic">
-                "Excelencia certificada en el sector del bienestar holístico."
+                "{t('about.trayectory_q')}"
               </p>
             </div>
             <Sparkles className="absolute -right-8 -top-8 w-32 h-32 text-white/10" />
@@ -142,10 +144,10 @@ export default function About() {
           >
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16 w-full max-w-5xl">
               {[
-                { val: "100%", label: "Personalizado" },
-                { val: "Elite", label: "Terapeutas" },
-                { val: "Flex", label: "Ubicaciones" },
-                { val: "24/7", label: "Sintonía" },
+                { val: "100%", label: t('about.stat_1') },
+                { val: "Elite", label: t('about.stat_2') },
+                { val: "Flex", label: t('about.stat_3') },
+                { val: "24/7", label: t('about.stat_4') },
               ].map((item, i) => (
                 <div key={i} className="flex flex-col items-center text-center group/item">
                   <p className="text-4xl md:text-5xl font-bold font-headline text-primary mb-2 transition-transform duration-500 group-hover/item:scale-110">

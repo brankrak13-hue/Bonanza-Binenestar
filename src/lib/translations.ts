@@ -56,7 +56,14 @@ export const translations: any = {
       v3_t: "Presencia Plena",
       v3_d: "Un compromiso con el 'aquí y ahora', desconectando de lo digital para reconectar con lo sensorial.",
       ecosystem_t: "Ecosistema de Bienestar",
-      ecosystem_d: "Un modelo donde ganan los clientes, los terapeutas y los aliados (Hoteles/Airbnb). Garantizamos excelencia con más de 22 años de trayectoria en el sector."
+      ecosystem_d: "Un modelo donde ganan los clientes, los terapeutas y los aliados (Hoteles/Airbnb). Garantizamos excelencia con más de 22 años de trayectoria en el sector.",
+      trayectory_t: "Trayectoria Garantizada",
+      trayectory_l: "Años de Experiencia",
+      trayectory_q: "Excelencia certificada en el sector del bienestar holístico.",
+      stat_1: "Personalizado",
+      stat_2: "Terapeutas",
+      stat_3: "Ubicaciones",
+      stat_4: "Sintonía"
     },
     home: {
       facial: {
@@ -251,7 +258,7 @@ export const translations: any = {
         s4_desc: "Los reembolsos se evaluarán caso por caso. En caso de no asistir a una cita confirmada sin aviso previo, Bonanza se reserva el derecho de no realizar la devolución del importe pagado.",
         s5_title: "5. Salud y Responsabilidad",
         s5_desc: "Es responsabilidad del cliente informar sobre cualquier condición médica, alergia o embarazo antes de iniciar un masaje o terapia. Nuestros tratamientos no sustituyen el asesoramiento médico profesional.",
-        updated: "Última actualización: Marzo 2024"
+        updated: "Ultima actualización: Marzo 2024"
       },
       privacy: {
         title: "Política de Privacidad",
@@ -265,7 +272,7 @@ export const translations: any = {
         s4_desc: "Usted tiene derecho a solicitar el acceso, corrección o eliminación de sus datos personales de nuestra base de datos en cualquier momento a través de nuestro formulario de contacto.",
         s5_title: "5. Cookies",
         s5_desc: "Utilizamos cookies esenciales para el funcionamiento técnico del sitio y para recordar sus preferencias de idioma, asegurando una navegación fluida.",
-        updated: "Última actualización: Marzo 2024"
+        updated: "Ultima actualización: Marzo 2024"
       }
     }
   },
@@ -321,13 +328,20 @@ export const translations: any = {
       v3_t: "Full Presence",
       v3_d: "A commitment to the 'here and now', disconnecting from the digital to reconnect with the sensory.",
       ecosystem_t: "Wellness Ecosystem",
-      ecosystem_d: "A model where clients, therapists, and partners (Hotels/Airbnb) win. We guarantee excellence with over 22 years of experience in the sector."
+      ecosystem_d: "A model where clients, therapists, and partners (Hotels/Airbnb) win. We guarantee excellence with over 22 years of experience in the sector.",
+      trayectory_t: "Guaranteed Expertise",
+      trayectory_l: "Years of Experience",
+      trayectory_q: "Certified excellence in the holistic wellness sector.",
+      stat_1: "Personalized",
+      stat_2: "Therapists",
+      stat_3: "Locations",
+      stat_4: "Harmony"
     },
     home: {
       facial: {
         subtitle: "ANCIENT TECHNIQUES",
         title: "Holistic Massages",
-        description: "Rejuvenate your skin and release tension with our customized facial massages. We use techniques combining lymphatic drainage, reflexology, and aromatherapy for radiant skin and deep relaxation.",
+        description: "Rejuvenece tu piel y libera tensiones con nuestros masajes faciales personalizados. Utilizamos técnicas que combinan drenaje linfático, reflexología y aromaterapia para una piel radiante y una relajación profunda.",
         button: "View Menu"
       },
       sound: {
