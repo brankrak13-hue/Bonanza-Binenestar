@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -33,11 +32,11 @@ export default function HeroSection({ title, subtitle, description, buttonText, 
   const currentImage = getImage(image.id);
 
   useEffect(() => {
-    // Reducimos a 15 partículas para mejorar el TBT (Total Blocking Time)
-    const newParticles = Array.from({ length: 15 }).map(() => ({
-      x: `${Math.random() * 100 - 50}px`,
-      y: `${Math.random() * 100 - 50}px`,
-      duration: `${2 + Math.random() * 2}s`,
+    // Reducimos partículas para liberar el hilo principal durante la carga inicial
+    const newParticles = Array.from({ length: 10 }).map(() => ({
+      x: `${Math.random() * 60 - 30}px`,
+      y: `${Math.random() * 60 - 30}px`,
+      duration: `${3 + Math.random() * 2}s`,
       left: `${Math.random() * 100}%`,
       top: `${Math.random() * 100}%`,
     }));
@@ -51,26 +50,29 @@ export default function HeroSection({ title, subtitle, description, buttonText, 
           src={currentImage.imageUrl}
           alt={currentImage.description}
           fill
-          priority
+          priority={true}
+          fetchPriority="high"
+          loading="eager"
+          decoding="sync"
           quality={85}
           className="object-cover animate-hero-zoom"
           data-ai-hint={currentImage.imageHint}
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-black/40 backdrop-grayscale-[0.2]" />
+        <div className="absolute inset-0 bg-black/45 backdrop-grayscale-[0.1]" />
       </div>
       
       <div className="relative z-10 text-center text-white px-6 max-w-4xl mx-auto">
-        <p className="text-sm md:text-base tracking-[0.4em] uppercase font-medium text-accent mb-6 animate-fadeIn opacity-0" style={{ animationDelay: '200ms' }}>
+        <p className="text-sm md:text-base tracking-[0.4em] uppercase font-bold text-accent mb-6 animate-fadeIn opacity-0" style={{ animationDelay: '150ms' }}>
           {t('hero.subtitle')}
         </p>
-        <h1 className="text-5xl md:text-7xl lg:text-9xl font-bold mb-8 leading-[1.1] animate-fadeIn opacity-0 font-headline" style={{ animationDelay: '400ms' }}>
+        <h1 className="text-5xl md:text-7xl lg:text-9xl font-bold mb-8 leading-[1.1] animate-fadeIn opacity-0 font-headline" style={{ animationDelay: '300ms' }}>
           {t('hero.title')}
         </h1>
-        <p className="text-lg md:text-xl text-gray-100/90 leading-relaxed mb-12 max-w-2xl mx-auto font-light animate-fadeIn opacity-0" style={{ animationDelay: '600ms' }}>
+        <p className="text-lg md:text-xl text-gray-100/95 leading-relaxed mb-12 max-w-2xl mx-auto font-light animate-fadeIn opacity-0" style={{ animationDelay: '450ms' }}>
           {t('hero.description')}
         </p>
-        <div className="animate-fadeIn opacity-0" style={{ animationDelay: '800ms' }}>
+        <div className="animate-fadeIn opacity-0" style={{ animationDelay: '600ms' }}>
           <Link 
             href={buttonLink} 
             className="magnetic bg-primary text-white border-2 border-primary px-10 py-4 text-sm tracking-[0.2em] uppercase font-bold transition-all duration-500 rounded-full hover:bg-accent hover:border-accent hover:shadow-2xl hover:-translate-y-1 group inline-flex items-center gap-2"
@@ -98,7 +100,7 @@ export default function HeroSection({ title, subtitle, description, buttonText, 
         </div>
       </div>
       
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-50">
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-40">
         <div className="w-px h-12 bg-white/40 mx-auto" />
       </div>
     </section>

@@ -1,4 +1,3 @@
-
 'use client';
 
 import { Montserrat, Cormorant_Garamond } from 'next/font/google';
@@ -34,7 +33,7 @@ export default function RootLayout({
         <FirebaseClientProvider>
           <LanguageProvider>
             <SiteSettingsProvider>
-              <LazyMotion features={domAnimation}>
+              <LazyMotion features={domAnimation} strict>
                 {children}
                 <Toaster />
               </LazyMotion>

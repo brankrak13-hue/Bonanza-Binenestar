@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
@@ -75,7 +74,7 @@ export default function Header() {
   return (
     <>
       {isBannerVisible && (
-        <div className="bg-primary text-primary-foreground text-center py-2 px-4 text-[10px] md:text-xs tracking-[0.2em] uppercase font-semibold relative z-50">
+        <div className="bg-primary text-primary-foreground text-center py-2 px-4 text-[10px] md:text-xs tracking-[0.2em] uppercase font-bold relative z-50">
           <p>{language === 'es' ? 'Experimenta la sanación holística. ¡Agenda hoy!' : 'Experience holistic healing. Book today!'}</p>
           <button 
             type="button" 
@@ -112,7 +111,7 @@ export default function Header() {
                         <LotusIcon className="w-7 h-7 md:w-8 h-8 text-primary transition-transform duration-700 group-hover:rotate-[360deg]" />
                         <span className="font-headline text-2xl md:text-3xl lg:text-4xl font-bold tracking-wider text-foreground ml-2">BONANZA</span>
                     </div>
-                    <span className="text-[8px] md:text-[10px] font-semibold tracking-[0.3em] text-primary/80 -mt-1">{language === 'es' ? 'ARTE & BIENESTAR' : 'ART & WELLNESS'}</span>
+                    <span className="text-[8px] md:text-[10px] font-bold tracking-[0.3em] text-primary -mt-1">{language === 'es' ? 'ARTE & BIENESTAR' : 'ART & WELLNESS'}</span>
                 </Link>
             </div>
 
@@ -125,7 +124,7 @@ export default function Header() {
                   key={item.name}
                   href={item.href}
                   onMouseEnter={() => setHoveredIndex(idx)}
-                  className="relative px-5 py-2.5 text-sm tracking-[0.1em] font-medium font-headline text-foreground/70 hover:text-primary transition-colors duration-300"
+                  className="relative px-5 py-2.5 text-sm tracking-[0.1em] font-bold font-headline text-foreground/80 hover:text-primary transition-colors duration-300"
                 >
                   <span className="relative z-10">{item.name}</span>
                   <AnimatePresence>
@@ -149,7 +148,7 @@ export default function Header() {
                 variant="ghost" 
                 size="icon" 
                 onClick={toggleLanguage} 
-                className="text-foreground/60 hover:text-primary transition-all rounded-full"
+                className="text-foreground/80 hover:text-primary transition-all rounded-full"
                 aria-label={`Cambiar a ${language === 'es' ? 'Inglés' : 'Español'}`}
               >
                 <span className="text-[10px] font-bold">{language.toUpperCase()}</span>
@@ -186,13 +185,13 @@ export default function Header() {
                     )}
 
                     <DropdownMenuItem asChild className="cursor-pointer focus:bg-primary/10 rounded-md py-2 px-3">
-                      <Link href="/perfil" className="w-full text-xs font-semibold tracking-wider">{t('nav.myProfile')}</Link>
+                      <Link href="/perfil" className="w-full text-xs font-bold tracking-wider">{t('nav.myProfile')}</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild className="cursor-pointer focus:bg-primary/10 rounded-md py-2 px-3">
-                      <Link href="/pedidos" className="w-full text-xs font-semibold tracking-wider">{t('nav.myAppointments')}</Link>
+                      <Link href="/pedidos" className="w-full text-xs font-bold tracking-wider">{t('nav.myAppointments')}</Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleSignOut} className="text-destructive cursor-pointer focus:bg-destructive/10 rounded-md py-2 px-3 font-semibold text-xs tracking-wider">
+                    <DropdownMenuItem onClick={handleSignOut} className="text-destructive cursor-pointer focus:bg-destructive/10 rounded-md py-2 px-3 font-bold text-xs tracking-wider">
                       <LogOut className="mr-2 h-4 w-4" />
                       {t('nav.signOut')}
                     </DropdownMenuItem>
@@ -201,7 +200,7 @@ export default function Header() {
               ) : (
                 <button 
                   type="button" 
-                  className="p-2 text-foreground/60 hover:text-primary transition-all duration-300 hover:scale-110"
+                  className="p-2 text-foreground/80 hover:text-primary transition-all duration-300 hover:scale-110"
                   onClick={() => setIsAuthModalOpen(true)}
                   disabled={isUserLoading}
                   aria-label="Iniciar sesión"
@@ -247,7 +246,7 @@ export default function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-xl font-headline font-semibold tracking-wide text-foreground/80 hover:text-primary transition-colors animate-fadeIn"
+                className="text-xl font-headline font-bold tracking-wide text-foreground/90 hover:text-primary transition-colors animate-fadeIn"
                 style={{ animationDelay: `${idx * 100}ms` }}
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -267,7 +266,7 @@ export default function Header() {
               </Link>
             )}
 
-            <Button variant="outline" onClick={toggleLanguage} className="mt-4 justify-start gap-3 rounded-full h-12">
+            <Button variant="outline" onClick={toggleLanguage} className="mt-4 justify-start gap-3 rounded-full h-12 border-primary/20 text-primary font-bold">
               <Languages className="w-5 h-5 text-primary" />
               <span className="font-bold">{language === 'es' ? 'English (EN)' : 'Español (ES)'}</span>
             </Button>
