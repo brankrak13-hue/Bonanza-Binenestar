@@ -1,13 +1,10 @@
-
-'use client';
-
 import dynamic from 'next/dynamic';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Skeleton } from '@/components/ui/skeleton';
 
-// Cargamos el componente de forma dinámica para mejorar el tiempo de respuesta inicial (TTFB)
-// Esto permite que el Header y el shell de la página carguen instantáneamente.
+// Optimizamos la carga del asesor: habilitamos SSR para mejorar el FCP
+// pero mantenemos la carga dinámica para separar el bundle de IA
 const AiProductAdvisor = dynamic(() => import('@/components/AiProductAdvisor'), {
   loading: () => (
     <div className="max-w-screen-md mx-auto px-4 py-20 space-y-8">
@@ -20,7 +17,7 @@ const AiProductAdvisor = dynamic(() => import('@/components/AiProductAdvisor'), 
       <Skeleton className="h-16 w-full rounded-2xl" />
     </div>
   ),
-  ssr: false // Desactivamos SSR para este componente específico ya que es 100% interactivo
+  ssr: true // Habilitamos SSR para reducir el tiempo percibido de carga
 });
 
 export default function AgenteVirtualPage() {
