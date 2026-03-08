@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -11,6 +10,7 @@ import {
 import { useLanguage } from "@/context/LanguageContext";
 import { Plus, Clock, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 
 export default function MassageMenu() {
     const { t } = useLanguage();
@@ -27,7 +27,6 @@ export default function MassageMenu() {
 
     const handleRedirectToStripe = (link: string) => {
         if (link) {
-            // Abrimos en una pestaña nueva para evitar que el visualizador bloquee la página externa de Stripe
             window.open(link, '_blank', 'noopener,noreferrer');
         }
     };
@@ -41,9 +40,13 @@ export default function MassageMenu() {
                         {t('services.subtitle') || 'BIENESTAR PREMIUM'}
                     </div>
                     <h1 className="text-5xl sm:text-7xl font-bold text-gray-900 mb-8 font-headline leading-tight">{t('services.title')}</h1>
-                    <p className="mt-4 text-gray-500 max-w-2xl mx-auto text-lg leading-relaxed font-light italic">
-                        {t('services.desc') || 'Cada tratamiento es un ritual personalizado diseñado para tu armonía.'}
-                    </p>
+                    
+                    <div className="max-w-2xl mx-auto">
+                        <TextGenerateEffect 
+                            words={t('services.desc') || 'Cada tratamiento es un ritual personalizado diseñado para restaurar tu armonía interior.'} 
+                            className="text-gray-500 text-lg leading-relaxed font-light italic text-center"
+                        />
+                    </div>
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-12">
