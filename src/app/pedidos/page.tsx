@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect, Suspense } from 'react';
+import { useEffect, Suspense, useMemo } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
@@ -33,7 +33,7 @@ function PedidosContent() {
     if (status === 'success') {
       toast({
         title: t('auth.successLoginTitle') || '¡Éxito!',
-        description: 'Tu reserva ha sido procesada.',
+        description: 'Tu reserva ha sido procesada con éxito.',
       });
     }
   }, [searchParams, toast, t]);
@@ -48,8 +48,15 @@ function PedidosContent() {
 
   const { data: orders, isLoading: isOrdersLoading } = useCollection(ordersQuery);
 
-  const pendingOrders = orders?.filter(o => ['pending', 'processing', 'shipped'].includes(o.status)) || [];
-  const completedOrders = orders?.filter(o => ['delivered', 'cancelled'].includes(o.status)) || [];
+  const pendingOrders = useMemo(() => 
+    orders?.filter(o => ['pending', 'processing', 'shipped'].includes(o.status)) || [],
+    [orders]
+  );
+  
+  const completedOrders = useMemo(() => 
+    orders?.filter(o => ['delivered', 'cancelled'].includes(o.status)) || [],
+    [orders]
+  );
 
   if (isUserLoading) {
     return (
@@ -64,6 +71,7 @@ function PedidosContent() {
       <div className="max-w-screen-md mx-auto px-4 py-40 text-center">
         <ShoppingBag className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
         <h1 className="text-2xl font-bold mb-4">{t('appointments.noAuth')}</h1>
+        <p className="text-gray-500 mb-8">Inicia sesión para gestionar tus citas.</p>
       </div>
     );
   }

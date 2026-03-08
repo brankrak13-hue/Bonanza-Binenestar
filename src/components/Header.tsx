@@ -1,6 +1,7 @@
+
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { User, Menu, X, LogOut, Languages, LayoutDashboard } from "lucide-react";
 import { LotusIcon } from "@/components/icons/LotusIcon";
@@ -39,7 +40,13 @@ export default function Header() {
   const { data: adminRole } = useDoc(adminRef);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -61,9 +68,9 @@ export default function Header() {
     }
   };
 
-  const toggleLanguage = () => {
+  const toggleLanguage = useCallback(() => {
     setLanguage(language === 'es' ? 'en' : 'es');
-  };
+  }, [language, setLanguage]);
 
   return (
     <>

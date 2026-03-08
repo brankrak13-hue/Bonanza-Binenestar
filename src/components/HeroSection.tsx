@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -32,11 +33,11 @@ export default function HeroSection({ title, subtitle, description, buttonText, 
   const currentImage = getImage(image.id);
 
   useEffect(() => {
-    // Solo generamos partículas en el cliente para evitar hidratación lenta
-    const newParticles = Array.from({ length: 30 }).map(() => ({
-      x: `${Math.random() * 150 - 75}px`,
-      y: `${Math.random() * 150 - 75}px`,
-      duration: `${1.5 + Math.random() * 2}s`,
+    // Reducimos a 15 partículas para mejorar el TBT (Total Blocking Time)
+    const newParticles = Array.from({ length: 15 }).map(() => ({
+      x: `${Math.random() * 100 - 50}px`,
+      y: `${Math.random() * 100 - 50}px`,
+      duration: `${2 + Math.random() * 2}s`,
       left: `${Math.random() * 100}%`,
       top: `${Math.random() * 100}%`,
     }));
