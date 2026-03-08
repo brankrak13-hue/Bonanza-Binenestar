@@ -10,6 +10,7 @@ import { aiProductAdvisor, AiProductAdvisorOutput } from '@/ai/flows/ai-product-
 import { Skeleton } from '@/components/ui/skeleton';
 import { useLanguage } from '@/context/LanguageContext';
 import { HeroHighlight, Highlight } from '@/components/ui/hero-highlight';
+import { TextGenerateEffect } from '@/components/ui/text-generate-effect';
 
 export default function AiProductAdvisor() {
   const { t, language } = useLanguage();
@@ -90,9 +91,12 @@ export default function AiProductAdvisor() {
                 <CardTitle className="text-4xl md:text-5xl font-bold mb-4 tracking-tight font-headline text-gray-900">
                   Tu Oráculo <Highlight className="text-primary">Digital</Highlight>
                 </CardTitle>
-                <CardDescription className="max-w-md mx-auto text-base text-gray-500 leading-relaxed font-body italic">
-                  "{t('ai.desc')}"
-                </CardDescription>
+                <div className="max-w-md mx-auto mt-8">
+                  <TextGenerateEffect 
+                    words={t('ai.desc')} 
+                    className="text-base text-gray-500 leading-relaxed font-body italic text-center"
+                  />
+                </div>
               </CardHeader>
             </HeroHighlight>
             <CardContent className="px-6 sm:px-10 pb-16">
