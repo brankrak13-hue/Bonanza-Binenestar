@@ -5,6 +5,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useSiteSettings } from "@/context/SiteSettingsContext";
 import { Users, Wind, Sparkles, ShieldCheck } from "lucide-react";
 import { WobbleCard } from "@/components/ui/wobble-card";
+import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card";
 
 export default function About() {
   const { t } = useLanguage();
@@ -19,15 +20,21 @@ export default function About() {
         {/* BLOQUE 1: Identidad y Propósito */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-32">
           <div className="relative animate-fadeIn">
-            <div className="relative z-10 aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl">
-              <Image
-                src={image.imageUrl}
-                alt={image.description}
-                fill
-                className="object-cover"
-                data-ai-hint={image.imageHint}
-              />
-            </div>
+            <CardContainer className="inter-var w-full">
+              <CardBody className="relative group/card w-full h-auto">
+                <CardItem translateZ="100" className="w-full">
+                  <div className="relative z-10 aspect-[4/5] rounded-[3rem] overflow-hidden shadow-2xl">
+                    <Image
+                      src={image.imageUrl}
+                      alt={image.description}
+                      fill
+                      className="object-cover"
+                      data-ai-hint={image.imageHint}
+                    />
+                  </div>
+                </CardItem>
+              </CardBody>
+            </CardContainer>
             <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-primary/10 rounded-full blur-3xl -z-0 animate-pulse" />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full border border-primary/20 rounded-[3rem] translate-x-6 translate-y-6 -z-10" />
           </div>
