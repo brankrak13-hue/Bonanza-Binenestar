@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, m } from 'framer-motion';
 import { useState } from 'react';
 
 export const HoverEffect = ({
@@ -33,7 +33,7 @@ export const HoverEffect = ({
         >
           <AnimatePresence>
             {hoveredIndex === idx && (
-              <motion.span
+              <m.span
                 className="absolute inset-0 h-full w-full bg-primary/10 block rounded-3xl"
                 layoutId="hoverBackground"
                 initial={{ opacity: 0 }}
