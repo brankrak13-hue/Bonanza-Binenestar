@@ -56,7 +56,7 @@ export const translations: any = {
       v3_t: "Presencia Plena",
       v3_d: "Un compromiso con el 'aquí y ahora', desconectando de lo digital para reconectar con lo sensorial.",
       ecosystem_t: "Ecosistema de Bienestar",
-      ecosystem_d: "Un modelo donde ganan los clientes, los terapeutas y los aliados (Hoteles/Airbnb). Garantizamos excelencia con más de 17 años de trayectoria en el sector."
+      ecosystem_d: "Un modelo donde ganan los clientes, los terapeutas y los aliados (Hoteles/Airbnb). Garantizamos excelencia con más de 22 años de trayectoria en el sector."
     },
     home: {
       facial: {
@@ -321,7 +321,7 @@ export const translations: any = {
       v3_t: "Full Presence",
       v3_d: "A commitment to the 'here and now', disconnecting from the digital to reconnect with the sensory.",
       ecosystem_t: "Wellness Ecosystem",
-      ecosystem_d: "A model where clients, therapists, and partners (Hotels/Airbnb) win. We guarantee excellence with over 17 years of experience in the sector."
+      ecosystem_d: "A model where clients, therapists, and partners (Hotels/Airbnb) win. We guarantee excellence with over 22 years of experience in the sector."
     },
     home: {
       facial: {

@@ -126,7 +126,7 @@ export default function About() {
                 Trayectoria Garantizada
               </h2>
               <div className="flex flex-col gap-2 mb-8">
-                 <p className="text-6xl font-bold text-white font-headline">17+</p>
+                 <p className="text-6xl font-bold text-white font-headline">22+</p>
                  <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-white/60">Años de Experiencia</p>
               </div>
               <p className="text-left text-sm text-white/90 leading-relaxed italic">
