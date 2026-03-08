@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { aiProductAdvisor, AiProductAdvisorOutput } from '@/ai/flows/ai-product-advisor';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useLanguage } from '@/context/LanguageContext';
+import { HeroHighlight, Highlight } from '@/components/ui/hero-highlight';
 
 export default function AiProductAdvisor() {
   const { t, language } = useLanguage();
@@ -80,16 +81,20 @@ export default function AiProductAdvisor() {
       <div className="max-w-screen-md mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="animate-fadeIn">
           <Card className="border-none shadow-[0_32px_64px_-16px_rgba(41,102,84,0.15)] glass-card rounded-[3rem] overflow-hidden border border-white/40">
-            <CardHeader className="text-center pt-12 pb-8">
-              <div className="mx-auto bg-primary/10 rounded-full p-5 w-fit mb-6 relative group">
-                  <div className="absolute inset-0 bg-primary/20 rounded-full animate-ping group-hover:animate-none opacity-40" />
-                  <Sparkles className="w-8 h-8 text-primary relative z-10 animate-spin-slow" />
-              </div>
-              <CardTitle className="text-4xl md:text-5xl font-bold mb-4 tracking-tight font-headline text-gray-900">{t('ai.title')}</CardTitle>
-              <CardDescription className="max-w-md mx-auto text-base text-gray-500 leading-relaxed font-body italic">
-                "{t('ai.desc')}"
-              </CardDescription>
-            </CardHeader>
+            <HeroHighlight>
+              <CardHeader className="text-center pt-12 pb-8 relative z-30">
+                <div className="mx-auto bg-primary/10 rounded-full p-5 w-fit mb-6 relative group">
+                    <div className="absolute inset-0 bg-primary/20 rounded-full animate-ping group-hover:animate-none opacity-40" />
+                    <Sparkles className="w-8 h-8 text-primary relative z-10 animate-spin-slow" />
+                </div>
+                <CardTitle className="text-4xl md:text-5xl font-bold mb-4 tracking-tight font-headline text-gray-900">
+                  Tu Oráculo <Highlight className="text-primary">Digital</Highlight>
+                </CardTitle>
+                <CardDescription className="max-w-md mx-auto text-base text-gray-500 leading-relaxed font-body italic">
+                  "{t('ai.desc')}"
+                </CardDescription>
+              </CardHeader>
+            </HeroHighlight>
             <CardContent className="px-6 sm:px-10 pb-16">
               <form onSubmit={handleSubmit} className="relative group space-y-6">
                 <div className="relative">
