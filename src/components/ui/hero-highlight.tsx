@@ -1,6 +1,6 @@
 'use client';
 import { cn } from '@/lib/utils';
-import { useMotionValue, motion, useMotionTemplate } from 'framer-motion';
+import { useMotionValue, m, useMotionTemplate } from 'framer-motion';
 import React from 'react';
 
 export const HeroHighlight = ({
@@ -41,7 +41,7 @@ export const HeroHighlight = ({
           backgroundImage: `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='16' height='16' fill='none'%3E%3Ccircle fill='%236366f1' id='pattern-circle' cx='10' cy='10' r='1.5'%3E%3C/circle%3E%3C/svg%3E")`,
         }}
       />
-      <motion.div
+      <m.div
         className="pointer-events-none absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100"
         style={{
           backgroundImage: `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='16' height='16' fill='none'%3E%3Ccircle fill='%2310b981' id='pattern-circle' cx='10' cy='10' r='1.5'%3E%3C/circle%3E%3C/svg%3E")`,
@@ -75,7 +75,7 @@ export const Highlight = ({
   className?: string;
 }) => {
   return (
-    <motion.span
+    <m.span
       initial={{
         backgroundSize: '0% 100%',
       }}
@@ -98,6 +98,6 @@ export const Highlight = ({
       )}
     >
       {children}
-    </motion.span>
+    </m.span>
   );
 };

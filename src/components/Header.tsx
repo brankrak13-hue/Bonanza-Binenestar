@@ -9,7 +9,7 @@ import AuthModal from "@/components/AuthModal";
 import { useUser, useAuth, useFirestore, useDoc, useMemoFirebase } from "@/firebase";
 import { signOut } from "firebase/auth";
 import { doc } from "firebase/firestore";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -129,7 +129,7 @@ export default function Header() {
                   <span className="relative z-10">{item.name}</span>
                   <AnimatePresence>
                     {hoveredIndex === idx && (
-                      <motion.span
+                      <m.span
                         layoutId="nav-glow"
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}

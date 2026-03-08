@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { Check, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -53,7 +53,7 @@ export const Button = ({
     >
       <AnimatePresence mode="wait">
         {status === 'idle' && (
-          <motion.span
+          <m.span
             key="idle"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -61,10 +61,10 @@ export const Button = ({
             className="flex items-center justify-center gap-2"
           >
             {children}
-          </motion.span>
+          </m.span>
         )}
         {status === 'loading' && (
-          <motion.span
+          <m.span
             key="loading"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -73,10 +73,10 @@ export const Button = ({
           >
             <Loader2 className="h-4 w-4 animate-spin" />
             {loadingText}
-          </motion.span>
+          </m.span>
         )}
         {status === 'success' && (
-          <motion.span
+          <m.span
             key="success"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -85,7 +85,7 @@ export const Button = ({
           >
             <Check className="h-4 w-4" />
             {successText}
-          </motion.span>
+          </m.span>
         )}
       </AnimatePresence>
     </button>

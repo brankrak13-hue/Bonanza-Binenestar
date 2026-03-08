@@ -1,13 +1,13 @@
-"use client";
-import React, { useRef } from "react";
+'use client';
+import React, { useRef } from 'react';
 import {
-  motion,
+  m,
   useMotionValue,
   useSpring,
   useTransform,
   useMotionTemplate,
-} from "framer-motion";
-import { cn } from "@/lib/utils";
+} from 'framer-motion';
+import { cn } from '@/lib/utils';
 
 export const CometCard = ({
   rotateDepth = 17.5,
@@ -80,7 +80,7 @@ export const CometCard = ({
 
   return (
     <div className={cn("perspective-[1000px] [transform-style:preserve-3d]", className)}>
-      <motion.div
+      <m.div
         ref={ref}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
@@ -102,7 +102,7 @@ export const CometCard = ({
         className="relative rounded-2xl"
       >
         {children}
-        <motion.div
+        <m.div
           className="pointer-events-none absolute inset-0 z-50 h-full w-full rounded-[inherit] mix-blend-overlay"
           style={{
             background: glareBackground,
@@ -110,7 +110,7 @@ export const CometCard = ({
           }}
           transition={{ duration: 0.2 }}
         />
-      </motion.div>
+      </m.div>
     </div>
   );
 };
