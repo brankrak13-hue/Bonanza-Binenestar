@@ -9,6 +9,7 @@ import AuthModal from "@/components/AuthModal";
 import { useUser, useAuth, useFirestore, useDoc, useMemoFirebase } from "@/firebase";
 import { signOut } from "firebase/auth";
 import { doc } from "firebase/firestore";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,6 +27,8 @@ export default function Header() {
   const [isBannerVisible, setIsBannerVisible] = useState(true);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  
   const { user, isUserLoading } = useUser();
   const { t, language, setLanguage } = useLanguage();
   const auth = useAuth();
@@ -106,14 +109,30 @@ export default function Header() {
                 </Link>
             </div>
 
-            <nav className="hidden lg:flex items-center space-x-10">
-              {navItems.map((item) => (
+            <nav 
+              className="hidden lg:flex items-center space-x-1"
+              onMouseLeave={() => setHoveredIndex(null)}
+            >
+              {navItems.map((item, idx) => (
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="nav-link text-[11px] tracking-[0.2em] font-bold text-foreground/60 hover:text-primary py-2"
+                  onMouseEnter={() => setHoveredIndex(idx)}
+                  className="relative px-5 py-2.5 text-sm tracking-[0.1em] font-medium font-headline text-foreground/70 hover:text-primary transition-colors duration-300"
                 >
-                  {item.name}
+                  <span className="relative z-10">{item.name}</span>
+                  <AnimatePresence>
+                    {hoveredIndex === idx && (
+                      <motion.span
+                        layoutId="nav-glow"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                        className="absolute inset-0 bg-primary/5 border border-primary/10 rounded-full shadow-[0_0_15px_rgba(41,102,84,0.1)]"
+                      />
+                    )}
+                  </AnimatePresence>
                 </Link>
               ))}
             </nav>
