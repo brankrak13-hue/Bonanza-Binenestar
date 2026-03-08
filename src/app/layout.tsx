@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Montserrat, Cormorant_Garamond } from 'next/font/google';
@@ -6,6 +7,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
 import { LanguageProvider } from '@/context/LanguageContext';
 import { SiteSettingsProvider } from '@/context/SiteSettingsContext';
+import { LazyMotion, domAnimation } from 'framer-motion';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -32,8 +34,10 @@ export default function RootLayout({
         <FirebaseClientProvider>
           <LanguageProvider>
             <SiteSettingsProvider>
-              {children}
-              <Toaster />
+              <LazyMotion features={domAnimation}>
+                {children}
+                <Toaster />
+              </LazyMotion>
             </SiteSettingsProvider>
           </LanguageProvider>
         </FirebaseClientProvider>
