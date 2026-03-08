@@ -40,7 +40,7 @@ export default function Header() {
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -74,7 +74,7 @@ export default function Header() {
             type="button" 
             onClick={() => setIsBannerVisible(false)}
             className="absolute right-4 top-1/2 -translate-y-1/2 hover:opacity-70 transition-opacity"
-            aria-label="Close banner"
+            aria-label="Cerrar banner"
           >
             <X className="w-3 h-3 md:w-4 h-4" />
           </button>
@@ -93,14 +93,14 @@ export default function Header() {
                 type="button"
                 className="p-2 -ml-2 text-foreground/70 hover:text-primary transition-colors"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                aria-label="Open menu"
+                aria-label="Abrir menú"
               >
                 <Menu className="w-6 h-6" />
               </button>
             </div>
 
             <div className="flex-1 flex justify-center lg:justify-start">
-                <Link href="/" className="flex flex-col items-center group">
+                <Link href="/" className="flex flex-col items-center group" aria-label="Bonanza Home">
                     <div className="flex items-center">
                         <LotusIcon className="w-7 h-7 md:w-8 h-8 text-primary transition-transform duration-700 group-hover:rotate-[360deg]" />
                         <span className="font-headline text-2xl md:text-3xl lg:text-4xl font-bold tracking-wider text-foreground ml-2">BONANZA</span>
@@ -143,6 +143,7 @@ export default function Header() {
                 size="icon" 
                 onClick={toggleLanguage} 
                 className="text-foreground/60 hover:text-primary transition-all rounded-full"
+                aria-label={`Cambiar a ${language === 'es' ? 'Inglés' : 'Español'}`}
               >
                 <span className="text-[10px] font-bold">{language.toUpperCase()}</span>
               </Button>
@@ -150,7 +151,11 @@ export default function Header() {
               {user ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <button type="button" className="p-2 text-primary hover:text-primary/80 transition-all duration-300 hover:scale-110">
+                    <button 
+                      type="button" 
+                      className="p-2 text-primary hover:text-primary/80 transition-all duration-300 hover:scale-110"
+                      aria-label="Perfil de usuario"
+                    >
                       <User className="w-5 h-5" />
                     </button>
                   </DropdownMenuTrigger>
@@ -192,6 +197,7 @@ export default function Header() {
                   className="p-2 text-foreground/60 hover:text-primary transition-all duration-300 hover:scale-110"
                   onClick={() => setIsAuthModalOpen(true)}
                   disabled={isUserLoading}
+                  aria-label="Iniciar sesión"
                 >
                   <User className="w-5 h-5" />
                 </button>
@@ -201,7 +207,6 @@ export default function Header() {
         </div>
       </header>
 
-      {/* Mobile Menu Overlay */}
       <div 
         className={cn(
           "fixed inset-0 z-[60] bg-black/60 transition-opacity duration-500 lg:hidden",
@@ -210,7 +215,6 @@ export default function Header() {
         onClick={() => setIsMenuOpen(false)}
       ></div>
 
-      {/* Mobile Menu Drawer */}
       <div className={cn(
         "fixed inset-y-0 left-0 z-[70] w-[85%] max-w-sm transform bg-background shadow-2xl transition-transform duration-500 ease-in-out lg:hidden h-full flex flex-col",
         isMenuOpen ? "translate-x-0" : "-translate-x-full"
@@ -225,6 +229,7 @@ export default function Header() {
               type="button"
               className="p-2 text-foreground hover:bg-secondary rounded-full transition-colors"
               onClick={() => setIsMenuOpen(false)}
+              aria-label="Cerrar menú"
             >
               <X className="w-6 h-6" />
             </button>

@@ -29,15 +29,14 @@ export default function HeroSection({ title, subtitle, description, buttonText, 
   const { getImage } = useSiteSettings();
   const [particles, setParticles] = useState<Particle[]>([]);
   
-  // Usar la imagen del contexto (posiblemente sobreescrita por el admin)
   const currentImage = getImage(image.id);
 
   useEffect(() => {
-    // Generamos los datos de las 50 partículas para la animación magnética
-    const newParticles = Array.from({ length: 50 }).map(() => ({
-      x: `${Math.random() * 200 - 100}px`,
-      y: `${Math.random() * 200 - 100}px`,
-      duration: `${1 + Math.random() * 2}s`,
+    // Solo generamos partículas en el cliente para evitar hidratación lenta
+    const newParticles = Array.from({ length: 30 }).map(() => ({
+      x: `${Math.random() * 150 - 75}px`,
+      y: `${Math.random() * 150 - 75}px`,
+      duration: `${1.5 + Math.random() * 2}s`,
       left: `${Math.random() * 100}%`,
       top: `${Math.random() * 100}%`,
     }));
@@ -52,8 +51,10 @@ export default function HeroSection({ title, subtitle, description, buttonText, 
           alt={currentImage.description}
           fill
           priority
+          quality={85}
           className="object-cover animate-hero-zoom"
           data-ai-hint={currentImage.imageHint}
+          sizes="100vw"
         />
         <div className="absolute inset-0 bg-black/40 backdrop-grayscale-[0.2]" />
       </div>
@@ -72,11 +73,11 @@ export default function HeroSection({ title, subtitle, description, buttonText, 
           <Link 
             href={buttonLink} 
             className="magnetic bg-primary text-white border-2 border-primary px-10 py-4 text-sm tracking-[0.2em] uppercase font-bold transition-all duration-500 rounded-full hover:bg-accent hover:border-accent hover:shadow-2xl hover:-translate-y-1 group inline-flex items-center gap-2"
+            aria-label={buttonText}
           >
             <span className="relative z-10">{t('hero.cta')}</span>
             <span className="relative z-10 transition-transform duration-300 group-hover:translate-x-1">→</span>
             
-            {/* Particle Field Logic */}
             <div className="particles-field">
               {particles.map((p, i) => (
                 <div
