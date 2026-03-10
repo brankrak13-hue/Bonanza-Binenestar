@@ -32,11 +32,11 @@ export default function HeroSection({ title, subtitle, description, buttonText, 
   const currentImage = getImage(image.id);
 
   useEffect(() => {
-    // Reducimos partículas para liberar el hilo principal durante la carga inicial
-    const newParticles = Array.from({ length: 10 }).map(() => ({
-      x: `${Math.random() * 60 - 30}px`,
-      y: `${Math.random() * 60 - 30}px`,
-      duration: `${3 + Math.random() * 2}s`,
+    // Generamos 50 partículas para el efecto magnético solicitado
+    const newParticles = Array.from({ length: 50 }).map(() => ({
+      x: `${Math.random() * 200 - 100}px`,
+      y: `${Math.random() * 200 - 100}px`,
+      duration: `${1.5 + Math.random() * 2}s`,
       left: `${Math.random() * 100}%`,
       top: `${Math.random() * 100}%`,
     }));
