@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -10,30 +11,30 @@
     --card-foreground: 40 10% 20%;
     --popover: 45 30% 98%;
     --popover-foreground: 40 10% 20%;
-    /* Darkened primary from 40% to 35% for better AA contrast on white */
-    --primary: 165 60% 35%;
+    /* Darkened primary for better AA contrast */
+    --primary: 165 60% 32%;
     --primary-foreground: 0 0% 100%;
     --secondary: 165 15% 94%;
     --secondary-foreground: 165 5% 9%;
     --muted: 165 15% 94%;
-    --muted-foreground: 165 10% 40%;
-    --accent: 41 49% 57%;
+    --muted-foreground: 165 10% 35%;
+    --accent: 41 49% 52%;
     --accent-foreground: 40 10% 20%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 165 10% 89.8%;
     --input: 165 10% 89.8%;
-    --ring: 165 60% 35%;
+    --ring: 165 60% 32%;
     --radius: 0.75rem;
   }
 }
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border outline-ring;
   }
   body {
-    @apply bg-background text-foreground overflow-x-hidden;
+    @apply bg-background text-foreground overflow-x-hidden antialiased;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-headline tracking-tight;
@@ -53,52 +54,14 @@
     @apply bg-white/70 backdrop-blur-md border border-white/20;
   }
 
-  .animate-spin-slow {
-    animation: spin 12s linear infinite;
-  }
-
-  /* Magnetic Field Button Styles */
-  .magnetic {
-    @apply relative overflow-visible !important;
-  }
-
-  .particles-field {
-    @apply absolute pointer-events-none;
-    inset: -100%;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-  }
-
-  .particle {
-    @apply absolute bg-white/60 rounded-full;
-    width: 3px;
-    height: 3px;
-  }
-
-  .magnetic:hover .particles-field {
-    opacity: 1;
-  }
-
-  @keyframes particleFloat {
-    0% { transform: translate(var(--x), var(--y)) scale(0); opacity: 0; }
-    50% { transform: translate(calc(var(--x) * -0.5), calc(var(--y) * -0.5)) scale(1); opacity: 0.8; }
-    100% { transform: translate(var(--x), var(--y)) scale(0); opacity: 0; }
-  }
-
-  /* Optimized Glow: Uses opacity instead of background-position to avoid layout thrashing */
+  /* Optimized animations using opacity/transform instead of layout properties */
   .glow-on-hover {
     @apply relative z-0 overflow-visible transition-all duration-500 !important;
   }
 
   .glow-on-hover:before {
     content: '';
-    background: linear-gradient(45deg, 
-      hsl(var(--primary)), 
-      hsl(var(--accent)), 
-      #fff, 
-      hsl(var(--accent)), 
-      hsl(var(--primary))
-    );
+    background: linear-gradient(45deg, hsl(var(--primary)), hsl(var(--accent)), #fff, hsl(var(--accent)), hsl(var(--primary)));
     position: absolute;
     top: -2px;
     left: -2px;
@@ -115,6 +78,17 @@
   .glow-on-hover:hover:before {
     opacity: 0.6;
   }
+
+  /* Wave animation */
+  @keyframes wave {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+
+  .wave-text span {
+    @apply inline-block;
+    animation: wave 2s ease-in-out infinite;
+  }
 }
 
 @keyframes spin {
@@ -122,18 +96,11 @@
   to { transform: rotate(360deg); }
 }
 
-@keyframes revealSection {
-  0% { 
-    opacity: 0; 
-    transform: translateY(20px);
-  }
-  100% { 
-    opacity: 1; 
-    transform: translateY(0);
-  }
+.animate-spin-slow {
+  animation: spin 12s linear infinite;
 }
 
-#contact:target, #about:target, #services:target {
-  animation: revealSection 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+/* Scroll margin for anchor links */
+#contact, #about, #services {
   scroll-margin-top: 100px;
 }

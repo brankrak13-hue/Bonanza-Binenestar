@@ -37,34 +37,10 @@ const nextConfig: NextConfig = {
           },
         ],
       },
-      {
-        source: '/fonts/(.*)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-        ],
-      },
-    ];
-  },
-  async rewrites() {
-    return [
-      {
-        source: '/services',
-        destination: '/servicios',
-      },
-      {
-        source: '/about',
-        destination: '/nosotros',
-      },
-      {
-        source: '/ai-advisor',
-        destination: '/agente-virtual',
-      },
     ];
   },
   images: {
+    qualities: [75, 85],
     remotePatterns: [
       {
         protocol: 'https',

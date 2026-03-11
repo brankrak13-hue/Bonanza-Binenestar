@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -32,7 +33,7 @@ export default function HeroSection({ title, subtitle, description, buttonText, 
   const currentImage = getImage(image.id);
 
   useEffect(() => {
-    // Generamos 50 partículas para el efecto magnético solicitado
+    // Generamos partículas para el efecto magnético
     const newParticles = Array.from({ length: 50 }).map(() => ({
       x: `${Math.random() * 200 - 100}px`,
       y: `${Math.random() * 200 - 100}px`,
@@ -52,7 +53,6 @@ export default function HeroSection({ title, subtitle, description, buttonText, 
           fill
           priority={true}
           fetchPriority="high"
-          loading="eager"
           decoding="sync"
           quality={85}
           className="object-cover animate-hero-zoom"

@@ -4,9 +4,10 @@
 import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 import { useSiteSettings } from "@/context/SiteSettingsContext";
-import { Users, Wind, Sparkles, ShieldCheck } from "lucide-react";
+import { Users, Wind, Sparkles, ShieldCheck, Award } from "lucide-react";
 import { WobbleCard } from "@/components/ui/wobble-card";
 import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card";
+import { m } from "framer-motion";
 
 export default function About() {
   const { t } = useLanguage();
@@ -18,9 +19,9 @@ export default function About() {
     <section id="about" className="bg-background py-20 sm:py-32 overflow-hidden">
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* BLOQUE 1: Identidad y Propósito */}
+        {/* BLOQUE 1: Identidad y Propósito con Efecto de Revelado */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-32">
-          <div className="relative animate-fadeIn">
+          <div className="relative">
             <CardContainer className="inter-var w-full">
               <CardBody className="relative group/card w-full h-auto">
                 <CardItem translateZ="100" className="w-full">
@@ -31,28 +32,28 @@ export default function About() {
                       fill
                       className="object-cover"
                       data-ai-hint={image.imageHint}
+                      sizes="(max-width: 768px) 100vw, 50vw"
                     />
                   </div>
                 </CardItem>
               </CardBody>
             </CardContainer>
             <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-primary/10 rounded-full blur-3xl -z-0 animate-pulse" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full border border-primary/20 rounded-[3rem] translate-x-6 translate-y-6 -z-10" />
           </div>
 
           <div className="space-y-8">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/5 text-primary text-xs font-bold tracking-[0.2em] uppercase border border-primary/10">
-              <Sparkles className="w-3.5 h-3.5" />
-              {t('about.subtitle')}
+            <div className="wave-text inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/5 text-primary text-xs font-bold tracking-[0.2em] uppercase border border-primary/10">
+              {t('about.subtitle').split('').map((char: string, i: number) => (
+                <span key={i} style={{ animationDelay: `${i * 0.1}s` }}>{char === ' ' ? '\u00A0' : char}</span>
+              ))}
             </div>
             <h2 className="text-5xl lg:text-7xl font-bold text-gray-900 font-headline leading-tight">
               {t('about.title')}
             </h2>
             
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-xl font-bold text-primary font-headline mb-3 flex items-center gap-3">
-                  <div className="w-8 h-px bg-primary/30" />
+            <div className="space-y-10">
+              <div className="relative pl-8 border-l-2 border-primary/20">
+                <h3 className="text-2xl font-bold text-primary font-headline mb-4">
                   {t('about.identity_q')}
                 </h3>
                 <p className="text-gray-600 leading-relaxed text-lg">
@@ -60,9 +61,8 @@ export default function About() {
                 </p>
               </div>
 
-              <div>
-                <h3 className="text-xl font-bold text-primary font-headline mb-3 flex items-center gap-3">
-                  <div className="w-8 h-px bg-primary/30" />
+              <div className="relative pl-8 border-l-2 border-accent/20">
+                <h3 className="text-2xl font-bold text-accent font-headline mb-4">
                   {t('about.vision_t')}
                 </h3>
                 <p className="text-gray-600 italic leading-relaxed text-lg">
@@ -73,7 +73,7 @@ export default function About() {
           </div>
         </div>
 
-        {/* BLOQUE 2: Filosofía Bonanza (Valores) */}
+        {/* BLOQUE 2: Valores */}
         <div className="mb-32">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 font-headline mb-4">{t('about.values_t')}</h2>
@@ -86,8 +86,12 @@ export default function About() {
               { icon: Wind, title: t('about.v2_t'), desc: t('about.v2_d') },
               { icon: Sparkles, title: t('about.v3_t'), desc: t('about.v3_d') },
             ].map((value, idx) => (
-              <div 
+              <m.div 
                 key={idx} 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.2 }}
+                viewport={{ once: true }}
                 className="p-10 rounded-[2.5rem] bg-white border border-transparent hover:border-primary/20 hover:shadow-2xl transition-all duration-500 group text-center"
               >
                 <div className="w-16 h-16 bg-secondary/50 rounded-2xl flex items-center justify-center mx-auto mb-8 group-hover:bg-primary group-hover:text-white transition-colors duration-500">
@@ -97,12 +101,12 @@ export default function About() {
                 <p className="text-gray-500 leading-relaxed text-sm">
                   {value.desc}
                 </p>
-              </div>
+              </m.div>
             ))}
           </div>
         </div>
 
-        {/* BLOQUE 3: Propuesta de Valor y Ecosistema - ADAPTADO CON WOBBLE CARD */}
+        {/* BLOQUE 3: Ecosistema y Trayectoria (Timeline Visual) */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-screen-xl mx-auto w-full">
           <WobbleCard
             containerClassName="col-span-1 lg:col-span-2 h-full bg-primary min-h-[400px]"
@@ -124,6 +128,7 @@ export default function About() {
             className="p-10 flex flex-col justify-center"
           >
             <div className="relative z-10">
+              <Award className="w-12 h-12 text-white/40 mb-6" />
               <h2 className="text-left text-balance text-2xl font-bold font-headline text-white mb-6">
                 {t('about.trayectory_t')}
               </h2>
@@ -135,7 +140,6 @@ export default function About() {
                 "{t('about.trayectory_q')}"
               </p>
             </div>
-            <Sparkles className="absolute -right-8 -top-8 w-32 h-32 text-white/10" />
           </WobbleCard>
 
           <WobbleCard 
