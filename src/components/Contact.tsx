@@ -20,6 +20,17 @@ export default function Contact() {
   const [isCalendarOpen, setIsCalendarOpen] = React.useState(false);
   const [selectedTime, setSelectedTime] = React.useState<string>("7:30 AM");
 
+  // State to track mouse position for the yellow spotlight effect
+  const [mousePos, setMousePos] = React.useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
   const whatsappLink = "https://wa.me/529843143457?text=Hola,%20quisiera%20reservar%20una%20sesión%20de%20Sound%20Healing%20o%20Masaje.";
   const currentLocale = language === 'es' ? es : enUS;
 
@@ -167,10 +178,20 @@ export default function Contact() {
             <Button 
               type="submit" 
               size="lg" 
-              className="glow-on-hover w-full sm:w-auto px-16 h-16 text-sm bg-white text-primary border border-primary/20 shadow-xl hover:shadow-primary/5 transition-all duration-500 font-bold tracking-[0.15em] uppercase flex items-center justify-center rounded-full"
+              onMouseMove={handleMouseMove}
+              className="relative group w-full sm:w-auto px-16 h-16 text-sm bg-white text-primary border border-primary/20 shadow-xl hover:shadow-primary/5 transition-all duration-500 font-bold tracking-[0.15em] uppercase flex items-center justify-center rounded-full overflow-hidden"
             >
-              {t('contact.submit')}
-              <MessageCircle className="w-4 h-4 ml-2" />
+              {/* Mouse-following yellow spotlight effect */}
+              <div 
+                className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"
+                style={{
+                  background: `radial-gradient(circle at ${mousePos.x}px ${mousePos.y}px, rgba(255, 215, 0, 0.35), transparent 70%)`,
+                }}
+              />
+              <span className="relative z-10 flex items-center justify-center gap-2">
+                {t('contact.submit')}
+                <MessageCircle className="w-4 h-4" />
+              </span>
             </Button>
           </div>
         </form>
