@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import { Montserrat, Cormorant_Garamond } from 'next/font/google';
 import './globals.css';
@@ -19,7 +20,7 @@ const cormorant = Cormorant_Garamond({
 
 /**
  * Metadata oficial del sitio para SEO y configuración del navegador.
- * Nota: Next.js detectará automáticamente un archivo favicon.ico en /app o /public.
+ * Next.js utilizará automáticamente los archivos robots.ts y sitemap.ts creados.
  */
 export const metadata: Metadata = {
   title: {
@@ -29,7 +30,14 @@ export const metadata: Metadata = {
   description: 'Santuario de bienestar holístico en Playa del Carmen. Masajes personalizados, Sound Healing y rituales de relajación profunda para el alma.',
   keywords: ['bienestar', 'masajes', 'sound healing', 'playa del carmen', 'holístico', 'relajación'],
   authors: [{ name: 'Bonanza' }],
-  viewport: 'width=device-width, initial-scale=1',
+  metadataBase: new URL('https://bonanza-bienestar.web.app'),
+  alternates: {
+    canonical: '/',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
