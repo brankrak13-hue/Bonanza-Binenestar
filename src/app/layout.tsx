@@ -1,12 +1,7 @@
-'use client';
-
+import type { Metadata } from 'next';
 import { Montserrat, Cormorant_Garamond } from 'next/font/google';
 import './globals.css';
-import { Toaster } from '@/components/ui/toaster';
-import { FirebaseClientProvider } from '@/firebase/client-provider';
-import { LanguageProvider } from '@/context/LanguageContext';
-import { SiteSettingsProvider } from '@/context/SiteSettingsContext';
-import { LazyMotion, domAnimation } from 'framer-motion';
+import { Providers } from '@/components/Providers';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -22,6 +17,21 @@ const cormorant = Cormorant_Garamond({
   display: 'swap',
 });
 
+/**
+ * Metadata oficial del sitio para SEO y configuración del navegador.
+ * Nota: Next.js detectará automáticamente un archivo favicon.ico en /app o /public.
+ */
+export const metadata: Metadata = {
+  title: {
+    default: 'Bonanza | Arte & Bienestar',
+    template: '%s | Bonanza'
+  },
+  description: 'Santuario de bienestar holístico en Playa del Carmen. Masajes personalizados, Sound Healing y rituales de relajación profunda para el alma.',
+  keywords: ['bienestar', 'masajes', 'sound healing', 'playa del carmen', 'holístico', 'relajación'],
+  authors: [{ name: 'Bonanza' }],
+  viewport: 'width=device-width, initial-scale=1',
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -30,16 +40,9 @@ export default function RootLayout({
   return (
     <html lang="es" className={`!scroll-smooth ${montserrat.variable} ${cormorant.variable}`} data-scroll-behavior="smooth" suppressHydrationWarning>
       <body className="font-body antialiased" suppressHydrationWarning>
-        <FirebaseClientProvider>
-          <LanguageProvider>
-            <SiteSettingsProvider>
-              <LazyMotion features={domAnimation} strict>
-                {children}
-                <Toaster />
-              </LazyMotion>
-            </SiteSettingsProvider>
-          </LanguageProvider>
-        </FirebaseClientProvider>
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );
