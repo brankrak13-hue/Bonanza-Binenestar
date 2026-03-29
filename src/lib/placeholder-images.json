@@ -1,6 +1,12 @@
 {
   "placeholderImages": [
     {
+      "id": "brand-logo",
+      "description": "Logo de Bonanza Paz y Bienestar, flor de loto dorada y turquesa.",
+      "imageUrl": "https://picsum.photos/seed/bonanza-logo/200/200",
+      "imageHint": "lotus flower"
+    },
+    {
       "id": "hero-wellness",
       "description": "Zen stones stacked on a blurred background, representing balance and tranquility.",
       "imageUrl": "https://images.unsplash.com/photo-1595433261422-cd66de8368a3?auto=format&q=75&w=1200",

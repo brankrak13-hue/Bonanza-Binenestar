@@ -2,9 +2,10 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { User, Menu, X, LogOut, Languages, LayoutDashboard } from "lucide-react";
-import { LotusIcon } from "@/components/icons/LotusIcon";
 import { useLanguage } from "@/context/LanguageContext";
+import { useSiteSettings } from "@/context/SiteSettingsContext";
 import AuthModal from "@/components/AuthModal";
 import { useUser, useAuth, useFirestore, useDoc, useMemoFirebase } from "@/firebase";
 import { signOut } from "firebase/auth";
@@ -31,9 +32,12 @@ export default function Header() {
   
   const { user, isUserLoading } = useUser();
   const { t, language, setLanguage } = useLanguage();
+  const { getImage } = useSiteSettings();
   const auth = useAuth();
   const db = useFirestore();
   const { toast } = useToast();
+
+  const brandLogo = getImage('brand-logo');
 
   const adminRef = useMemoFirebase(() => (user && db ? doc(db, 'roles_admin', user.uid) : null), [user, db]);
   const { data: adminRole } = useDoc(adminRef);
@@ -106,12 +110,20 @@ export default function Header() {
             </div>
 
             <div className="flex-1 flex justify-center lg:justify-start">
-                <Link href="/" className="flex flex-col items-center group" aria-label="Bonanza Home">
-                    <div className="flex items-center">
-                        <LotusIcon className="w-7 h-7 md:w-8 h-8 text-primary transition-transform duration-700 group-hover:rotate-[360deg]" />
-                        <span className="font-headline text-2xl md:text-3xl lg:text-4xl font-bold tracking-wider text-foreground ml-2">BONANZA</span>
+                <Link href="/" className="flex items-center gap-3 group" aria-label="Bonanza Home">
+                    <div className="relative w-12 h-12 md:w-14 md:h-14 transition-transform duration-700 group-hover:scale-110">
+                        <Image
+                            src={brandLogo.imageUrl}
+                            alt={brandLogo.description}
+                            fill
+                            className="object-contain"
+                            data-ai-hint={brandLogo.imageHint}
+                        />
                     </div>
-                    <span className="text-[8px] md:text-[10px] font-bold tracking-[0.3em] text-primary -mt-1">{language === 'es' ? 'ARTE & BIENESTAR' : 'ART & WELLNESS'}</span>
+                    <div className="flex flex-col">
+                        <span className="font-headline text-2xl md:text-3xl lg:text-4xl font-bold tracking-wider text-foreground leading-none">BONANZA</span>
+                        <span className="text-[8px] md:text-[10px] font-bold tracking-[0.3em] text-primary mt-1 uppercase whitespace-nowrap">{t('nav.slogan')}</span>
+                    </div>
                 </Link>
             </div>
 
@@ -227,10 +239,17 @@ export default function Header() {
       )}>
         <div className="p-8 flex flex-col h-full">
           <div className="flex justify-between items-center mb-12">
-            <div className="flex items-center">
-              <LotusIcon className="w-6 h-6 text-primary" />
-              <span className="font-headline text-xl font-bold ml-2">BONANZA</span>
-            </div>
+            <Link href="/" className="flex items-center gap-3" onClick={() => setIsMenuOpen(false)}>
+                <div className="relative w-10 h-10">
+                    <Image
+                        src={brandLogo.imageUrl}
+                        alt={brandLogo.description}
+                        fill
+                        className="object-contain"
+                    />
+                </div>
+                <span className="font-headline text-xl font-bold">BONANZA</span>
+            </Link>
             <button
               type="button"
               className="p-2 text-foreground hover:bg-secondary rounded-full transition-colors"

@@ -1,4 +1,3 @@
-
 export const translations: any = {
   es: {
     nav: {
@@ -11,7 +10,8 @@ export const translations: any = {
       myProfile: "Mi Perfil",
       myAppointments: "Mis Citas",
       signOut: "Cerrar Sesión",
-      admin: "Admin"
+      admin: "Admin",
+      slogan: "PAZ Y BIENESTAR"
     },
     admin: {
       title: "Panel de Control",
@@ -37,7 +37,7 @@ export const translations: any = {
     },
     hero: {
       title: "Eleva tu Bienestar",
-      subtitle: "BONANZA ARTE & BIENESTAR",
+      subtitle: "BONANZA PAZ Y BIENESTAR",
       description: "Descubre un santuario de paz interior a través de nuestros masajes faciales y terapias de sound healing.",
       cta: "Agenda tu Cita"
     },
@@ -287,7 +287,8 @@ export const translations: any = {
       myProfile: "My Profile",
       myAppointments: "My Appointments",
       signOut: "Sign Out",
-      admin: "Admin"
+      admin: "Admin",
+      slogan: "PEACE AND WELL-BEING"
     },
     admin: {
       title: "Control Panel",
@@ -309,7 +310,7 @@ export const translations: any = {
     },
     hero: {
       title: "Elevate Your Well-being",
-      subtitle: "BONANZA ART & WELLNESS",
+      subtitle: "BONANZA PEACE AND WELL-BEING",
       description: "Discover a sanctuary of inner peace through our holistic facial massages and sound healing therapies.",
       cta: "Book Your Appointment"
     },

@@ -1,16 +1,20 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import { LotusIcon } from "@/components/icons/LotusIcon";
 import { Instagram } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import { useSiteSettings } from "@/context/SiteSettingsContext";
 
 export default function Footer() {
     const { t } = useLanguage();
+    const { getImage } = useSiteSettings();
     const [year, setYear] = useState<number | null>(null);
+
+    const brandLogo = getImage('brand-logo');
 
     useEffect(() => {
         setYear(new Date().getFullYear());
@@ -66,12 +70,22 @@ export default function Footer() {
                     </div>
                 </div>
                 <div className="mt-16 pt-8 border-t flex flex-col sm:flex-row justify-between items-center text-sm text-muted-foreground">
-                    <div className="flex items-center space-x-2">
-                        <Link href="/" className="flex items-center gap-2 text-foreground">
-                            <LotusIcon className="w-5 h-5 text-primary" />
-                            <span className="font-headline text-xl font-semibold">BONANZA</span>
+                    <div className="flex items-center space-x-4">
+                        <Link href="/" className="flex items-center gap-3 text-foreground">
+                            <div className="relative w-8 h-8">
+                                <Image
+                                    src={brandLogo.imageUrl}
+                                    alt={brandLogo.description}
+                                    fill
+                                    className="object-contain"
+                                />
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="font-headline text-xl font-semibold leading-tight">BONANZA</span>
+                                <span className="text-[7px] font-bold tracking-widest text-primary leading-tight uppercase">{t('nav.slogan')}</span>
+                            </div>
                         </Link>
-                        {year && <p>&copy; {year} Bonanza {t('footer.rights')}</p>}
+                        {year && <p className="ml-4">&copy; {year} Bonanza {t('footer.rights')}</p>}
                     </div>
                     <div className="flex space-x-4 mt-4 sm:mt-0">
                         <a href="https://www.instagram.com/bonanzaarteybienestar/" className="text-muted-foreground hover:text-primary transition-colors" target="_blank" rel="noopener noreferrer">

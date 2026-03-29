@@ -2,7 +2,9 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 import { useAuth } from '@/firebase';
+import { useSiteSettings } from '@/context/SiteSettingsContext';
 import { confirmPasswordReset, verifyPasswordResetCode } from 'firebase/auth';
 import { useLanguage } from '@/context/LanguageContext';
 import { useToast } from '@/hooks/use-toast';
@@ -14,14 +16,16 @@ import { Loader2, Lock, CheckCircle2, ShieldCheck, ArrowRight, ShieldAlert, Spar
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
-import { LotusIcon } from '@/components/icons/LotusIcon';
 
 function RestablecerContent() {
   const { t } = useLanguage();
   const { toast } = useToast();
+  const { getImage } = useSiteSettings();
   const router = useRouter();
   const searchParams = useSearchParams();
   const auth = useAuth();
+
+  const brandLogo = getImage('brand-logo');
 
   const [oobCode, setOobCode] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
@@ -93,7 +97,9 @@ function RestablecerContent() {
         <div className="relative">
             <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full animate-pulse" />
             <div className="relative bg-white p-6 rounded-full shadow-xl">
-                <LotusIcon className="w-16 h-16 text-primary animate-spin-slow" />
+                <div className="relative w-16 h-16 animate-spin-slow">
+                    <Image src={brandLogo.imageUrl} alt="" fill className="object-contain" />
+                </div>
             </div>
         </div>
         <div className="text-center space-y-2">
@@ -120,7 +126,9 @@ function RestablecerContent() {
             ) : errorMsg ? (
               <ShieldAlert className="w-10 h-10 text-destructive relative z-10" />
             ) : (
-              <ShieldCheck className="w-10 h-10 text-primary relative z-10" />
+              <div className="relative w-10 h-10 z-10">
+                  <Image src={brandLogo.imageUrl} alt="" fill className="object-contain" />
+              </div>
             )}
           </div>
           
@@ -205,7 +213,9 @@ function RestablecerContent() {
               <Button asChild className="btn-primary rounded-full px-10 h-14 shadow-lg">
                 <Link href="/" className="flex items-center gap-3 text-xs tracking-widest">
                   VOLVER AL INICIO
-                  <LotusIcon className="w-5 h-5" />
+                  <div className="relative w-5 h-5">
+                      <Image src={brandLogo.imageUrl} alt="" fill className="object-contain" />
+                  </div>
                 </Link>
               </Button>
             </div>
@@ -229,7 +239,7 @@ function RestablecerContent() {
       </Card>
 
       <div className="mt-8 text-center text-[9px] uppercase tracking-[0.5em] text-primary/30 font-bold">
-          Bonanza Arte & Bienestar • Ritual de Seguridad
+          Bonanza Paz y Bienestar • Ritual de Seguridad
       </div>
 
       <style jsx global>{`

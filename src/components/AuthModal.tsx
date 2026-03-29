@@ -1,30 +1,29 @@
+"use client";
 
-'use client';
-
-import { useState } from 'react';
-import { useAuth } from '@/firebase';
+import { useState } from "react";
+import Image from "next/image";
+import { useAuth } from "@/firebase";
 import { 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword,
   updateProfile,
   sendPasswordResetEmail
-} from 'firebase/auth';
+} from "firebase/auth";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { useToast } from '@/hooks/use-toast';
-import { Loader2, Key, Mail, CheckCircle2, Sparkles, ArrowRight, ShieldCheck } from 'lucide-react';
-import { useLanguage } from '@/context/LanguageContext';
-import { cn } from '@/lib/utils';
-import { LotusIcon } from '@/components/icons/LotusIcon';
+} from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import { Loader2, Key, Mail, CheckCircle2, ArrowRight, ShieldCheck } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
+import { useSiteSettings } from "@/context/SiteSettingsContext";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -35,11 +34,14 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const auth = useAuth();
   const { toast } = useToast();
   const { t } = useLanguage();
+  const { getImage } = useSiteSettings();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [view, setView] = useState<'auth' | 'reset' | 'resetSuccess'>('auth');
+
+  const brandLogo = getImage('brand-logo');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -130,7 +132,14 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
               ) : view === 'reset' ? (
                   <Key className="w-8 h-8 sm:w-10 sm:h-10 text-primary animate-pulse" />
               ) : (
-                  <LotusIcon className="w-8 h-8 sm:w-10 sm:h-10 text-primary" />
+                  <div className="relative w-10 h-10 sm:w-12 sm:h-12">
+                      <Image
+                          src={brandLogo.imageUrl}
+                          alt="Bonanza Logo"
+                          fill
+                          className="object-contain"
+                      />
+                  </div>
               )}
             </div>
             <DialogTitle className="text-2xl sm:text-3xl font-headline font-bold text-center text-gray-900 leading-tight">
@@ -293,7 +302,9 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                           onClick={() => setView('auth')}
                           className="text-[9px] sm:text-[10px] uppercase tracking-[0.4em] font-bold text-gray-400 hover:text-primary transition-all duration-500 flex items-center justify-center gap-2 mx-auto"
                       >
-                          <LotusIcon className="w-4 h-4 opacity-40" />
+                          <div className="relative w-4 h-4 opacity-40">
+                              <Image src={brandLogo.imageUrl} alt="" fill className="object-contain" />
+                          </div>
                           VOLVER AL INICIO
                       </button>
                   </div>
