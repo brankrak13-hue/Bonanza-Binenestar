@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -71,8 +72,8 @@ export default function Footer() {
                 </div>
                 <div className="mt-16 pt-8 border-t flex flex-col sm:flex-row justify-between items-center text-sm text-muted-foreground">
                     <div className="flex items-center space-x-4">
-                        <Link href="/" className="flex items-center gap-3 text-foreground">
-                            <div className="relative w-8 h-8">
+                        <Link href="/" className="flex items-center gap-4 text-foreground group">
+                            <div className="relative w-12 h-12 transition-transform duration-500 group-hover:scale-110">
                                 <Image
                                     src={brandLogo.imageUrl}
                                     alt={brandLogo.description}

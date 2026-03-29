@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
@@ -110,8 +111,8 @@ export default function Header() {
             </div>
 
             <div className="flex-1 flex justify-center lg:justify-start">
-                <Link href="/" className="flex items-center gap-3 group" aria-label="Bonanza Home">
-                    <div className="relative w-12 h-12 md:w-14 md:h-14 transition-transform duration-700 group-hover:scale-110">
+                <Link href="/" className="flex items-center gap-4 group" aria-label="Bonanza Home">
+                    <div className="relative w-14 h-14 md:w-16 md:h-16 transition-transform duration-700 group-hover:scale-110">
                         <Image
                             src={brandLogo.imageUrl}
                             alt={brandLogo.description}
@@ -240,7 +241,7 @@ export default function Header() {
         <div className="p-8 flex flex-col h-full">
           <div className="flex justify-between items-center mb-12">
             <Link href="/" className="flex items-center gap-3" onClick={() => setIsMenuOpen(false)}>
-                <div className="relative w-10 h-10">
+                <div className="relative w-12 h-12">
                     <Image
                         src={brandLogo.imageUrl}
                         alt={brandLogo.description}
