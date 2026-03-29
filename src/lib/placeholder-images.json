@@ -2,9 +2,9 @@
   "placeholderImages": [
     {
       "id": "brand-logo",
-      "description": "Logo de Bonanza Paz y Bienestar, flor de loto estilo vitral con bordes dorados y tonos turquesa.",
-      "imageUrl": "https://images.unsplash.com/photo-1528484489644-bc3d5622ff91?q=80&w=200&auto=format&fit=crop",
-      "imageHint": "lotus logo"
+      "description": "Logotipo oficial de Bonanza Paz y Bienestar.",
+      "imageUrl": "/logo-bonanza.png",
+      "imageHint": "brand logo"
     },
     {
       "id": "hero-wellness",
