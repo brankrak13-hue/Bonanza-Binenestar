@@ -42,7 +42,7 @@ export default function About() {
           </div>
 
           <div className="space-y-8">
-            <div className="wave-text inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/5 text-primary text-xs font-bold tracking-[0.2em] uppercase border border-primary/10">
+            <div className="wave-text inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary/5 text-primary text-sm font-semibold tracking-[0.1em] uppercase border border-primary/20 font-headline italic">
               {t('about.subtitle').split('').map((char: string, i: number) => (
                 <span key={i} style={{ animationDelay: `${i * 0.1}s` }}>{char === ' ' ? '\u00A0' : char}</span>
               ))}
@@ -110,7 +110,7 @@ export default function About() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-screen-xl mx-auto w-full">
           <WobbleCard
             containerClassName="col-span-1 lg:col-span-2 h-full bg-primary min-h-[400px]"
-            className="p-10 flex flex-col justify-center"
+            className="flex flex-col justify-center"
           >
             <div className="max-w-lg relative z-10">
               <h2 className="text-left text-balance text-3xl md:text-4xl lg:text-5xl font-bold font-headline text-white mb-6 leading-tight">
@@ -125,7 +125,7 @@ export default function About() {
 
           <WobbleCard 
             containerClassName="col-span-1 bg-accent min-h-[400px]" 
-            className="p-10 flex flex-col justify-center"
+            className="flex flex-col justify-center"
           >
             <div className="relative z-10">
               <Award className="w-12 h-12 text-white/40 mb-6" />
@@ -144,7 +144,7 @@ export default function About() {
 
           <WobbleCard 
             containerClassName="col-span-1 lg:col-span-3 bg-secondary min-h-[250px]" 
-            className="p-10 flex items-center justify-center"
+            className="flex items-center justify-center p-4 sm:p-0"
           >
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16 w-full max-w-5xl">
               {[

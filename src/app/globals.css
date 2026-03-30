@@ -104,3 +104,17 @@
 #contact, #about, #services {
   scroll-margin-top: 100px;
 }
+
+/* Particle Hover Effect */
+.particles-field {
+  @apply absolute inset-0 pointer-events-none overflow-visible;
+  z-index: 0;
+}
+
+.particle {
+  @apply absolute rounded-full bg-accent/40;
+  width: 4px;
+  height: 4px;
+  filter: blur(1px);
+}
+

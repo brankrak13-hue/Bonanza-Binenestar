@@ -60,8 +60,8 @@ export default function ProductShowcase({
                 <Image
                   src={currentImage.imageUrl}
                   alt={currentImage.description}
-                  width={800}
-                  height={600}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
                   className="object-cover w-full h-full"
                   data-ai-hint={currentImage.imageHint}
                 />
@@ -75,7 +75,7 @@ export default function ProductShowcase({
             )}
           >
             <p
-              className="text-xs tracking-[0.3em] font-bold uppercase text-primary animate-slideIn"
+              className="text-xs tracking-[0.15em] font-bold uppercase text-primary animate-slideIn font-headline italic"
               style={{ animationDelay: '100ms' }}
             >
               {subtitle}

@@ -183,6 +183,7 @@ export default function AdminDashboard() {
                                 alt={img.description} 
                                 fill 
                                 className="object-cover" 
+                                sizes="(max-width: 768px) 100vw, 33vw"
                               />
                             </div>
                             <div className="sm:col-span-2 space-y-4">

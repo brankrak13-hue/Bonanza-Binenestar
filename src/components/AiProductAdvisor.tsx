@@ -88,10 +88,13 @@ export default function AiProductAdvisor() {
                     <div className="absolute inset-0 bg-primary/20 rounded-full animate-ping group-hover:animate-none opacity-40" />
                     <Sparkles className="w-8 h-8 text-primary relative z-10 animate-spin-slow" />
                 </div>
-                <CardTitle className="text-4xl md:text-5xl font-bold mb-4 tracking-tight font-headline text-gray-900">
-                  Tu Oráculo <Highlight className="text-primary">Digital</Highlight>
+                <CardTitle 
+                  key={language}
+                  className="text-4xl md:text-5xl font-bold mb-4 tracking-tight font-headline text-gray-900"
+                >
+                  {t('ai.title_p1')} <Highlight className="text-primary px-3 py-1.5">{t('ai.title_p2')}</Highlight> {t('ai.title_p3')}
                 </CardTitle>
-                <div className="max-w-md mx-auto mt-8">
+                <div className="max-w-md mx-auto mt-8" key={`desc-${language}`}>
                   <TextGenerateEffect 
                     words={t('ai.desc')} 
                     className="text-base text-gray-500 leading-relaxed font-body italic text-center"

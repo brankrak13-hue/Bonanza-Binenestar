@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { useAuth } from "@/firebase";
 import { 
   signInWithEmailAndPassword, 
@@ -21,9 +20,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Key, Mail, CheckCircle2, ArrowRight, ShieldCheck } from "lucide-react";
+import { Loader2, Key, Mail, CheckCircle2, ArrowRight, ShieldCheck, UserCircle, User } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
-import { useSiteSettings } from "@/context/SiteSettingsContext";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -34,14 +32,11 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
   const auth = useAuth();
   const { toast } = useToast();
   const { t } = useLanguage();
-  const { getImage } = useSiteSettings();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [view, setView] = useState<'auth' | 'reset' | 'resetSuccess'>('auth');
-
-  const brandLogo = getImage('brand-logo');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -132,13 +127,8 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
               ) : view === 'reset' ? (
                   <Key className="w-8 h-8 sm:w-10 sm:h-10 text-primary animate-pulse" />
               ) : (
-                  <div className="relative w-10 h-10 sm:w-12 sm:h-12">
-                      <Image
-                          src={brandLogo.imageUrl}
-                          alt="Bonanza Logo"
-                          fill
-                          className="object-contain"
-                      />
+                  <div className="flex items-center justify-center">
+                      <UserCircle className="w-10 h-10 sm:w-12 sm:h-12 text-primary/80" />
                   </div>
               )}
             </div>
@@ -269,7 +259,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           ) : (
             <form onSubmit={handleResetPassword} className="space-y-6 sm:space-y-8 py-6 sm:py-10 animate-in slide-in-from-bottom-4 duration-700">
               <div className="space-y-3">
-                <Label htmlFor="reset-email" className="text-[9px] sm:text-[10px] uppercase tracking-[0.5em] font-bold text-primary/50 ml-2">{t('auth.email')}</Label>
+                <Label htmlFor="reset-email" className="text-[10px] sm:text-[11px] uppercase tracking-[0.15em] font-semibold text-primary/70 ml-2 font-headline italic">{t('auth.email')}</Label>
                 <div className="relative group">
                   <Mail className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-300 group-focus-within:text-primary transition-all duration-500" />
                   <Input 
@@ -278,13 +268,13 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                     placeholder="tu@email.com" 
                     value={email} 
                     onChange={(e) => setEmail(e.target.value)} 
-                    className="h-16 sm:h-20 rounded-[1.5rem] sm:rounded-[2rem] bg-secondary/30 border-transparent focus:border-primary/20 focus:bg-white pl-14 text-base sm:text-lg transition-all duration-500 shadow-[inset_0_2px_4px_rgba(0,0,0,0.02)]"
+                    className="h-12 sm:h-14 rounded-2xl bg-secondary/30 border-transparent focus:border-primary/20 focus:bg-white pl-13 text-sm sm:text-base transition-all duration-500 shadow-sm"
                     required 
                   />
                 </div>
               </div>
               <div className="space-y-6">
-                  <Button type="submit" className="w-full btn-primary h-16 sm:h-20 rounded-[1.5rem] sm:rounded-[2rem] text-[10px] sm:text-xs tracking-[0.4em] shadow-[0_20px_40px_-10px_rgba(41,102,84,0.4)] hover:shadow-[0_25px_50px_-12px_rgba(41,102,84,0.5)] active:scale-95 transition-all group/btn overflow-hidden relative" disabled={isLoading}>
+                  <Button type="submit" className="w-full btn-primary h-12 sm:h-14 rounded-2xl text-[10px] sm:text-xs tracking-[0.2em] shadow-lg hover:shadow-primary/20 active:scale-95 transition-all group/btn overflow-hidden relative" disabled={isLoading}>
                       <div className="absolute inset-0 bg-white/10 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-500" />
                       {isLoading ? (
                           <Loader2 className="mr-2 h-6 w-6 animate-spin" />
@@ -300,12 +290,10 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
                       <button 
                           type="button" 
                           onClick={() => setView('auth')}
-                          className="text-[9px] sm:text-[10px] uppercase tracking-[0.4em] font-bold text-gray-400 hover:text-primary transition-all duration-500 flex items-center justify-center gap-2 mx-auto"
+                          className="text-[10px] sm:text-[11px] uppercase tracking-[0.2em] font-bold text-gray-400 hover:text-primary transition-all duration-500 flex items-center justify-center gap-2 mx-auto"
                       >
-                          <div className="relative w-4 h-4 opacity-40">
-                              <Image src={brandLogo.imageUrl} alt="" fill className="object-contain" />
-                          </div>
-                          VOLVER AL INICIO
+                          <User className="w-3 h-3 opacity-40" />
+                          {t('auth.backToLogin') || "VOLVER AL INICIO"}
                       </button>
                   </div>
               </div>

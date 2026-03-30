@@ -77,8 +77,24 @@ export const translations: any = {
         subtitle: "Vibraciones que Sanan",
         title: "Terapia de Sound Healing",
         description: "Sumérgete en un baño de sonidos armónicos con cuencos tibetanos y otros instrumentos. Sesiones disponibles todos los días a las 7:30 AM y 8:00 PM para un equilibrio total.",
-        button: "Reservar Sesión"
       }
+    },
+    benefits: {
+      title: "¿Por qué elegir Bonanza?",
+      b1_title: "Ingredientes Naturales",
+      b1_desc: "Usamos solo productos orgánicos y de alta calidad para tu cuidado.",
+      b2_title: "Terapeutas Expertos",
+      b2_desc: "Profesionales certificados con años de experiencia en bienestar.",
+      b3_title: "Enfoque Holístico",
+      b3_desc: "Tratamos cuerpo, mente y espíritu como un todo armónico.",
+      b4_title: "Ambiente Relajante",
+      b4_desc: "Un espacio diseñado exclusivamente para tu paz y tranquilidad."
+    },
+    exclusive: {
+      subtitle: "Más allá de los productos",
+      title: "Experiencias Exclusivas",
+      desc: "Descubre nuestros spas, servicios de consulta personalizados y eventos únicos que te transportarán al corazón del lujo y el bienestar de Bonanza.",
+      cta: "Reservar una experiencia"
     },
     services: {
       title: "Nuestras Experiencias",
@@ -141,7 +157,9 @@ export const translations: any = {
       }
     },
     ai: {
-      title: "Tu Oráculo Digital",
+      title_p1: "Tu Oráculo",
+      title_p2: "Digital",
+      title_p3: "",
       desc: "Dinos cómo te sientes y nuestra sabiduría artificial revelará el ritual que tu alma necesita hoy.",
       placeholder: "Ej: 'Me siento con mucha carga mental y tensión en el cuello'...",
       cta: "Consultar Sabiduría IA",
@@ -343,7 +361,7 @@ export const translations: any = {
       facial: {
         subtitle: "ANCIENT TECHNIQUES",
         title: "Holistic Massages",
-        description: "Rejuvenece tu piel y libera tensiones con nuestros masajes faciales personalizados. Utilizamos técnicas que combinan drenaje linfático, reflexología y aromaterapia para una piel radiante y una relajación profunda.",
+        description: "Rejuvenate your skin and release tension with our personalized facial massages. We use techniques combining lymphatic drainage, reflexology and aromatherapy for radiant skin and deep relaxation.",
         button: "View Menu"
       },
       sound: {
@@ -352,6 +370,23 @@ export const translations: any = {
         description: "Immerse yourself in a harmonic sound bath with Tibetan bowls and other instruments. Sessions available daily at 7:30 AM and 8:00 PM for total balance.",
         button: "Book Session"
       }
+    },
+    benefits: {
+      title: "Why choose Bonanza?",
+      b1_title: "Natural Ingredients",
+      b1_desc: "We use only organic and high-quality products for your care.",
+      b2_title: "Expert Therapists",
+      b2_desc: "Certified professionals with years of wellness experience.",
+      b3_title: "Holistic Approach",
+      b3_desc: "We treat body, mind and spirit as a harmonious whole.",
+      b4_title: "Relaxing Environment",
+      b4_desc: "A space designed exclusively for your peace and tranquility."
+    },
+    exclusive: {
+      subtitle: "Beyond the products",
+      title: "Exclusive Experiences",
+      desc: "Discover our spas, personalized consultation services and unique events that will transport you to the heart of Bonanza's luxury and well-being.",
+      cta: "Book an experience"
     },
     services: {
       title: "Our Experiences",
@@ -414,7 +449,9 @@ export const translations: any = {
       }
     },
     ai: {
-      title: "Your Digital Oracle",
+      title_p1: "Your",
+      title_p2: "Digital",
+      title_p3: "Oracle",
       desc: "Tell us how you feel and our artificial wisdom will reveal the ritual your soul needs today.",
       placeholder: "E.g.: 'I feel a lot of mental load and neck tension'...",
       cta: "Consult AI Wisdom",

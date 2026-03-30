@@ -38,7 +38,7 @@ export default function Footer() {
     };
 
     return (
-        <footer className="bg-secondary border-t">
+        <footer className="footer-reveal bg-secondary border-t fixed bottom-0 left-0 w-full -z-10 min-h-[400px] flex items-center">
             <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
                     <div className="lg:col-span-1">
@@ -72,24 +72,27 @@ export default function Footer() {
                 </div>
                 <div className="mt-16 pt-8 border-t flex flex-col sm:flex-row justify-between items-center text-sm text-muted-foreground">
                     <div className="flex items-center space-x-4">
-                        <Link href="/" className="flex items-center gap-4 text-foreground group">
-                            <div className="relative w-12 h-12 transition-transform duration-500 group-hover:scale-110">
+                        <Link href="/" className="group" aria-label="Bonanza Home - Volver al Inicio">
+                            <div className="relative h-[60px] w-[210px] transition-all duration-700 group-hover:scale-105 origin-left">
                                 <Image
-                                    src={brandLogo.imageUrl}
-                                    alt={brandLogo.description}
+                                    src="/logo-bonanza-full.png"
+                                    alt="Bonanza Paz y Bienestar"
                                     fill
-                                    className="object-contain"
+                                    className="object-contain object-left"
+                                    sizes="210px"
                                 />
-                            </div>
-                            <div className="flex flex-col">
-                                <span className="font-headline text-xl font-semibold leading-tight">BONANZA</span>
-                                <span className="text-[7px] font-bold tracking-widest text-primary leading-tight uppercase">{t('nav.slogan')}</span>
                             </div>
                         </Link>
                         {year && <p className="ml-4">&copy; {year} Bonanza {t('footer.rights')}</p>}
                     </div>
                     <div className="flex space-x-4 mt-4 sm:mt-0">
-                        <a href="https://www.instagram.com/bonanzaarteybienestar/" className="text-muted-foreground hover:text-primary transition-colors" target="_blank" rel="noopener noreferrer">
+                        <a 
+                            href="https://www.instagram.com/bonanzaarteybienestar/" 
+                            className="text-muted-foreground hover:text-primary transition-colors" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            aria-label="Siguenos en Instagram"
+                        >
                             <Instagram className="h-5 w-5" />
                         </a>
                     </div>

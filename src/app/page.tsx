@@ -36,9 +36,9 @@ export default function Home() {
         image={getPlaceholderImage('hero-wellness')}
       />
       
-      <Benefits />
+      <Benefits className="relative z-10 bg-background border-y-0" />
       
-      <div id="services" className="py-16 sm:py-24 bg-white">
+      <div id="services" className="relative z-10 py-16 sm:py-24 bg-white shadow-[0_-50px_100px_-50px_rgba(0,0,0,0.1)]">
         <div className="space-y-12 sm:space-y-16">
           <ProductShowcase
             subtitle={t('home.facial.subtitle')}
@@ -60,7 +60,9 @@ export default function Home() {
         </div>
       </div>
       
-      <Contact />
+      <div className="relative z-10 bg-background shadow-[0_50px_100px_-50px_rgba(0,0,0,0.1)] mb-[600px] md:mb-[500px]">
+        <Contact />
+      </div>
       <Footer />
     </main>
   );

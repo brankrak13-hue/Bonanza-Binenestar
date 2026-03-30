@@ -9,31 +9,31 @@
     {
       "id": "hero-wellness",
       "description": "Zen stones stacked on a blurred background, representing balance and tranquility.",
-      "imageUrl": "https://images.unsplash.com/photo-1595433261422-cd66de8368a3?auto=format&q=75&w=1200",
+      "imageUrl": "https://images.unsplash.com/photo-1595433261422-cd66de8368a3?auto=format&q=80&w=1200",
       "imageHint": "zen balance"
     },
     {
       "id": "facial-massage",
       "description": "A woman receiving a relaxing facial massage.",
-      "imageUrl": "https://images.unsplash.com/photo-1598901986949-f593ff2a31a6?auto=format&q=75&w=1000",
+      "imageUrl": "https://images.unsplash.com/photo-1598901986949-f593ff2a31a6?auto=format&q=80&w=800",
       "imageHint": "facial massage"
     },
     {
       "id": "sound-healing",
       "description": "Person meditating on a rock near the water, representing peace and healing.",
-      "imageUrl": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&q=75&w=1000",
+      "imageUrl": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&q=80&w=800",
       "imageHint": "serene meditation"
     },
     {
       "id": "exclusive-experience",
       "description": "A serene spa environment with candles and towels.",
-      "imageUrl": "https://images.unsplash.com/photo-1733653024328-9d3f37fdfb73?auto=format&q=75&w=1200",
+      "imageUrl": "https://images.unsplash.com/photo-1733653024328-9d3f37fdfb73?auto=format&q=80&w=1200",
       "imageHint": "spa ambiance"
     },
     {
       "id": "about-us",
       "description": "A person meditating on a beach during a beautiful sunset.",
-      "imageUrl": "https://images.unsplash.com/photo-1536623975707-c4b3b2af565d?auto=format&q=75&w=1200",
+      "imageUrl": "https://images.unsplash.com/photo-1536623975707-c4b3b2af565d?auto=format&q=80&w=1200",
       "imageHint": "beach meditation"
     }
   ]

@@ -94,67 +94,75 @@ export default function Header() {
 
       <header className={cn(
         "sticky top-0 z-40 transition-all duration-500",
-        scrolled ? "bg-background/95 backdrop-blur-md shadow-lg h-20" : "bg-background h-24"
+        scrolled ? "bg-background/95 backdrop-blur-md shadow-lg h-[64px] md:h-[74px] lg:h-[84px]" : "bg-background h-[80px] md:h-[100px] lg:h-[120px]"
       )}>
-        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
-          <div className="flex items-center justify-between h-full">
+        <div className="w-full mx-auto px-4 md:px-10 h-full relative">
+          <div className="flex items-center justify-between h-full w-full">
             
-            <div className="lg:hidden flex-1">
-              <button
-                type="button"
-                className="p-2 -ml-2 text-foreground/70 hover:text-primary transition-colors"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                aria-label="Abrir menú"
-              >
-                <Menu className="w-6 h-6" />
-              </button>
-            </div>
-
-            <div className="flex-1 flex justify-center lg:justify-start">
-                <Link href="/" className="flex items-center gap-4 group" aria-label="Bonanza Home">
-                    <div className="relative w-14 h-14 md:w-16 md:h-16 transition-transform duration-700 group-hover:scale-110">
-                        <Image
-                            src={brandLogo.imageUrl}
-                            alt={brandLogo.description}
-                            fill
-                            className="object-contain"
-                            data-ai-hint={brandLogo.imageHint}
-                        />
-                    </div>
-                    <div className="flex flex-col">
-                        <span className="font-headline text-2xl md:text-3xl lg:text-4xl font-bold tracking-wider text-foreground leading-none">BONANZA</span>
-                        <span className="text-[8px] md:text-[10px] font-bold tracking-[0.3em] text-primary mt-1 uppercase whitespace-nowrap">{t('nav.slogan')}</span>
-                    </div>
-                </Link>
-            </div>
-
-            <nav 
-              className="hidden lg:flex items-center space-x-1"
-              onMouseLeave={() => setHoveredIndex(null)}
-            >
-              {navItems.map((item, idx) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  onMouseEnter={() => setHoveredIndex(idx)}
-                  className="relative px-5 py-2.5 text-sm tracking-[0.1em] font-bold font-headline text-foreground/80 hover:text-primary transition-colors duration-300"
+            {/* Left section: Logo (desktop) or Menu (mobile) */}
+            <div className="flex-1 flex items-center justify-start h-full">
+              <div className="lg:hidden">
+                <button
+                  type="button"
+                  className="p-2 -ml-2 text-foreground/70 hover:text-primary transition-colors"
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  aria-label="Abrir menú"
                 >
-                  <span className="relative z-10">{item.name}</span>
-                  <AnimatePresence>
-                    {hoveredIndex === idx && (
-                      <m.span
-                        layoutId="nav-glow"
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.9 }}
-                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                        className="absolute inset-0 bg-primary/5 border border-primary/10 rounded-full shadow-[0_0_15px_rgba(41,102,84,0.1)]"
-                      />
-                    )}
-                  </AnimatePresence>
-                </Link>
-              ))}
-            </nav>
+                  <Menu className="w-6 h-6" />
+                </button>
+              </div>
+
+              <div className="flex items-center transition-all duration-500">
+                  <Link href="/" className="group" aria-label="Bonanza Home - Volver al Inicio">
+                      <div className={cn(
+                          "relative transition-all duration-700 group-hover:scale-105 origin-left",
+                          scrolled
+                              ? "h-[45px] w-[157px] md:h-[52px] md:w-[182px] lg:h-[60px] lg:w-[210px]"
+                              : "h-[56px] w-[196px] md:h-[74px] md:w-[259px] lg:h-[90px] lg:w-[315px]"
+                      )}>
+                          <Image
+                              src="/logo-bonanza-full.png"
+                              alt="Bonanza Paz y Bienestar"
+                              fill
+                              priority
+                              className="object-contain object-left"
+                              sizes="(max-width: 768px) 266px, (max-width: 1024px) 350px, 455px"
+                          />
+                      </div>
+                  </Link>
+              </div>
+            </div>
+
+            {/* Middle section: Navigation - Absolutely centered in the header */}
+            <div className="hidden lg:flex absolute left-1/2 -translate-x-1/2 items-center h-full">
+              <nav 
+                className="flex items-center space-x-1"
+                onMouseLeave={() => setHoveredIndex(null)}
+              >
+                {navItems.map((item, idx) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    onMouseEnter={() => setHoveredIndex(idx)}
+                    className="relative px-5 py-2.5 text-sm tracking-[0.1em] font-bold font-headline text-foreground/80 hover:text-primary transition-colors duration-300"
+                  >
+                    <span className="relative z-10">{item.name}</span>
+                    <AnimatePresence>
+                      {hoveredIndex === idx && (
+                        <m.span
+                          layoutId="nav-glow"
+                          initial={{ opacity: 0, scale: 0.9 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.9 }}
+                          transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                          className="absolute inset-0 bg-primary/5 border border-primary/10 rounded-full shadow-[0_0_15px_rgba(41,102,84,0.1)]"
+                        />
+                      )}
+                    </AnimatePresence>
+                  </Link>
+                ))}
+              </nav>
+            </div>
 
             <div className="flex-1 flex items-center justify-end space-x-1 md:space-x-4">
               <Button 
@@ -240,16 +248,16 @@ export default function Header() {
       )}>
         <div className="p-8 flex flex-col h-full">
           <div className="flex justify-between items-center mb-12">
-            <Link href="/" className="flex items-center gap-3" onClick={() => setIsMenuOpen(false)}>
-                <div className="relative w-12 h-12">
+            <Link href="/" className="group" onClick={() => setIsMenuOpen(false)}>
+                <div className="relative h-[60px] w-[210px]">
                     <Image
-                        src={brandLogo.imageUrl}
-                        alt={brandLogo.description}
+                        src="/logo-bonanza-full.png"
+                        alt="Bonanza Paz y Bienestar"
                         fill
-                        className="object-contain"
+                        className="object-contain object-left"
+                        sizes="210px"
                     />
                 </div>
-                <span className="font-headline text-xl font-bold">BONANZA</span>
             </Link>
             <button
               type="button"

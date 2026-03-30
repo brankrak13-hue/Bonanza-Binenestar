@@ -58,8 +58,8 @@ export default function Contact() {
                         <p className="text-gray-600 text-sm font-medium">{t('contact.bannerDesc')}</p>
                     </div>
                 </div>
-                <Button asChild className="btn-primary h-12 rounded-full px-8 bg-accent hover:bg-accent/90 shadow-lg hover:shadow-accent/40 transition-all">
-                    <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                <Button asChild className="btn-primary h-12 rounded-full px-8 bg-accent hover:bg-accent/90 shadow-lg hover:shadow-accent/40 transition-all text-gray-950 font-black">
+                    <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2" aria-label="Contactar por WhatsApp para reservar">
                         <MessageCircle className="w-5 h-5" />
                         {t('contact.whatsapp')}
                     </a>
@@ -72,7 +72,7 @@ export default function Contact() {
                 <Phone className="w-5 h-5"/>
                 <span className="font-bold">984 314 3457</span>
             </a>
-            <a href="https://www.instagram.com/bonanzaarteybienestar/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-gray-600 hover:text-primary transition-all duration-300 hover:scale-105">
+            <a href="https://www.instagram.com/bonanzaarteybienestar/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-gray-700 hover:text-primary transition-all duration-300 hover:scale-105" aria-label="Visitar nuestro perfil de Instagram">
                 <Instagram className="w-5 h-5"/>
                 <span className="font-bold">@bonanzaarteybienestar</span>
             </a>
