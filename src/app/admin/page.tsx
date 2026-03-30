@@ -1,9 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import { useUser, useFirestore, useDoc, useCollection, useMemoFirebase } from '@/firebase';
+import { 
+  useUser, 
+  useFirestore, 
+  useDoc, 
+  useCollection, 
+  useMemoFirebase,
+  collection,
+  doc,
+  setDoc
+} from '@/firebase';
 import { useLanguage } from '@/context/LanguageContext';
-import { collection, doc, setDoc } from 'firebase/firestore';
 import { placeholderImages } from '@/lib/images';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';

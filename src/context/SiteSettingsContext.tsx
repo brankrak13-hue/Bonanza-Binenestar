@@ -1,8 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, ReactNode, useMemo } from 'react';
-import { useFirestore, useCollection, useMemoFirebase } from '@/firebase';
-import { collection } from 'firebase/firestore';
+import { useFirestore, useCollection, useMemoFirebase, collection } from '@/firebase';
 import { placeholderImages, type ImagePlaceholder } from '@/lib/images';
 
 interface SiteSettingsContextType {

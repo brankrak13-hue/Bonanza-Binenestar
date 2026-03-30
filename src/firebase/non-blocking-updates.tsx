@@ -5,12 +5,12 @@ import {
   addDoc,
   updateDoc,
   deleteDoc,
-  CollectionReference,
-  DocumentReference,
-  SetOptions,
-} from 'firebase/firestore';
+  type CollectionReference,
+  type DocumentReference,
+  type SetOptions,
+} from '@/firebase';
 import { errorEmitter } from '@/firebase/error-emitter';
-import {FirestorePermissionError} from '@/firebase/errors';
+import { FirestorePermissionError } from '@/firebase/errors';
 
 /**
  * Initiates a setDoc operation for a document reference.

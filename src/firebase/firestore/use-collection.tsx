@@ -2,13 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import {
-  Query,
-  onSnapshot,
-  DocumentData,
-  FirestoreError,
-  QuerySnapshot,
-  CollectionReference,
-} from 'firebase/firestore';
+  type Query,
+  type DocumentData,
+  type FirestoreError,
+  type QuerySnapshot,
+  type CollectionReference,
+} from '@/firebase';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
 
@@ -72,8 +71,11 @@ export function useCollection<T = any>(
     setIsLoading(true);
     setError(null);
 
+    // Use dynamic require to avoid top-level evaluation during build
+    const { onSnapshot: firebaseOnSnapshot } = require('firebase/firestore');
+
     // Directly use memoizedTargetRefOrQuery as it's assumed to be the final query
-    const unsubscribe = onSnapshot(
+    const unsubscribe = firebaseOnSnapshot(
       memoizedTargetRefOrQuery,
       (snapshot: QuerySnapshot<DocumentData>) => {
         const results: ResultItemType[] = [];

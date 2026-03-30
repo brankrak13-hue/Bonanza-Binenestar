@@ -3,9 +3,16 @@
 import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { useUser, useFirestore, useDoc, useMemoFirebase, updateDocumentNonBlocking } from '@/firebase';
+import { 
+  useUser, 
+  useFirestore, 
+  useDoc, 
+  useMemoFirebase, 
+  updateDocumentNonBlocking,
+  doc,
+  setDoc
+} from '@/firebase';
 import { useLanguage } from '@/context/LanguageContext';
-import { doc, setDoc } from 'firebase/firestore';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';

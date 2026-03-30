@@ -5,9 +5,16 @@ import { useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { useUser, useFirestore, useCollection, useMemoFirebase } from '@/firebase';
+import { 
+  useUser, 
+  useFirestore, 
+  useCollection, 
+  useMemoFirebase,
+  collection,
+  query,
+  orderBy
+} from '@/firebase';
 import { useLanguage } from '@/context/LanguageContext';
-import { collection, query, orderBy } from 'firebase/firestore';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';

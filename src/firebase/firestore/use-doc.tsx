@@ -2,12 +2,11 @@
     
 import { useState, useEffect } from 'react';
 import {
-  DocumentReference,
-  onSnapshot,
-  DocumentData,
-  FirestoreError,
-  DocumentSnapshot,
-} from 'firebase/firestore';
+  type DocumentReference,
+  type DocumentData,
+  type FirestoreError,
+  type DocumentSnapshot,
+} from '@/firebase';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
 
@@ -58,7 +57,10 @@ export function useDoc<T = any>(
     setIsLoading(true);
     setError(null);
 
-    const unsubscribe = onSnapshot(
+    // Use dynamic require to avoid top-level evaluation during build
+    const { onSnapshot: firebaseOnSnapshot } = require('firebase/firestore');
+
+    const unsubscribe = firebaseOnSnapshot(
       memoizedDocRef,
       (snapshot: DocumentSnapshot<DocumentData>) => {
         if (snapshot.exists()) {
