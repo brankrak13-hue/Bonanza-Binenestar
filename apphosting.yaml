@@ -6,3 +6,17 @@ runConfig:
   maxInstances: 1
   minInstances: 0
   memory: 512Mi
+
+env:
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    value: "AIzaSyDkG1mbdGq_iuClDswHQIP76NdI4HKN-Ec"
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: "studio-9297324962-e23f7"
+  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+    value: "1:938375163616:web:3b8c55c0fb62fceeb5ea85"
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    value: "studio-9297324962-e23f7.firebaseapp.com"
+  - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+    value: "938375163616"
+  - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    value: "studio-9297324962-e23f7.firebasestorage.app"
