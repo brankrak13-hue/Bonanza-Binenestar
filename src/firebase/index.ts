@@ -62,19 +62,35 @@ export function initializeFirebase() {
 }
 
 export function getSdks(firebaseApp: FirebaseApp, isDummy: boolean = false) {
-  // If we are forced into dummy mode (for build), we return stubs that don't trigger SDK logic
-  if (isDummy || !firebaseApp || (!firebaseApp.options.apiKey && !firebaseConfig.apiKey)) {
-    return {
-      firebaseApp,
-      get auth() { return {} as any; },
-      get firestore() { return {} as any; }
-    };
-  }
+  // We use getters to make initialization completely lazy.
+  // CRITICAL: We avoid calling getAuth() and getFirestore() during the 
+  // Next.js build phase to prevent crashes when API keys are not present.
+  const isBuildPhase = typeof process !== 'undefined' && 
+                      (process.env.NEXT_PHASE === 'phase-production-build' || 
+                       process.env.NODE_ENV === 'production' && !process.env.FIREBASE_CONFIG && !process.env.NEXT_PUBLIC_FIREBASE_API_KEY);
 
   return {
     firebaseApp,
-    get auth() { return getAuth(firebaseApp); },
-    get firestore() { return getFirestore(firebaseApp); }
+    get auth() { 
+      if (isDummy || isBuildPhase || !firebaseApp?.options?.apiKey) {
+        return {
+          currentUser: null,
+          onAuthStateChanged: () => () => {},
+          // Add other used auth methods as stubs if needed
+        } as any;
+      }
+      return getAuth(firebaseApp); 
+    },
+    get firestore() { 
+      if (isDummy || isBuildPhase || !firebaseApp?.options?.apiKey) {
+        return {
+          collection: () => ({}),
+          doc: () => ({}),
+          // Add other used firestore methods as stubs if needed
+        } as any;
+      }
+      return getFirestore(firebaseApp); 
+    }
   };
 }
 

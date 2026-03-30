@@ -1,6 +1,7 @@
 'use client';
-import { getAuth, type User } from 'firebase/auth';
-import { getApps } from 'firebase/app';
+// Top-level imports removed to prevent build-time crashes. 
+// Firebase SDKs are now imported dynamically inside guarded functions.
+import type { User } from 'firebase/auth';
 
 type SecurityRuleContext = {
   path: string;
@@ -69,28 +70,27 @@ function buildAuthObject(currentUser: User | null): FirebaseAuthObject | null {
   };
 }
 
-/**
- * Builds the complete, simulated request object for the error message.
- * It safely tries to get the current authenticated user.
- * @param context The context of the failed Firestore operation.
- * @returns A structured request object.
- */
-function buildRequestObject(context: SecurityRuleContext): SecurityRuleRequest {
+async function buildRequestObject(context: SecurityRuleContext): Promise<SecurityRuleRequest> {
   let authObject: FirebaseAuthObject | null = null;
   try {
-    // Safely attempt to get the current user.
-    // FIRST, check if a Firebase app is even initialized AND has a key.
+    // 1. Check if we are in a safe environment (client-side or with valid app)
+    const { getApps } = await import('firebase/app');
     const apps = getApps();
+    
+    // 2. ONLY proceed if an app exists AND it has an apiKey.
+    // This prevents the "Neither apiKey nor config.authenticator provided" error
+    // during the Next.js static generation phase.
     if (apps.length > 0 && apps[0].options.apiKey) {
+      const { getAuth } = await import('firebase/auth');
       const firebaseAuth = getAuth();
       const currentUser = firebaseAuth.currentUser;
       if (currentUser) {
         authObject = buildAuthObject(currentUser);
       }
     }
-  } catch {
-    // This will catch errors if the Firebase app is not yet initialized.
-    // In this case, we'll proceed without auth information.
+  } catch (err) {
+    // This will catch errors if the Firebase app is not yet initialized or fails validation.
+    console.warn('FirestorePermissionError: Auth context unavailable during build or initialization.', err);
   }
 
   return {
@@ -117,12 +117,23 @@ ${JSON.stringify(requestObject, null, 2)}`;
  * available in Firestore Security Rules.
  */
 export class FirestorePermissionError extends Error {
-  public readonly request: SecurityRuleRequest;
+  public request: SecurityRuleRequest | null = null;
 
   constructor(context: SecurityRuleContext) {
-    const requestObject = buildRequestObject(context);
-    super(buildErrorMessage(requestObject));
+    super('Firestore permission denied. Initializing request details...');
     this.name = 'FirebaseError';
-    this.request = requestObject;
+    
+    // We handle the async resolution of the request object separately 
+    // to avoid blocking the constructor (which must be sync).
+    this.initRequest(context);
+  }
+
+  private async initRequest(context: SecurityRuleContext) {
+    try {
+      this.request = await buildRequestObject(context);
+      this.message = buildErrorMessage(this.request);
+    } catch {
+      this.message = 'Firestore permission denied (Details unavailable).';
+    }
   }
 }
