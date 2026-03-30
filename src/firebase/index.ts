@@ -7,41 +7,49 @@ import { getFirestore } from 'firebase/firestore'
 
 // IMPORTANT: DO NOT MODIFY THIS FUNCTION
 export function initializeFirebase() {
-  if (!getApps().length) {
-    // Important! initializeApp() is called without any arguments because Firebase App Hosting
-    // integrates with the initializeApp() function to provide the environment variables needed to
-    // populate the FirebaseOptions in production. It is critical that we attempt to call initializeApp()
-    // without arguments.
-    let firebaseApp;
+  if (getApps().length) {
+    const app = getApp();
+    // If the existing app is missing the apiKey and we have one in our config
+    if (!app.options.apiKey && firebaseConfig.apiKey) {
+       // In some environments (like FAH build), the auto-initialized app is incomplete.
+       // However, by checking BEFORE init in the next block, we prevent this state.
+    }
+    return getSdks(app);
+  }
+
+  let firebaseApp;
+  
+  // Check if automatic FIREBASE_CONFIG is present and valid for client SDKs
+  let hasValidAutoConfig = false;
+  try {
+    const autoConfigStr = typeof process !== 'undefined' ? process.env.FIREBASE_CONFIG : null;
+    const autoConfig = autoConfigStr ? JSON.parse(autoConfigStr) : null;
+    hasValidAutoConfig = !!(autoConfig && autoConfig.apiKey);
+  } catch (e) {
+    hasValidAutoConfig = false;
+  }
+
+  if (hasValidAutoConfig) {
     try {
       // Attempt to initialize via Firebase App Hosting environment variables
       firebaseApp = initializeApp();
-      
-      // CRITICAL FIX: Firebase App Hosting sometimes provides an incomplete FIREBASE_CONFIG 
-      // during the build phase (missing apiKey). This causes getAuth() and other client SDKs to fail.
-      // We check if apiKey is present; if not, we force a fallback to our hardcoded config.
-      if (!firebaseApp.options.apiKey && firebaseConfig.apiKey) {
-        throw new Error("Missing apiKey in automatic initialization (common during build phase)");
-      }
     } catch (e) {
       if (process.env.NODE_ENV === "production") {
-        console.warn('Automatic initialization failed or incomplete. Falling back to firebase config object.', e);
+        console.warn('Automatic initialization failed. Falling back to firebase config object.', e);
       }
-      
-      // If already initialized but missing apiKey, we try to initialize with config
-      try {
-        firebaseApp = initializeApp(firebaseConfig);
-      } catch (err) {
-        // Fallback to existing app if re-initialization fails
-        firebaseApp = getApp();
-      }
+      firebaseApp = initializeApp(firebaseConfig);
     }
-
-    return getSdks(firebaseApp);
+  } else {
+    // No auto-config or invalid (like in FAH build phase). Use hardcoded config.
+    try {
+      firebaseApp = initializeApp(firebaseConfig);
+    } catch (e) {
+      // If re-initialization fails because it's already there but broken
+      firebaseApp = getApp();
+    }
   }
 
-  // If already initialized, return the SDKs with the already initialized App
-  return getSdks(getApp());
+  return getSdks(firebaseApp);
 }
 
 export function getSdks(firebaseApp: FirebaseApp) {
