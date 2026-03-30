@@ -76,7 +76,13 @@ export function getSdks(firebaseApp: FirebaseApp, isDummy: boolean = false) {
         return {
           currentUser: null,
           onAuthStateChanged: () => () => {},
-          // Add other used auth methods as stubs if needed
+          // Stubs for Auth methods
+          signOut: async () => {},
+          signInAnonymously: async () => ({ user: null }),
+          signInWithEmailAndPassword: async () => ({ user: null }),
+          createUserWithEmailAndPassword: async () => ({ user: null }),
+          confirmPasswordReset: async () => {},
+          verifyPasswordResetCode: async () => "",
         } as any;
       }
       return getAuth(firebaseApp); 
@@ -86,13 +92,83 @@ export function getSdks(firebaseApp: FirebaseApp, isDummy: boolean = false) {
         return {
           collection: () => ({}),
           doc: () => ({}),
-          // Add other used firestore methods as stubs if needed
         } as any;
       }
       return getFirestore(firebaseApp); 
     }
   };
 }
+
+// --- GUARDED SDK WRAPPERS (To avoid direct imports in UI components) ---
+
+export async function signOut() {
+  const { auth } = initializeFirebase();
+  const { signOut: firebaseSignOut } = await import('firebase/auth');
+  return firebaseSignOut(auth);
+}
+
+// Fixed doc and collection wrappers (guarded)
+export function doc(db: Firestore, ...args: [string, ...string[]]) {
+  if (typeof window === 'undefined') return {} as any;
+  // This is a synchronous call in Firebase SDK but we still want to avoid top-level issues
+  const { doc: firebaseDoc } = require('firebase/firestore');
+  return firebaseDoc(db, ...args);
+}
+
+export function collection(db: Firestore, path: string) {
+  if (typeof window === 'undefined') return {} as any;
+  const { collection: firebaseCollection } = require('firebase/firestore');
+  return firebaseCollection(db, path);
+}
+
+export async function createUserWithEmailAndPassword(...args: [import('firebase/auth').Auth, string, string]) {
+  const { createUserWithEmailAndPassword: firebaseCreate } = await import('firebase/auth');
+  return firebaseCreate(...args);
+}
+
+export async function updateProfile(...args: [import('firebase/auth').User, { displayName?: string | null; photoURL?: string | null }]) {
+  const { updateProfile: firebaseUpdate } = await import('firebase/auth');
+  return firebaseUpdate(...args);
+}
+
+export async function sendPasswordResetEmail(...args: [import('firebase/auth').Auth, string, import('firebase/auth').ActionCodeSettings?]) {
+  const { sendPasswordResetEmail: firebaseSend } = await import('firebase/auth');
+  return firebaseSend(...args);
+}
+
+export async function confirmPasswordReset(code: string, newPass: string) {
+  const { auth } = initializeFirebase();
+  const { confirmPasswordReset: firebaseConfirm } = await import('firebase/auth');
+  return firebaseConfirm(auth, code, newPass);
+}
+
+export async function verifyPasswordResetCode(code: string) {
+  const { auth } = initializeFirebase();
+  const { verifyPasswordResetCode: firebaseVerify } = await import('firebase/auth');
+  return firebaseVerify(auth, code);
+}
+
+export async function signInAnonymously(auth: import('firebase/auth').Auth) {
+  const { signInAnonymously: firebaseSignIn } = await import('firebase/auth');
+  return firebaseSignIn(auth);
+}
+
+export async function signInWithEmailAndPassword(...args: [import('firebase/auth').Auth, string, string]) {
+  const { signInWithEmailAndPassword: firebaseSignIn } = await import('firebase/auth');
+  return firebaseSignIn(...args);
+}
+
+import { Firestore } from 'firebase/firestore';
+
+export async function getGuardedFirestore() {
+   return initializeFirebase().firestore;
+}
+
+// These are used for type definitions mostly, but we can also provide guarded wrappers
+// for common firestore functions if they are imported directly.
+export { type User, type Auth } from 'firebase/auth';
+export { type FirebaseApp } from 'firebase/app';
+export { type Firestore } from 'firebase/firestore';
 
 export * from './provider';
 export * from './client-provider';
@@ -102,3 +178,4 @@ export * from './non-blocking-updates';
 export * from './non-blocking-login';
 export * from './errors';
 export * from './error-emitter';
+

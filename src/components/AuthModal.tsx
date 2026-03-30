@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useAuth } from "@/firebase";
 import { 
+  useAuth, 
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword,
   updateProfile,
   sendPasswordResetEmail
-} from "firebase/auth";
+} from "@/firebase";
 import {
   Dialog,
   DialogContent,

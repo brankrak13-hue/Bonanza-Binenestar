@@ -8,9 +8,7 @@ import { User, Menu, X, LogOut, Languages, LayoutDashboard } from "lucide-react"
 import { useLanguage } from "@/context/LanguageContext";
 import { useSiteSettings } from "@/context/SiteSettingsContext";
 import AuthModal from "@/components/AuthModal";
-import { useUser, useAuth, useFirestore, useDoc, useMemoFirebase } from "@/firebase";
-import { signOut } from "firebase/auth";
-import { doc } from "firebase/firestore";
+import { useUser, useAuth, useFirestore, useDoc, useMemoFirebase, signOut, doc } from "@/firebase";
 import { m, AnimatePresence } from "framer-motion";
 import {
   DropdownMenu,
@@ -65,7 +63,7 @@ export default function Header() {
 
   const handleSignOut = async () => {
     try {
-      await signOut(auth);
+      await signOut();
       toast({ title: t('nav.signOut') });
     } catch (error) {
       toast({ variant: "destructive", title: "Error" });

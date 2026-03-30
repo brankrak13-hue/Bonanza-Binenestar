@@ -3,9 +3,8 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
-import { useAuth } from '@/firebase';
+import { useAuth, confirmPasswordReset, verifyPasswordResetCode } from '@/firebase';
 import { useSiteSettings } from '@/context/SiteSettingsContext';
-import { confirmPasswordReset, verifyPasswordResetCode } from 'firebase/auth';
 import { useLanguage } from '@/context/LanguageContext';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -40,7 +39,7 @@ function RestablecerContent() {
     const code = searchParams.get('oobCode');
     if (code) {
       setOobCode(code);
-      verifyPasswordResetCode(auth, code)
+      verifyPasswordResetCode(code)
         .then((emailAddress) => {
           setEmail(emailAddress);
           setIsVerifyingCode(false);
@@ -54,7 +53,7 @@ function RestablecerContent() {
       setIsVerifyingCode(false);
       setErrorMsg("No se encontró una llave de seguridad válida en el enlace.");
     }
-  }, [searchParams, auth]);
+  }, [searchParams]);
 
   const handleReset = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,7 +75,7 @@ function RestablecerContent() {
 
     setIsLoading(true);
     try {
-      await confirmPasswordReset(auth, oobCode, newPassword);
+      await confirmPasswordReset(oobCode, newPassword);
       setIsSuccess(true);
       toast({ title: t('auth.passwordSuccess') });
       setTimeout(() => router.push('/'), 5000);
