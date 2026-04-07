@@ -6,6 +6,7 @@ import Footer from '@/components/Footer';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { HoverBorderGradient } from '@/components/ui/hover-border-gradient';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
@@ -230,9 +231,16 @@ export default function ReservarPage() {
                       required
                     />
                   </div>
-                  <Button type="submit" disabled={loading} className="w-full h-16 btn-primary rounded-2xl text-lg shadow-xl hover:shadow-primary/20 transition-all">
-                    {loading ? t('reserve.verifying') : t('reserve.verifyButton')}
-                  </Button>
+                  <HoverBorderGradient
+                    as="button"
+                    type="submit"
+                    disabled={loading}
+                    containerClassName="rounded-2xl w-full h-16"
+                    className="text-base shadow-xl"
+                    style={{ opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
+                  >
+                    {loading ? t('reserve.verifying') : 'Verificar Cita'}
+                  </HoverBorderGradient>
                 </form>
               </CardContent>
             </Card>
