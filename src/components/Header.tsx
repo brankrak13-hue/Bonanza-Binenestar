@@ -1,14 +1,14 @@
-
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { User, Menu, X, LogOut, Languages, LayoutDashboard } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { useSiteSettings } from "@/context/SiteSettingsContext";
 import AuthModal from "@/components/AuthModal";
-import { useUser, useAuth, useFirestore, useDoc, useMemoFirebase, signOut, doc } from "@/firebase";
+import { supabase } from "@/supabase/client";
+import { useAuthContext } from "@/supabase/provider";
 import { m, AnimatePresence } from "framer-motion";
 import {
   DropdownMenu,
@@ -21,6 +21,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useCallback } from "react";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,42 +29,47 @@ export default function Header() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  
-  const { user, isUserLoading } = useUser();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  const { user, loading: isUserLoading } = useAuthContext();
   const { t, language, setLanguage } = useLanguage();
   const { getImage } = useSiteSettings();
-  const auth = useAuth();
-  const db = useFirestore();
   const { toast } = useToast();
-
-  const brandLogo = getImage('brand-logo');
-
-  const adminRef = useMemoFirebase(() => (user && db ? doc(db, 'roles_admin', user.uid) : null), [user, db]);
-  const { data: adminRole } = useDoc(adminRef);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(window.scrollY > 20);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Check admin role from Supabase
+  useEffect(() => {
+    if (!user) { setIsAdmin(false); return; }
+    const checkAdmin = async () => {
+      const { data } = await supabase
+        .from('admin_roles')
+        .select('id')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      setIsAdmin(!!data);
+    };
+    checkAdmin();
+  }, [user]);
+
   const navItems = [
     { name: t('nav.home'), href: "/" },
     { name: t('nav.services'), href: "/servicios" },
     { name: t('nav.advisor'), href: "/agente-virtual" },
+    { name: t('nav.reserve') || 'Reservar', href: "/reservar" },
     { name: t('nav.about'), href: "/nosotros" },
     { name: t('nav.contact'), href: "/#contact" },
   ];
 
   const handleSignOut = async () => {
     try {
-      await signOut();
+      await supabase.auth.signOut();
       toast({ title: t('nav.signOut') });
     } catch (error) {
       toast({ variant: "destructive", title: "Error" });
@@ -73,6 +79,8 @@ export default function Header() {
   const toggleLanguage = useCallback(() => {
     setLanguage(language === 'es' ? 'en' : 'es');
   }, [language, setLanguage]);
+
+  const displayName = user?.user_metadata?.full_name || user?.email || 'Usuario';
 
   return (
     <>
@@ -97,7 +105,7 @@ export default function Header() {
         <div className="w-full mx-auto px-4 md:px-10 h-full relative">
           <div className="flex items-center justify-between h-full w-full">
             
-            {/* Left section: Logo (desktop) or Menu (mobile) */}
+            {/* Left: Logo */}
             <div className="flex-1 flex items-center justify-start h-full">
               <div className="lg:hidden">
                 <button
@@ -111,32 +119,29 @@ export default function Header() {
               </div>
 
               <div className="flex items-center transition-all duration-500">
-                  <Link href="/" className="group" aria-label="Bonanza Home - Volver al Inicio">
-                      <div className={cn(
-                          "relative transition-all duration-700 group-hover:scale-105 origin-left",
-                          scrolled
-                              ? "h-[45px] w-[157px] md:h-[52px] md:w-[182px] lg:h-[60px] lg:w-[210px]"
-                              : "h-[56px] w-[196px] md:h-[74px] md:w-[259px] lg:h-[90px] lg:w-[315px]"
-                      )}>
-                          <Image
-                              src="/logo-bonanza-full.png"
-                              alt="Bonanza Paz y Bienestar"
-                              fill
-                              priority
-                              className="object-contain object-left"
-                              sizes="(max-width: 768px) 266px, (max-width: 1024px) 350px, 455px"
-                          />
-                      </div>
-                  </Link>
+                <Link href="/" className="group" aria-label="Bonanza Home - Volver al Inicio">
+                  <div className={cn(
+                    "relative transition-all duration-700 group-hover:scale-105 origin-left",
+                    scrolled
+                      ? "h-[45px] w-[157px] md:h-[52px] md:w-[182px] lg:h-[60px] lg:w-[210px]"
+                      : "h-[56px] w-[196px] md:h-[74px] md:w-[259px] lg:h-[90px] lg:w-[315px]"
+                  )}>
+                    <Image
+                      src="/logo-bonanza-full.png"
+                      alt="Bonanza Paz y Bienestar"
+                      fill
+                      priority
+                      className="object-contain object-left"
+                      sizes="(max-width: 768px) 266px, (max-width: 1024px) 350px, 455px"
+                    />
+                  </div>
+                </Link>
               </div>
             </div>
 
-            {/* Middle section: Navigation - Absolutely centered in the header */}
+            {/* Center: Navigation */}
             <div className="hidden lg:flex absolute left-1/2 -translate-x-1/2 items-center h-full">
-              <nav 
-                className="flex items-center space-x-1"
-                onMouseLeave={() => setHoveredIndex(null)}
-              >
+              <nav className="flex items-center space-x-1" onMouseLeave={() => setHoveredIndex(null)}>
                 {navItems.map((item, idx) => (
                   <Link
                     key={item.name}
@@ -162,6 +167,7 @@ export default function Header() {
               </nav>
             </div>
 
+            {/* Right: Auth + Lang */}
             <div className="flex-1 flex items-center justify-end space-x-1 md:space-x-4">
               <Button 
                 variant="ghost" 
@@ -186,12 +192,12 @@ export default function Header() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-64 p-2 glass-card animate-scaleIn">
                     <DropdownMenuLabel className="pb-3">
-                      <p className="text-sm font-bold text-foreground">{language === 'es' ? 'Hola' : 'Hello'}, {user.displayName || 'User'}</p>
+                      <p className="text-sm font-bold text-foreground">{language === 'es' ? 'Hola' : 'Hello'}, {displayName}</p>
                       <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider truncate">{user.email}</p>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     
-                    {adminRole && (
+                    {isAdmin && (
                       <>
                         <DropdownMenuItem asChild className="cursor-pointer focus:bg-primary/10 rounded-md py-2 px-3 text-primary">
                           <Link href="/admin" className="w-full text-xs font-bold tracking-wider flex items-center gap-2">
@@ -232,14 +238,16 @@ export default function Header() {
         </div>
       </header>
 
+      {/* Mobile overlay */}
       <div 
         className={cn(
           "fixed inset-0 z-[60] bg-black/60 transition-opacity duration-500 lg:hidden",
           isMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         )}
         onClick={() => setIsMenuOpen(false)}
-      ></div>
+      />
 
+      {/* Mobile drawer */}
       <div className={cn(
         "fixed inset-y-0 left-0 z-[70] w-[85%] max-w-sm transform bg-background shadow-2xl transition-transform duration-500 ease-in-out lg:hidden h-full flex flex-col",
         isMenuOpen ? "translate-x-0" : "-translate-x-full"
@@ -247,15 +255,15 @@ export default function Header() {
         <div className="p-8 flex flex-col h-full">
           <div className="flex justify-between items-center mb-12">
             <Link href="/" className="group" onClick={() => setIsMenuOpen(false)}>
-                <div className="relative h-[60px] w-[210px]">
-                    <Image
-                        src="/logo-bonanza-full.png"
-                        alt="Bonanza Paz y Bienestar"
-                        fill
-                        className="object-contain object-left"
-                        sizes="210px"
-                    />
-                </div>
+              <div className="relative h-[60px] w-[210px]">
+                <Image
+                  src="/logo-bonanza-full.png"
+                  alt="Bonanza Paz y Bienestar"
+                  fill
+                  className="object-contain object-left"
+                  sizes="210px"
+                />
+              </div>
             </Link>
             <button
               type="button"
@@ -280,8 +288,8 @@ export default function Header() {
               </Link>
             ))}
             
-            {adminRole && (
-               <Link
+            {isAdmin && (
+              <Link
                 href="/admin"
                 className="text-xl font-headline font-bold text-primary flex items-center gap-2 animate-fadeIn"
                 style={{ animationDelay: '500ms' }}

@@ -3,6 +3,8 @@ import type { Metadata } from 'next';
 import { Montserrat, Cormorant_Garamond } from 'next/font/google';
 import './globals.css';
 import { Providers } from '@/components/Providers';
+import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -30,12 +32,12 @@ export const viewport = {
 // Final metadata configuration for SEO and Browser
 export const metadata: Metadata = {
   title: {
-    default: 'Bonanza | Arte & Bienestar',
+    default: 'Bonanza | Bienestar',
     template: '%s | Bonanza'
   },
   description: 'Santuario de bienestar holístico en Playa del Carmen. Masajes personalizados, Sound Healing y rituales de relajación profunda para el alma. Recupera tu equilibrio interior con técnicas ancestrales.',
   keywords: ['bienestar', 'masajes', 'sound healing', 'playa del carmen', 'holístico', 'relajación', 'bonanza bienestar', 'terapia de sonido'],
-  authors: [{ name: 'Bonanza Arte & Bienestar' }],
+  authors: [{ name: 'Bonanza | Bienestar' }],
   metadataBase: new URL('https://bonanza-bienestar.web.app'),
   alternates: {
     canonical: '/',
@@ -45,7 +47,7 @@ export const metadata: Metadata = {
     follow: true,
   },
   openGraph: {
-    title: 'Bonanza | Arte & Bienestar',
+    title: 'Bonanza | Bienestar',
     description: 'Santuario de bienestar holístico en Playa del Carmen. Masajes personalizados y Sound Healing.',
     url: 'https://bonanza-bienestar.web.app',
     siteName: 'Bonanza',
@@ -62,19 +64,18 @@ export default function RootLayout({
   return (
     <html lang="es" className={`!scroll-smooth ${montserrat.variable} ${cormorant.variable}`} data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
-        {/* Preconnect to critical domains to improve LCP and connection times */}
-        <link rel="preconnect" href="https://firestore.googleapis.com" />
-        <link rel="preconnect" href="https://apis.google.com" />
-        <link rel="preconnect" href="https://studio-9297324962-e23f7.firebaseapp.com" />
+        {/* Preconnect to critical domains */}
+        <link rel="preconnect" href="https://pqmlwfeobainscuxtoaa.supabase.co" />
         <link rel="preconnect" href="https://images.unsplash.com" />
-        <link rel="dns-prefetch" href="https://firestore.googleapis.com" />
-        <link rel="dns-prefetch" href="https://apis.google.com" />
+        <link rel="dns-prefetch" href="https://pqmlwfeobainscuxtoaa.supabase.co" />
         <link rel="dns-prefetch" href="https://images.unsplash.com" />
       </head>
       <body className="font-body antialiased" suppressHydrationWarning>
         <Providers>
           {children}
         </Providers>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

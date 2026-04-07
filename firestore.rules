@@ -52,12 +52,22 @@ service cloud.firestore {
     match /userProfiles/{userProfileId}/orders/{orderId} {
       allow read: if isOwner(userProfileId) || isAdmin();
       allow create: if isOwner(userProfileId);
-      allow update: if isAdmin();
+      allow update: if isAdmin() || isOwner(userProfileId); // Allowed for users to add reservation dates
       
       match /orderItems/{orderItemId} {
         allow read: if isOwner(userProfileId) || isAdmin();
         allow create: if isOwner(userProfileId);
       }
+    }
+
+    // Regla global para que el admin pueda ver todos los pedidos en una sola consulta
+    match /{path=**}/orders/{orderId} {
+      allow read: if isAdmin();
+    }
+
+    match /reservations/{reservationId} {
+      allow read, create: if true;
+      allow update, delete: if isAdmin();
     }
 
     // --- INTEGRACIÓN STRIPE (CUSTOMERS & PAYMENTS) ---

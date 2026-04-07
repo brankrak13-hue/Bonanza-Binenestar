@@ -1,7 +1,7 @@
 'use client';
 
-import React, { createContext, useContext, ReactNode, useMemo } from 'react';
-import { useFirestore, useCollection, useMemoFirebase, collection } from '@/firebase';
+import React, { createContext, useContext, ReactNode, useMemo, useState, useEffect } from 'react';
+import { supabase } from '@/supabase/client';
 import { placeholderImages, type ImagePlaceholder } from '@/lib/images';
 
 interface SiteSettingsContextType {
@@ -15,42 +15,34 @@ interface SiteSettingsContextType {
 const SiteSettingsContext = createContext<SiteSettingsContextType | undefined>(undefined);
 
 export function SiteSettingsProvider({ children }: { children: ReactNode }) {
-  const db = useFirestore();
+  const [imagesMap, setImagesMap] = useState<Record<string, string>>({});
+  const [pricesMap, setPricesMap] = useState<Record<string, number>>({});
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Query for images
-  const imagesQuery = useMemoFirebase(() => {
-    if (!db) return null;
-    return collection(db, 'siteSettings', 'content', 'images');
-  }, [db]);
+  useEffect(() => {
+    const fetchSettings = async () => {
+      setIsLoading(true);
+      try {
+        const { data: imgData } = await supabase.from('site_images').select('id, url');
+        const { data: priceData } = await supabase.from('site_prices').select('id, price');
 
-  // Query for prices
-  const pricesQuery = useMemoFirebase(() => {
-    if (!db) return null;
-    return collection(db, 'siteSettings', 'content', 'prices');
-  }, [db]);
-
-  const { data: imageOverrides, isLoading: isLoadingImages } = useCollection(imagesQuery);
-  const { data: priceOverrides, isLoading: isLoadingPrices } = useCollection(pricesQuery);
-
-  const imagesMap = useMemo(() => {
-    const map: Record<string, string> = {};
-    if (imageOverrides) {
-      imageOverrides.forEach((doc: any) => {
-        map[doc.id] = doc.url;
-      });
-    }
-    return map;
-  }, [imageOverrides]);
-
-  const pricesMap = useMemo(() => {
-    const map: Record<string, number> = {};
-    if (priceOverrides) {
-      priceOverrides.forEach((doc: any) => {
-        map[doc.id] = Number(doc.price);
-      });
-    }
-    return map;
-  }, [priceOverrides]);
+        if (imgData) {
+          const map: Record<string, string> = {};
+          imgData.forEach((row: any) => { map[row.id] = row.url; });
+          setImagesMap(map);
+        }
+        if (priceData) {
+          const map: Record<string, number> = {};
+          priceData.forEach((row: any) => { map[row.id] = Number(row.price); });
+          setPricesMap(map);
+        }
+      } catch (err) {
+        console.error('[SiteSettings] Error fetching settings:', err);
+      }
+      setIsLoading(false);
+    };
+    fetchSettings();
+  }, []);
 
   const getImage = (id: string): ImagePlaceholder => {
     const defaultImg = placeholderImages.find(img => img.id === id);
@@ -62,7 +54,6 @@ export function SiteSettingsProvider({ children }: { children: ReactNode }) {
         imageHint: 'not found'
       };
     }
-
     return {
       ...defaultImg,
       imageUrl: imagesMap[id] || defaultImg.imageUrl
@@ -74,13 +65,7 @@ export function SiteSettingsProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <SiteSettingsContext.Provider value={{ 
-      images: imagesMap, 
-      prices: pricesMap,
-      getImage, 
-      getPrice,
-      isLoading: isLoadingImages || isLoadingPrices 
-    }}>
+    <SiteSettingsContext.Provider value={{ images: imagesMap, prices: pricesMap, getImage, getPrice, isLoading }}>
       {children}
     </SiteSettingsContext.Provider>
   );

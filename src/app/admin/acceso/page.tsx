@@ -1,9 +1,9 @@
-
 'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useUser, useFirestore, doc, setDoc } from '@/firebase';
+import { supabase } from '@/supabase/client';
+import { useAuthContext } from '@/supabase/provider';
 import { useLanguage } from '@/context/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,8 +14,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 export default function AdminAccessPage() {
-  const { user } = useUser();
-  const db = useFirestore();
+  const { user } = useAuthContext();
   const router = useRouter();
   const { t } = useLanguage();
   const { toast } = useToast();
@@ -27,56 +26,34 @@ export default function AdminAccessPage() {
   const handleValidate = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!user || !db) {
-        toast({ 
-          variant: "destructive", 
-          title: "Sesión requerida", 
-          description: "Debes iniciar sesión con tu cuenta personal antes de activar el modo admin." 
-        });
-        return;
+    if (!user) {
+      toast({ variant: "destructive", title: "Sesión requerida", description: "Debes iniciar sesión con tu cuenta personal antes de activar el modo admin." });
+      return;
     }
 
     setIsLoading(true);
 
-    // Intentamos leer de la variable de entorno, si no existe usamos una de respaldo.
-    // La variable DEBE tener el prefijo NEXT_PUBLIC_ para ser visible aquí.
     const masterKey = process.env.NEXT_PUBLIC_ADMIN_ACCESS_KEY || 'BonanzaAdmin2024';
 
     if (secretKey.trim() === masterKey.trim()) {
       try {
-        // Creamos el documento en la colección protegida roles_admin
-        // Esto activará tu rango de administrador en todo el sitio.
-        await setDoc(doc(db, 'roles_admin', user.uid), {
-          grantedAt: new Date().toISOString(),
+        await supabase.from('admin_roles').upsert({
+          user_id: user.id,
           email: user.email,
-          setupBy: 'Master Key System',
+          granted_at: new Date().toISOString(),
+          setup_by: 'Master Key System',
           role: 'admin'
-        });
+        }, { onConflict: 'user_id' });
         
         setIsSuccess(true);
-        toast({ 
-          title: "Acceso Concedido", 
-          description: "Tu cuenta ahora tiene privilegios de administrador." 
-        });
-        
-        // Redirigimos al panel principal después de una breve pausa
-        setTimeout(() => {
-          router.push('/admin');
-        }, 1500);
+        toast({ title: "Acceso Concedido", description: "Tu cuenta ahora tiene privilegios de administrador." });
+        setTimeout(() => router.push('/admin'), 1500);
       } catch (err: any) {
         console.error("Error al guardar rol de admin:", err);
-        toast({ 
-          variant: "destructive", 
-          title: "Error de Sistema", 
-          description: "No se pudieron guardar los permisos. Verifica tu conexión." 
-        });
+        toast({ variant: "destructive", title: "Error de Sistema", description: "No se pudieron guardar los permisos. Verifica tu conexión." });
       }
     } else {
-      toast({ 
-        variant: "destructive", 
-        title: "Llave Incorrecta", 
-        description: "La contraseña ingresada no coincide con la llave maestra." 
-      });
+      toast({ variant: "destructive", title: "Llave Incorrecta", description: "La contraseña ingresada no coincide con la llave maestra." });
     }
     setIsLoading(false);
   };
@@ -126,11 +103,7 @@ export default function AdminAccessPage() {
                   />
                 </div>
                 
-                <Button 
-                  type="submit" 
-                  className="w-full h-16 btn-primary rounded-2xl text-base tracking-widest" 
-                  disabled={isLoading || !user}
-                >
+                <Button type="submit" className="w-full h-16 btn-primary rounded-2xl text-base tracking-widest" disabled={isLoading || !user}>
                   {isLoading ? <Loader2 className="w-6 h-6 animate-spin" /> : "ACTIVAR MODO ADMIN"}
                 </Button>
                 

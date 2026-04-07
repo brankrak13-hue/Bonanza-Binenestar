@@ -1,6 +1,6 @@
 'use server';
 /**
- * @fileOverview An AI-powered product advisor for Bonanza Arte & Bienestar services.
+ * @fileOverview An AI-powered product advisor for Bonanza | Bienestar services.
  */
 
 import { ai } from '@/ai/genkit';
@@ -31,7 +31,7 @@ const productAdvisorPrompt = ai.definePrompt({
   name: 'productAdvisorPrompt',
   input: { schema: AiProductAdvisorInputSchema },
   output: { schema: AiProductAdvisorOutputSchema },
-  prompt: `You are an expert wellness advisor for "Bonanza Arte & Bienestar".
+  prompt: `You are an expert wellness advisor for "Bonanza | Bienestar".
 Your goal is to recommend a single treatment from our menu that best fits the user's needs.
 
 IMPORTANT: Respond in the language specified in the input (current language: {{{language}}}).

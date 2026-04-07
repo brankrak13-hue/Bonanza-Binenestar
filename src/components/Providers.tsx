@@ -2,7 +2,7 @@
 
 import { ReactNode } from 'react';
 import { Toaster } from '@/components/ui/toaster';
-import { FirebaseClientProvider } from '@/firebase/client-provider';
+import { SupabaseProvider } from '@/supabase/provider';
 import { LanguageProvider } from '@/context/LanguageContext';
 import { SiteSettingsProvider } from '@/context/SiteSettingsContext';
 import { LazyMotion, domAnimation } from 'framer-motion';
@@ -13,7 +13,7 @@ import { LazyMotion, domAnimation } from 'framer-motion';
  */
 export function Providers({ children }: { children: ReactNode }) {
   return (
-    <FirebaseClientProvider>
+    <SupabaseProvider>
       <LanguageProvider>
         <SiteSettingsProvider>
           <LazyMotion features={domAnimation} strict>
@@ -22,6 +22,6 @@ export function Providers({ children }: { children: ReactNode }) {
           </LazyMotion>
         </SiteSettingsProvider>
       </LanguageProvider>
-    </FirebaseClientProvider>
+    </SupabaseProvider>
   );
 }

@@ -1,45 +1,81 @@
-
 import { NextResponse } from 'next/server';
-import Stripe from 'stripe';
 import { headers } from 'next/headers';
+import Stripe from 'stripe';
+import { createClient } from '@supabase/supabase-js';
+import { sendOrderConfirmation } from '@/lib/mail';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2025-01-27',
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+  apiVersion: '2025-01-27.acacia' as any,
 });
 
-// El secreto de firma del webhook sirve para verificar que Stripe es quien envía el mensaje.
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+// Use the service role key for server-side writes (bypasses RLS)
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 export async function POST(req: Request) {
   const body = await req.text();
-  const sig = (await headers()).get('stripe-signature') as string;
+  const headersList = await headers();
+  const signature = headersList.get('stripe-signature');
+
+  if (!signature || !endpointSecret) {
+    return NextResponse.json(
+      { error: 'Falta la firma de Stripe o el Webhook Secret no está configurado.' },
+      { status: 400 }
+    );
+  }
 
   let event: Stripe.Event;
 
   try {
-    if (!endpointSecret || !sig) {
-      // SI NO HAY SECRETO: Procesamos el evento sin verificar la firma (solo para desarrollo inicial).
-      // IMPORTANTE: En producción esto es un riesgo de seguridad.
-      console.warn('⚠️ WEBHOOK: Procesando sin verificación de firma (STRIPE_WEBHOOK_SECRET no configurado).');
-      event = JSON.parse(body);
-    } else {
-      // CON SECRETO: Stripe valida que el mensaje es auténtico.
-      event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
-    }
+    event = stripe.webhooks.constructEvent(body, signature, endpointSecret);
   } catch (err: any) {
-    console.error(`❌ Error en Webhook de Stripe: ${err.message}`);
-    return NextResponse.json({ error: `Webhook Error: ${err.message}` }, { status: 400 });
+    console.error(`⚠️  Webhook signature verification failed.`, err.message);
+    return NextResponse.json({ error: err.message }, { status: 400 });
   }
 
-  // Manejamos el evento de pago completado
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session;
-    const orderId = session.metadata?.orderId;
-    const userId = session.metadata?.userId;
+    const userId = session.client_reference_id;
+    const customerEmail = session.customer_details?.email || null;
 
-    console.log(`✅ PAGO CONFIRMADO: Orden ${orderId} para el usuario ${userId}`);
-    
-    // Aquí es donde actualizarías el estado en tu base de datos a "Pagado" de forma oficial.
+    try {
+      // Generate unique reservation code
+      const reservationCode = 'BNZ-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+
+      const orderDetails = {
+        stripe_session_id: session.id,
+        user_id: userId || null,
+        customer_email: customerEmail,
+        order_date: new Date().toISOString(),
+        status: 'paid',
+        payment_status: session.payment_status,
+        total_amount: session.amount_total ? session.amount_total / 100 : 0,
+        currency: session.currency,
+        reservation_code: reservationCode,
+        reservation_date: null,
+      };
+
+      const { error } = await supabaseAdmin.from('orders').insert(orderDetails);
+
+      if (error) {
+        console.error('Error guardando en Supabase:', error);
+        return NextResponse.json({ error: 'Error interno guardando datos' }, { status: 500 });
+      }
+
+      console.log(`✅ Compra registrada con éxito. Código: ${reservationCode}`);
+
+      if (customerEmail) {
+        await sendOrderConfirmation(customerEmail, { ...orderDetails, reservationCode });
+      }
+
+    } catch (error) {
+      console.error('Error en webhook:', error);
+      return NextResponse.json({ error: 'Error interno' }, { status: 500 });
+    }
   }
 
   return NextResponse.json({ received: true });

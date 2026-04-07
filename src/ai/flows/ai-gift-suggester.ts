@@ -38,7 +38,7 @@ const prompt = ai.definePrompt({
   name: 'luxuryGiftSuggesterPrompt',
   input: { schema: LuxuryGiftSuggesterInputSchema },
   output: { schema: LuxuryGiftSuggesterOutputSchema },
-  prompt: `You are an expert gift recommender for "Bonanza Arte & Bienestar", a sanctuary for holistic well-being specializing in personalized massages and sound healing therapies.
+  prompt: `You are an expert gift recommender for "Bonanza | Bienestar", a sanctuary for holistic well-being specializing in personalized massages and sound healing therapies.
 Your goal is to suggest thoughtful and suitable treatments as gifts based on the provided information about the gift recipient and the occasion.
 Consider the brand's aesthetic (holistic, serene, restorative, high-quality).
 

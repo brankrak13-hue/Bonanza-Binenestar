@@ -72,9 +72,9 @@ export default function Contact() {
                 <Phone className="w-5 h-5"/>
                 <span className="font-bold">984 314 3457</span>
             </a>
-            <a href="https://www.instagram.com/bonanzaarteybienestar/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-gray-700 hover:text-primary transition-all duration-300 hover:scale-105" aria-label="Visitar nuestro perfil de Instagram">
+            <a href="https://www.instagram.com/bonanzabienstar" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-gray-700 hover:text-primary transition-all duration-300 hover:scale-105" aria-label="Visitar nuestro perfil de Instagram">
                 <Instagram className="w-5 h-5"/>
-                <span className="font-bold">@bonanzaarteybienestar</span>
+                <span className="font-bold">@bonanzabienstar</span>
             </a>
             <a href="https://maps.app.goo.gl/vZpV5rLkXj7HgXjZ7" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-gray-600 hover:text-primary transition-all duration-300 hover:scale-105">
                 <MapPin className="w-5 h-5"/>

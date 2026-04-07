@@ -87,11 +87,12 @@ export default function Footer() {
                     </div>
                     <div className="flex space-x-4 mt-4 sm:mt-0">
                         <a 
-                            href="https://www.instagram.com/bonanzaarteybienestar/" 
-                            className="text-muted-foreground hover:text-primary transition-colors" 
+                            href="https://www.instagram.com/bonanzabienstar" 
                             target="_blank" 
-                            rel="noopener noreferrer"
-                            aria-label="Siguenos en Instagram"
+                            rel="noopener noreferrer" 
+                            className="bg-primary/10 hover:bg-primary/20 p-3 rounded-full text-primary transition-all duration-300 hover:scale-110"
+                            aria-label="Sintoniza en Instagram"
+                            title="@bonanzabienstar"
                         >
                             <Instagram className="h-5 w-5" />
                         </a>
