@@ -15,7 +15,9 @@ interface SiteSettingsContextType {
 const SiteSettingsContext = createContext<SiteSettingsContextType | undefined>(undefined);
 
 export function SiteSettingsProvider({ children }: { children: ReactNode }) {
-  const [imagesMap, setImagesMap] = useState<Record<string, string>>({});
+  // Pre-inicializar con defaults locales para evitar el delay de 410ms de Supabase
+  const defaultImagesMap = Object.fromEntries(placeholderImages.map(img => [img.id, img.imageUrl]));
+  const [imagesMap, setImagesMap] = useState<Record<string, string>>(defaultImagesMap);
   const [pricesMap, setPricesMap] = useState<Record<string, number>>({});
   const [isLoading, setIsLoading] = useState(true);
 
@@ -46,22 +48,24 @@ export function SiteSettingsProvider({ children }: { children: ReactNode }) {
         const { data: priceData } = await supabase.from('site_prices').select('id, price');
 
         if (imgData) {
-          const map: Record<string, string> = {};
-          const oldStonesUrl = 'photo-1595433261422-cd66de8368a3';
-          const newPremiumStones = 'https://images.unsplash.com/photo-1545208393-596371BA9a3e?auto=format&fit=crop&q=80&w=1200';
-          
+          const map: Record<string, string> = { ...defaultImagesMap };
+          const badUrlPatterns = [
+            'photo-1595433261422-cd66de8368a3', // URL antigua de Unsplash
+            '.imgix.net',                        // URLs de imgix (PNG sin optimizar 700+ KiB)
+          ];
+          const newPremiumStones = 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=1200';
+
           for (const row of imgData) {
-            // AUTO-CURACIÓN: Si la DB tiene el link roto, lo arreglamos en caliente
-            if (row.id === 'hero-wellness' && row.url.includes(oldStonesUrl)) {
-              console.log('[SiteSettings] SANANDO BASE DE DATOS: Detectada URL antigua. Actualizando...');
-              // Actualizamos en Supabase para que no vuelva a ocurrir
+            const isBadHero = row.id === 'hero-wellness' && badUrlPatterns.some(p => row.url.includes(p));
+            if (isBadHero) {
+              console.log('[SiteSettings] AUTO-HEAL: URL problemática detectada. Reparando DB...');
               await supabase.from('site_images').update({ url: newPremiumStones }).eq('id', 'hero-wellness');
-              map[row.id] = newPremiumStones;
+              map['hero-wellness'] = newPremiumStones;
             } else {
               map[row.id] = row.url;
             }
           }
-          
+
           setImagesMap(map);
           localStorage.setItem('bonanza_site_images', JSON.stringify(map));
         }
@@ -117,17 +121,21 @@ export function SiteSettingsProvider({ children }: { children: ReactNode }) {
 
   const getImage = (id: string): ImagePlaceholder => {
     const defaultImg = placeholderImages.find(img => img.id === id);
+    const storedUrl = imagesMap[id];
+    // Rechazar URLs problemáticas aunque estén en caché
+    const badPatterns = ['.imgix.net', 'photo-1595433261422-cd66de8368a3'];
+    const isBadUrl = storedUrl && badPatterns.some(p => storedUrl.includes(p));
     if (!defaultImg) {
       return {
         id: 'not-found',
         description: 'Image not found',
-        imageUrl: imagesMap[id] || `https://picsum.photos/seed/${id}/1200/800`,
+        imageUrl: (!isBadUrl && storedUrl) || `https://picsum.photos/seed/${id}/1200/800`,
         imageHint: 'not found'
       };
     }
     return {
       ...defaultImg,
-      imageUrl: imagesMap[id] || defaultImg.imageUrl
+      imageUrl: (!isBadUrl && storedUrl) || defaultImg.imageUrl
     };
   };
 

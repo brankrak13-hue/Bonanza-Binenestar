@@ -40,7 +40,8 @@ export default function HeroSection() {
   return (
     <section 
       ref={sectionRef}
-      className="relative w-full h-[calc(100vh-120px)] min-h-[700px] flex items-center justify-center overflow-hidden bg-black"
+      className="relative w-full h-[calc(100vh-120px)] min-h-[700px] flex items-center justify-center overflow-hidden"
+      style={{ background: 'linear-gradient(135deg, #1a2a1a 0%, #2d3b2d 40%, #1e2e2e 100%)' }}
     >
       {/* Background Layer with Ken Burns & Parallax */}
       <m.div 
@@ -50,9 +51,9 @@ export default function HeroSection() {
         <m.div 
           style={{ scale: imageScale }}
           className="relative w-full h-[120%] -top-[10%]"
-          initial={{ scale: 1.5, opacity: 0 }}
+          initial={{ scale: 1.15, opacity: 0.3 }}
           animate={{ scale: 1.1, opacity: 1 }}
-          transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }}
         >
           <Image
             src={heroImage.imageUrl}
@@ -61,7 +62,9 @@ export default function HeroSection() {
             priority={true}
             fetchPriority="high"
             className="object-cover"
-            unoptimized={heroImage.imageUrl.startsWith('http')} 
+            sizes="100vw"
+            placeholder="blur"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABgUE/8QAIhAAAQQCAgMBAAAAAAAAAAAAAQIDBBEFEiExQVH/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8Amq3tpVrFq22bJHLqLVY5u2IjHFLdGBhIBJPUknPWo+0NRsdNqFhSG22w2pUhxwlLbYHqUo8AAdzVXVNRn1O6l2U5vlVgNtj9UjsBXN0TTJNZ1KKziyEJyd97yfbH6pslJIIP2RX/2Q=="
           />
           {/* Capa de atmósfera - Gradiente premium para texto legible */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/70 backdrop-blur-[1px]" />

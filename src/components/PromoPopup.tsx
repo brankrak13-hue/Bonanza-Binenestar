@@ -65,6 +65,7 @@ export default function PromoPopup() {
             {/* Close Button */}
             <button
               onClick={handleClose}
+              aria-label="Cerrar promoción"
               className="absolute top-4 right-4 z-10 p-2 bg-white/80 backdrop-blur hover:bg-white rounded-full shadow-lg transition-all"
             >
               <X className="w-5 h-5 text-gray-800" />
@@ -87,9 +88,9 @@ export default function PromoPopup() {
                 className={`w-full h-12 rounded-2xl font-bold transition-all shadow-md flex items-center justify-center gap-2 ${copied ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-primary text-white hover:bg-primary/90'}`}
               >
                 {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                {copied ? t('admin.uploadSuccess') : t('admin.copyCode')}
+                {copied ? '¡Código copiado!' : t('admin.copyCode')}
               </Button>
-              <p className="mt-3 text-[10px] text-gray-400 font-bold uppercase tracking-widest">CÓDIGO: ABRIL20</p>
+              <p className="mt-3 text-[10px] text-gray-600 font-bold uppercase tracking-widest">CÓDIGO: ABRIL20</p>
             </div>
           </m.div>
         </div>
