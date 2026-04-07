@@ -1,15 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 type Direction = "TOP" | "LEFT" | "BOTTOM" | "RIGHT";
 
-// Colores Bonanza extraídos del design system:
-// --primary: hsl(163, 45%, 35%)  → teal-verde oscuro
-// --accent:  hsl(40, 60%, 60%)   → dorado cálido
-const BONANZA_PRIMARY = "hsl(163, 45%, 35%)";
-const BONANZA_ACCENT  = "hsl(40, 60%, 60%)";
+// Colores Bonanza — verde teal y dorado cálido
+const BONANZA_GREEN  = "hsl(163, 55%, 50%)";
+const BONANZA_GOLD   = "hsl(40, 80%, 65%)";
+const BONANZA_BRIGHT = "hsl(163, 70%, 60%)";
 
 export function HoverBorderGradient({
   children,
@@ -30,7 +29,10 @@ export function HoverBorderGradient({
     clockwise?: boolean;
     type?: "button" | "submit" | "reset";
     disabled?: boolean;
-  } & React.HTMLAttributes<HTMLElement>
+    href?: string;
+    target?: string;
+    rel?: string;
+  } & React.AllHTMLAttributes<HTMLElement>
 >) {
   const [hovered, setHovered] = useState(false);
   const [direction, setDirection] = useState<Direction>("TOP");
@@ -43,16 +45,16 @@ export function HoverBorderGradient({
       : dirs[(idx + 1) % dirs.length];
   };
 
-  // Borde animado: alterna entre el verde y el dorado de Bonanza
+  // Gradiente giratorio: colores brillantes que se ven sobre el fondo oscuro del anillo
   const movingMap: Record<Direction, string> = {
-    TOP:    `radial-gradient(20.7% 50% at 50% 0%,    ${BONANZA_PRIMARY} 0%, rgba(255,255,255,0) 100%)`,
-    LEFT:   `radial-gradient(16.6% 43.1% at 0% 50%,  ${BONANZA_ACCENT}  0%, rgba(255,255,255,0) 100%)`,
-    BOTTOM: `radial-gradient(20.7% 50% at 50% 100%,  ${BONANZA_PRIMARY} 0%, rgba(255,255,255,0) 100%)`,
-    RIGHT:  `radial-gradient(16.2% 41.2% at 100% 50%, ${BONANZA_ACCENT}  0%, rgba(255,255,255,0) 100%)`,
+    TOP:    `radial-gradient(22% 55% at 50% 0%,    ${BONANZA_GOLD}  0%, transparent 100%)`,
+    LEFT:   `radial-gradient(18% 45% at 0% 50%,    ${BONANZA_GREEN} 0%, transparent 100%)`,
+    BOTTOM: `radial-gradient(22% 55% at 50% 100%,  ${BONANZA_GOLD}  0%, transparent 100%)`,
+    RIGHT:  `radial-gradient(18% 45% at 100% 50%,  ${BONANZA_GREEN} 0%, transparent 100%)`,
   };
 
-  // Brillo en hover: destello dorado-verde
-  const highlight = `radial-gradient(75% 181% at 50% 50%, ${BONANZA_ACCENT} 0%, rgba(255,255,255,0) 100%)`;
+  // Destello en hover: verde brillante que envuelve todo el borde
+  const highlight = `radial-gradient(75% 181% at 50% 50%, ${BONANZA_BRIGHT} 0%, transparent 100%)`;
 
   useEffect(() => {
     if (!hovered) {
@@ -71,41 +73,39 @@ export function HoverBorderGradient({
       type={type}
       disabled={disabled}
       className={cn(
-        // Contenedor: anillo exterior semi-transparente verde
-        "relative flex rounded-full border border-primary/30 content-center",
-        "bg-primary/10 hover:bg-primary/20 transition duration-500",
-        "items-center flex-col flex-nowrap h-min justify-center overflow-visible p-px",
-        "w-full",
+        // Contenedor externo: transparente para que solo se vea el gradiente animado como borde
+        "relative flex rounded-2xl content-center",
+        "items-center flex-col flex-nowrap h-min justify-center overflow-hidden",
+        "p-[3px] w-full", // p-[3px] = grosor del borde visible
         disabled && "opacity-70 cursor-not-allowed",
         containerClassName
       )}
       {...props}
     >
-      {/* Superficie interior: fondo verde Bonanza sólido */}
+      {/* Superficie interior verde Bonanza — sobre el fondo transparente del borde */}
       <div
         className={cn(
-          "w-full text-white z-10 bg-primary px-6 py-4 rounded-[inherit]",
+          "relative w-full text-white z-10 bg-primary px-6 py-4 rounded-xl",
           "flex items-center justify-center gap-2",
           "font-bold tracking-[0.2em] uppercase text-sm",
+          "transition-all duration-300",
+          hovered ? "bg-primary/90" : "bg-primary",
           className
         )}
       >
         {children}
       </div>
 
-      {/* Borde animado giratorio */}
-      <motion.div
-        className="flex-none inset-0 overflow-hidden absolute z-0 rounded-[inherit]"
-        style={{ filter: "blur(2px)", position: "absolute", width: "100%", height: "100%" }}
+      {/* Gradiente animado que ocupa TODO el contenedor — se ve en los 3px del borde */}
+      <m.div
+        className="absolute inset-0 z-0 rounded-[inherit]"
+        style={{ filter: "blur(3px)", width: "100%", height: "100%" }}
         initial={{ background: movingMap[direction] }}
         animate={{
           background: hovered ? [movingMap[direction], highlight] : movingMap[direction],
         }}
         transition={{ ease: "linear", duration: duration ?? 1.2 }}
       />
-
-      {/* Anillo interior que crea el efecto de borde */}
-      <div className="bg-primary absolute z-1 flex-none inset-[2px] rounded-[100px]" />
     </Tag>
   );
 }

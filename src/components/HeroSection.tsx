@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 import { useSiteSettings } from "@/context/SiteSettingsContext";
-import { useScroll, useTransform, m } from "framer-motion";
+import { useScroll, useTransform, m, useMotionValue, useSpring } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
 export default function HeroSection() {
@@ -27,6 +27,26 @@ export default function HeroSection() {
   const imageScale = useTransform(scrollYProgress, [0, 1], [1.1, 1.3]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const contentY = useTransform(scrollYProgress, [0, 0.5], [0, 50]);
+
+  // Efecto magnético (Gravedad) para el botón
+  const buttonX = useMotionValue(0);
+  const buttonY = useMotionValue(0);
+  const springConfig = { damping: 15, stiffness: 150, mass: 0.1 };
+  const magneticX = useSpring(buttonX, springConfig);
+  const magneticY = useSpring(buttonY, springConfig);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - (rect.left + rect.width / 2);
+    const y = e.clientY - (rect.top + rect.height / 2);
+    buttonX.set(x * 0.3); // 30% del movimiento del mouse
+    buttonY.set(y * 0.3);
+  };
+
+  const handleMouseLeave = () => {
+    buttonX.set(0);
+    buttonY.set(0);
+  };
 
   // Si no hay imagen cargada pero no estamos en loading general, mostrar un fondo elegante
   if (!heroImage.imageUrl && !isLoading) {
@@ -113,8 +133,10 @@ export default function HeroSection() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: 1.8 }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+                style={{ x: magneticX, y: magneticY }}
+                className="relative cursor-pointer"
             >
                 <Link 
                     href="/reservar"

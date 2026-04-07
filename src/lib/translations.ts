@@ -88,6 +88,7 @@ export const translations: any = {
         subtitle: "Vibraciones que Sanan",
         title: "Terapia de Sound Healing",
         description: "Sumérgete en un baño de sonidos armónicos con cuencos tibetanos y otros instrumentos. Sesiones disponibles todos los días a las 7:30 AM y 8:00 PM para un equilibrio total.",
+        button: "Pedir disponibilidad"
       }
     },
     benefits: {
@@ -198,7 +199,7 @@ export const translations: any = {
       message: "Mensaje o Preferencias",
       messagePlaceholder: "Cuéntanos sobre lo que buscas...",
       security: "PROTECCIÓN HUMANA ACTIVA",
-      submit: "Solicitar Disponibilidad"
+      submit: "Pedir disponibilidad"
     },
     auth: {
       title: "Mi Cuenta",

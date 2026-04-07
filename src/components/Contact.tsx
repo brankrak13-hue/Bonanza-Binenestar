@@ -13,6 +13,8 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { es, enUS } from "date-fns/locale";
 import { useLanguage } from "@/context/LanguageContext";
+import { m } from "framer-motion";
+import { HoverBorderGradient } from "@/components/ui/hover-border-gradient";
 
 export default function Contact() {
   const { t, language } = useLanguage();
@@ -42,12 +44,24 @@ export default function Contact() {
   return (
     <section id="contact" className="bg-secondary/30 py-16 sm:py-24 scroll-mt-24">
       <div className="max-w-screen-md mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12 animate-fadeIn">
+        <m.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center mb-12"
+        >
           <h2 className="text-4xl md:text-5xl font-bold text-foreground font-headline mb-4">{t('contact.title')}</h2>
           <p className="mt-4 text-gray-600 text-lg font-medium">{t('contact.desc')}</p>
-        </div>
+        </m.div>
 
-        <div className="mb-12 p-6 bg-white rounded-3xl shadow-sm border border-primary/10 animate-scaleIn">
+        <m.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          viewport={{ once: true }}
+          className="mb-12 p-6 bg-white rounded-3xl shadow-sm border border-primary/10"
+        >
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                 <div className="flex items-center gap-4">
                     <div className="bg-primary/10 p-3 rounded-full">
@@ -58,31 +72,46 @@ export default function Contact() {
                         <p className="text-gray-600 text-sm font-medium">{t('contact.bannerDesc')}</p>
                     </div>
                 </div>
-                <Button asChild className="btn-primary h-12 rounded-full px-8 bg-accent hover:bg-accent/90 shadow-lg hover:shadow-accent/40 transition-all text-gray-950 font-black">
-                    <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2" aria-label="Contactar por WhatsApp para reservar">
-                        <MessageCircle className="w-5 h-5" />
-                        {t('contact.whatsapp')}
-                    </a>
-                </Button>
+                <a
+                  href={whatsappLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-accent text-gray-950 font-black h-12 px-8 flex items-center gap-2 rounded-full transition-transform hover:scale-105 shadow-lg uppercase text-xs tracking-widest"
+                >
+                  <MessageCircle className="w-5 h-5" />
+                  {t('contact.whatsapp')}
+                </a>
             </div>
-        </div>
+        </m.div>
 
-        <div className="mb-12 flex flex-col sm:flex-row justify-center items-center gap-6 sm:gap-12 text-center">
-            <a href="tel:9843143457" className="flex items-center gap-3 text-gray-600 hover:text-primary transition-all duration-300 hover:scale-105">
-                <Phone className="w-5 h-5"/>
+        <m.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          viewport={{ once: true }}
+          className="mb-12 flex flex-col sm:flex-row justify-center items-center gap-6 sm:gap-12 text-center"
+        >
+            <a href="tel:9843143457" className="flex items-center gap-3 text-gray-600 hover:text-primary transition-all duration-300 hover:scale-105 group">
+                <Phone className="w-5 h-5 group-hover:rotate-12 transition-transform"/>
                 <span className="font-bold">984 314 3457</span>
             </a>
-            <a href="https://www.instagram.com/bonanzabienstar" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-gray-700 hover:text-primary transition-all duration-300 hover:scale-105" aria-label="Visitar nuestro perfil de Instagram">
-                <Instagram className="w-5 h-5"/>
+            <a href="https://www.instagram.com/bonanzabienstar" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-gray-700 hover:text-primary transition-all duration-300 hover:scale-105 group" aria-label="Visitar nuestro perfil de Instagram">
+                <Instagram className="w-5 h-5 group-hover:rotate-12 transition-transform"/>
                 <span className="font-bold">@bonanzabienstar</span>
             </a>
-            <a href="https://maps.app.goo.gl/vZpV5rLkXj7HgXjZ7" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-gray-600 hover:text-primary transition-all duration-300 hover:scale-105">
-                <MapPin className="w-5 h-5"/>
+            <a href="https://maps.app.goo.gl/vZpV5rLkXj7HgXjZ7" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-gray-600 hover:text-primary transition-all duration-300 hover:scale-105 group">
+                <MapPin className="w-5 h-5 group-hover:rotate-12 transition-transform"/>
                 <span className="font-bold">{t('contact.location')}</span>
             </a>
-        </div>
+        </m.div>
 
-        <form className="space-y-8 bg-white p-8 sm:p-12 rounded-[3rem] shadow-2xl border border-white/40 animate-fadeIn" style={{ animationDelay: '200ms' }}>
+        <m.form 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          viewport={{ once: true }}
+          className="space-y-8 bg-white p-8 sm:p-12 rounded-[3rem] shadow-2xl border border-white/40"
+        >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
             <div className="space-y-3">
                 <label className="text-[10px] uppercase tracking-[0.3em] font-bold text-gray-500 ml-1">{t('contact.name')}</label>
@@ -136,26 +165,26 @@ export default function Contact() {
                 <Label
                     htmlFor="morning"
                     className={cn(
-                        "flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all cursor-pointer gap-2",
-                        selectedTime === "7:30 AM" ? "border-primary bg-primary/5" : "border-secondary/40"
+                      "flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all cursor-pointer gap-2 group/time",
+                      selectedTime === "7:30 AM" ? "border-primary bg-primary/5 shadow-md scale-[1.02]" : "border-secondary/40 hove:border-primary/20"
                     )}
                 >
                     <RadioGroupItem value="7:30 AM" id="morning" className="sr-only" />
-                    <Sun className={cn("w-5 h-5", selectedTime === "7:30 AM" ? "text-primary" : "text-gray-500")} />
-                    <span className="text-[10px] font-bold tracking-widest uppercase">{t('contact.morning')}</span>
+                    <Sun className={cn("w-5 h-5 transition-transform group-hover/time:rotate-12", selectedTime === "7:30 AM" ? "text-primary" : "text-gray-500")} />
+                    <span className="text-[10px] font-bold tracking-widest uppercase text-center">{t('contact.morning')}</span>
                     <span className="text-[9px] text-gray-500 font-bold">7:30 AM</span>
                 </Label>
                 
                 <Label
                     htmlFor="evening"
                     className={cn(
-                        "flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all cursor-pointer gap-2",
-                        selectedTime === "8:00 PM" ? "border-primary bg-primary/5" : "border-secondary/40"
+                      "flex flex-col items-center justify-center p-4 rounded-2xl border-2 transition-all cursor-pointer gap-2 group/time",
+                      selectedTime === "8:00 PM" ? "border-primary bg-primary/5 shadow-md scale-[1.02]" : "border-secondary/40 hover:border-primary/20"
                     )}
                 >
                     <RadioGroupItem value="8:00 PM" id="evening" className="sr-only" />
-                    <Moon className={cn("w-5 h-5", selectedTime === "8:00 PM" ? "text-primary" : "text-gray-500")} />
-                    <span className="text-[10px] font-bold tracking-widest uppercase">{t('contact.evening')}</span>
+                    <Moon className={cn("w-5 h-5 transition-transform group-hover/time:rotate-12", selectedTime === "8:00 PM" ? "text-primary" : "text-gray-500")} />
+                    <span className="text-[10px] font-bold tracking-widest uppercase text-center">{t('contact.evening')}</span>
                     <span className="text-[9px] text-gray-500 font-bold">8:00 PM</span>
                 </Label>
               </RadioGroup>
@@ -170,31 +199,37 @@ export default function Contact() {
             />
           </div>
 
-          <div className="flex flex-col items-center gap-6 pt-6">
-            <div className="flex items-center gap-2 text-[10px] font-bold tracking-widest text-gray-500 bg-gray-50/80 px-5 py-2.5 rounded-full border border-gray-100/50">
+          <div className="flex flex-col items-center gap-8 pt-6">
+            <m.div 
+              whileHover={{ scale: 1.05 }}
+              className="flex items-center gap-2 text-[10px] font-bold tracking-widest text-gray-500 bg-gray-50/80 px-6 py-3 rounded-full border border-gray-100/50 shadow-sm transition-all"
+            >
               <ShieldCheck className="w-4 h-4 text-primary" />
               {t('contact.security')}
-            </div>
+            </m.div>
+
             <Button 
               type="submit" 
               size="lg" 
               onMouseMove={handleMouseMove}
               className="relative group w-full sm:w-auto px-16 h-16 text-sm bg-white text-primary border border-primary/20 shadow-xl hover:shadow-primary/5 transition-all duration-500 font-bold tracking-[0.15em] uppercase flex items-center justify-center rounded-full overflow-hidden"
             >
-              {/* Mouse-following yellow spotlight effect */}
+              {/* Capa de animación: Destello amarillo que sigue al cursor */}
               <div 
                 className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"
                 style={{
                   background: `radial-gradient(circle at ${mousePos.x}px ${mousePos.y}px, rgba(255, 215, 0, 0.35), transparent 70%)`,
                 }}
               />
+              
+              {/* Contenido del botón (Z-10 para estar sobre el destello) */}
               <span className="relative z-10 flex items-center justify-center gap-2">
                 {t('contact.submit')}
                 <MessageCircle className="w-4 h-4" />
               </span>
             </Button>
           </div>
-        </form>
+        </m.form>
       </div>
     </section>
   );

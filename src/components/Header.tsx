@@ -147,21 +147,36 @@ export default function Header() {
                     key={item.name}
                     href={item.href}
                     onMouseEnter={() => setHoveredIndex(idx)}
-                    className="relative px-5 py-2.5 text-sm tracking-[0.1em] font-bold font-headline text-foreground/80 hover:text-primary transition-colors duration-300"
+                    className="relative px-6 py-2.5 text-[15px] tracking-[0.05em] font-medium font-serif text-slate-700 hover:text-primary transition-all duration-300"
                   >
-                    <span className="relative z-10">{item.name}</span>
+                    <div className="relative z-10 flex overflow-hidden">
+                      {item.name.split('').map((char, i) => (
+                        <m.span
+                          key={i}
+                          initial={{ y: "100%" }}
+                          animate={{ y: 0 }}
+                          transition={{ delay: 0.1 + (idx * 0.1) + (i * 0.02), duration: 0.4, ease: [0.215, 0.61, 0.355, 1] }}
+                        >
+                          {char === ' ' ? '\u00A0' : char}
+                        </m.span>
+                      ))}
+                    </div>
                     <AnimatePresence>
                       {hoveredIndex === idx && (
                         <m.span
                           layoutId="nav-glow"
-                          initial={{ opacity: 0, scale: 0.9 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0.9 }}
-                          transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                          className="absolute inset-0 bg-primary/5 border border-primary/10 rounded-full shadow-[0_0_15px_rgba(41,102,84,0.1)]"
+                          initial={{ opacity: 0, scale: 0.9, y: 2 }}
+                          animate={{ opacity: 1, scale: 1, y: 0 }}
+                          exit={{ opacity: 0, scale: 0.9, y: 2 }}
+                          transition={{ type: "spring", stiffness: 350, damping: 25 }}
+                          className="absolute inset-x-2 inset-y-1 bg-primary/5 border border-primary/10 rounded-xl shadow-[0_4px_12px_rgba(41,102,84,0.08)]"
                         />
                       )}
                     </AnimatePresence>
+                    {/* Active Underline */}
+                    <m.div 
+                      className="absolute bottom-1 left-5 right-5 h-[2px] bg-primary/40 origin-left scale-x-0 transition-transform duration-500 hover:scale-x-100"
+                    />
                   </Link>
                 ))}
               </nav>
@@ -280,7 +295,7 @@ export default function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-xl font-headline font-bold tracking-wide text-foreground/90 hover:text-primary transition-colors animate-fadeIn"
+                className="text-lg font-headline font-semibold tracking-wide text-foreground/90 hover:text-primary transition-colors animate-fadeIn"
                 style={{ animationDelay: `${idx * 100}ms` }}
                 onClick={() => setIsMenuOpen(false)}
               >

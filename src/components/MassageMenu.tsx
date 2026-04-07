@@ -69,28 +69,25 @@ export default function MassageMenu() {
                                     <div className="space-y-4 mt-auto">
                                         {massage.prices.map((p: any, i: number) => {
                                             return (
-                                                <div 
-                                                    key={i} 
-                                                    className={cn(
-                                                        "flex items-center justify-between p-5 rounded-[2.5rem] bg-white border-2 transition-all duration-500 cursor-pointer group/item",
-                                                        "border-transparent shadow-sm hover:border-primary/20 hover:scale-[1.03] active:scale-95"
-                                                    )}
+                                                <button
+                                                    key={i}
+                                                    type="button"
+                                                    className="w-full bg-white text-gray-900 group/item py-1 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/20 mb-3"
                                                     onClick={() => handleRedirectToStripe(p.paymentLink)}
                                                 >
-                                                    <div className="flex flex-col gap-1">
-                                                        <div className="flex items-center gap-2">
-                                                            <Clock className="w-3 h-3 text-primary/40" />
-                                                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">{p.duration} {t('services.min')}</span>
+                                                    <div className="flex items-center justify-between w-full p-2">
+                                                        <div className="flex flex-col items-start gap-0 pl-2">
+                                                            <div className="flex items-center gap-2">
+                                                                <Clock className="w-3 h-3 text-primary/40" />
+                                                                <span className="text-[9px] font-bold text-gray-400 uppercase tracking-[0.2em]">{p.duration} {t('services.min')}</span>
+                                                            </div>
+                                                            <span className="font-bold text-lg text-primary font-headline">${p.amount.toLocaleString()}</span>
                                                         </div>
-                                                        <span className="font-bold text-2xl text-primary font-headline">${p.amount.toLocaleString()}</span>
+                                                        <div className="h-10 w-10 rounded-full flex flex-shrink-0 items-center justify-center transition-all duration-500 shadow-md bg-primary text-white group-hover/item:rotate-90 group-hover/item:scale-110">
+                                                            <Plus className="w-5 h-5" />
+                                                        </div>
                                                     </div>
-                                                    
-                                                    <div 
-                                                        className="h-12 w-12 rounded-full flex items-center justify-center transition-all duration-700 shadow-lg bg-primary text-white group-hover/item:rotate-90 group-hover/item:scale-110"
-                                                    >
-                                                        <Plus className="w-6 h-6" />
-                                                    </div>
-                                                </div>
+                                                </button>
                                             );
                                         })}
                                     </div>

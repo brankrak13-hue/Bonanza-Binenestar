@@ -45,21 +45,21 @@ export default function About() {
             <m.div 
               initial="initial"
               whileInView="animate"
-              viewport={{ once: true, margin: "-20px" }}
+              viewport={{ once: true, margin: "-100px" }}
               className="inline-flex items-center px-8 py-3 rounded-full bg-primary/5 text-primary text-[10px] sm:text-xs font-black tracking-[0.3em] uppercase border border-primary/20 font-headline relative overflow-hidden group/badge backdrop-blur-sm shadow-lg"
             >
-              {/* Shimmer Effect - Ahora más visible y rítmico */}
+              {/* Shimmer Effect */}
               <m.div 
                 animate={{ 
                   left: ['-100%', '200%'],
                 }}
                 transition={{ 
-                  duration: 2.5, 
+                  duration: 3, 
                   repeat: Infinity, 
                   ease: "easeInOut",
                   repeatDelay: 1
                 }}
-                className="absolute inset-0 z-0 bg-gradient-to-r from-transparent via-white/60 to-transparent skew-x-[-25deg] pointer-events-none"
+                className="absolute inset-0 z-0 bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-[-25deg] pointer-events-none"
               />
               
               <div className="relative z-10 flex">
@@ -67,12 +67,12 @@ export default function About() {
                   <m.span 
                     key={i} 
                     variants={{
-                      initial: { opacity: 0, y: 15, scale: 0.8 },
-                      animate: { opacity: 1, y: 0, scale: 1 }
+                      initial: { opacity: 0, y: 15, filter: "blur(4px)" },
+                      animate: { opacity: 1, y: 0, filter: "blur(0px)" }
                     }}
                     transition={{ 
-                      duration: 0.5, 
-                      delay: i * 0.04, 
+                      duration: 0.4, 
+                      delay: i * 0.03, 
                       ease: [0.215, 0.61, 0.355, 1] 
                     }}
                   >
@@ -83,33 +83,47 @@ export default function About() {
             </m.div>
 
             <m.h2 
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
+              initial={{ opacity: 0, scale: 0.95, filter: "blur(8px)" }}
+              whileInView={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+              transition={{ duration: 0.8, delay: 0.4 }}
               viewport={{ once: true }}
-              className="text-5xl lg:text-7xl font-bold text-gray-900 font-headline leading-[1.1] tracking-tight"
+              className="text-5xl lg:text-7xl font-bold text-gray-900 font-headline leading-[1.1] tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-gray-900 via-gray-800 to-primary/60"
             >
               {t('about.title')}
             </m.h2>
             
             <div className="space-y-10">
-              <div className="relative pl-8 border-l-2 border-primary/20">
+              <m.div 
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
+                viewport={{ once: true }}
+                className="relative pl-8 border-l-2 border-primary/20 group"
+              >
+                <div className="absolute left-[-2px] top-0 h-0 w-0.5 bg-primary transition-all duration-1000 group-hover:h-full" />
                 <h3 className="text-2xl font-bold text-primary font-headline mb-4">
                   {t('about.identity_q')}
                 </h3>
                 <p className="text-gray-600 leading-relaxed text-lg">
                   {t('about.identity_a')}
                 </p>
-              </div>
+              </m.div>
 
-              <div className="relative pl-8 border-l-2 border-accent/20">
+              <m.div 
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.8 }}
+                viewport={{ once: true }}
+                className="relative pl-8 border-l-2 border-accent/20 group"
+              >
+                <div className="absolute left-[-2px] top-0 h-0 w-0.5 bg-accent transition-all duration-1000 group-hover:h-full" />
                 <h3 className="text-2xl font-bold text-accent font-headline mb-4">
                   {t('about.vision_t')}
                 </h3>
                 <p className="text-gray-600 italic leading-relaxed text-lg">
                   "{t('about.vision_d')}"
                 </p>
-              </div>
+              </m.div>
             </div>
           </div>
         </div>
@@ -121,30 +135,37 @@ export default function About() {
             <div className="w-24 h-1 bg-accent/30 mx-auto rounded-full" />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { icon: Users, title: t('about.v1_t'), desc: t('about.v1_d') },
-              { icon: Wind, title: t('about.v2_t'), desc: t('about.v2_d') },
-              { icon: Sparkles, title: t('about.v3_t'), desc: t('about.v3_d') },
-            ].map((value, idx) => (
-              <m.div 
-                key={idx} 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.2 }}
-                viewport={{ once: true }}
-                className="p-10 rounded-[2.5rem] bg-white border border-transparent hover:border-primary/20 hover:shadow-2xl transition-all duration-500 group text-center"
-              >
-                <div className="w-16 h-16 bg-secondary/50 rounded-2xl flex items-center justify-center mx-auto mb-8 group-hover:bg-primary group-hover:text-white transition-colors duration-500">
-                  <value.icon className="w-8 h-8 text-primary group-hover:text-white" strokeWidth={1.5} />
-                </div>
-                <h4 className="text-2xl font-bold text-gray-900 font-headline mb-4">{value.title}</h4>
-                <p className="text-gray-500 leading-relaxed text-sm">
-                  {value.desc}
-                </p>
-              </m.div>
-            ))}
-          </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[
+                { icon: Users, title: t('about.v1_t'), desc: t('about.v1_d') },
+                { icon: Wind, title: t('about.v2_t'), desc: t('about.v2_d') },
+                { icon: Sparkles, title: t('about.v3_t'), desc: t('about.v3_d') },
+              ].map((value, idx) => (
+                <m.div 
+                  key={idx} 
+                  initial={{ opacity: 0, y: 30, scale: 0.9 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  whileHover={{ y: -10, scale: 1.02 }}
+                  transition={{ 
+                    duration: 0.5, 
+                    delay: idx * 0.15,
+                    type: 'spring',
+                    stiffness: 150,
+                    damping: 12
+                  }}
+                  viewport={{ once: true }}
+                  className="p-10 rounded-[2.5rem] bg-white border border-gray-100/50 hover:border-primary/20 shadow-[0_20px_50px_rgba(0,0,0,0.03)] hover:shadow-[0_40px_80px_rgba(0,0,0,0.08)] transition-all duration-500 group text-center"
+                >
+                  <div className="w-16 h-16 bg-secondary/50 rounded-2xl flex items-center justify-center mx-auto mb-8 group-hover:bg-primary group-hover:text-white transition-colors duration-500 shadow-inner group-hover:shadow-lg">
+                    <value.icon className="w-8 h-8 text-primary group-hover:text-white transition-transform duration-500 group-hover:rotate-12" strokeWidth={1.5} />
+                  </div>
+                  <h4 className="text-2xl font-bold text-gray-900 font-headline mb-4">{value.title}</h4>
+                  <p className="text-gray-500 leading-relaxed text-sm">
+                    {value.desc}
+                  </p>
+                </m.div>
+              ))}
+            </div>
         </div>
 
         {/* BLOQUE 3: Ecosistema y Trayectoria (Timeline Visual) */}

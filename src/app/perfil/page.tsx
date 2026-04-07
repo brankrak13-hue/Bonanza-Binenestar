@@ -25,7 +25,7 @@ import {
 import { deleteUserAccount } from '@/app/actions/delete-account';
 
 export default function PerfilPage() {
-  const { user, loading: isUserLoading, signOut } = useAuthContext();
+  const { user, loading: isUserLoading } = useAuthContext();
   const { t } = useLanguage();
   const { toast } = useToast();
 
@@ -35,6 +35,7 @@ export default function PerfilPage() {
   const [lastName, setLastName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   // Delete Account States
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -51,9 +52,12 @@ export default function PerfilPage() {
         .maybeSingle();
       if (data) {
         setProfile(data);
-        setFirstName(data.first_name || '');
-        setLastName(data.last_name || '');
+        setFirstName(data.first_name || user?.user_metadata?.full_name?.split(' ')[0] || '');
+        setLastName(data.last_name || user?.user_metadata?.full_name?.split(' ').slice(1).join(' ') || '');
         setPhoneNumber(data.phone_number || '');
+      } else {
+        setFirstName(user?.user_metadata?.full_name?.split(' ')[0] || '');
+        setLastName(user?.user_metadata?.full_name?.split(' ').slice(1).join(' ') || '');
       }
       setIsProfileLoading(false);
     };
@@ -81,6 +85,7 @@ export default function PerfilPage() {
       toast({ variant: "destructive", title: t('profile.error'), description: t('profile.errorDesc') });
     } finally {
       setIsSaving(false);
+      setIsEditing(false);
     }
   };
 
@@ -91,7 +96,7 @@ export default function PerfilPage() {
       const result = await deleteUserAccount(user.id);
       if (result.success) {
         toast({ title: "Cuenta eliminada", description: "Tu información ha sido borrada permanentemente." });
-        await signOut();
+        await supabase.auth.signOut();
         window.location.href = '/';
       } else {
         throw new Error(result.error);
@@ -129,7 +134,7 @@ export default function PerfilPage() {
     );
   }
 
-  const displayName = firstName ? `${firstName} ${lastName}` : user.email;
+  const displayName = firstName ? `${firstName} ${lastName}` : (user.user_metadata?.full_name || user.email);
 
   return (
     <main className="min-h-screen bg-[#fcfcfc] animate-in fade-in duration-1000">
@@ -147,17 +152,28 @@ export default function PerfilPage() {
             </div>
             <CardTitle className="text-2xl font-headline tracking-wide">{displayName}</CardTitle>
             <CardDescription className="opacity-70">{t('profile.desc')}</CardDescription>
+            
+            {!isEditing && (
+                <Button 
+                    type="button"
+                    onClick={() => setIsEditing(true)} 
+                    className="absolute top-6 right-6 rounded-full bg-white text-primary border border-primary/20 hover:bg-primary hover:text-white transition-colors"
+                    variant="outline"
+                >
+                    Modificar
+                </Button>
+            )}
           </CardHeader>
           <CardContent className="p-8 sm:p-12">
             <form onSubmit={handleSave} className="space-y-8">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                 <div className="space-y-3">
                   <Label htmlFor="firstName" className="text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400 ml-1">{t('profile.firstName')}</Label>
-                  <Input id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="bg-secondary/10 border-transparent focus:border-primary/20 h-14 rounded-2xl shadow-inner outline-none" placeholder="Paz" required />
+                  <Input id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} disabled={!isEditing} className="bg-secondary/10 border-transparent focus:border-primary/20 h-14 rounded-2xl shadow-inner outline-none disabled:opacity-75 disabled:cursor-not-allowed" placeholder="Paz" required />
                 </div>
                 <div className="space-y-3">
                   <Label htmlFor="lastName" className="text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400 ml-1">{t('profile.lastName')}</Label>
-                  <Input id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} className="bg-secondary/10 border-transparent focus:border-primary/20 h-14 rounded-2xl shadow-inner outline-none" placeholder="Bienestar" required />
+                  <Input id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} disabled={!isEditing} className="bg-secondary/10 border-transparent focus:border-primary/20 h-14 rounded-2xl shadow-inner outline-none disabled:opacity-75 disabled:cursor-not-allowed" placeholder="Bienestar" required />
                 </div>
               </div>
 
@@ -173,14 +189,16 @@ export default function PerfilPage() {
                 <Label htmlFor="phone" className="text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400 ml-1">{t('profile.phone')}</Label>
                 <div className="relative">
                   <Phone className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <Input id="phone" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} className="bg-secondary/10 border-transparent focus:border-primary/20 h-14 rounded-2xl pl-14 shadow-inner outline-none" placeholder="+52 984 000 0000" />
+                  <Input id="phone" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} disabled={!isEditing} className="bg-secondary/10 border-transparent focus:border-primary/20 h-14 rounded-2xl pl-14 shadow-inner outline-none disabled:opacity-75 disabled:cursor-not-allowed" placeholder="+52 984 000 0000" />
                 </div>
               </div>
 
-              <Button type="submit" className="w-full btn-primary h-16 rounded-2xl text-md font-bold shadow-xl shadow-primary/10 transition-all hover:scale-[1.01]" disabled={isSaving}>
-                {isSaving ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : <Save className="w-5 h-5 mr-2" />}
-                {isSaving ? t('profile.saving') : t('profile.save')}
-              </Button>
+              {isEditing && (
+                  <Button type="submit" className="w-full btn-primary h-16 rounded-2xl text-md font-bold shadow-xl shadow-primary/10 transition-all hover:scale-[1.01]" disabled={isSaving}>
+                    {isSaving ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : <Save className="w-5 h-5 mr-2" />}
+                    {isSaving ? t('profile.saving') : t('profile.save')}
+                  </Button>
+              )}
             </form>
           </CardContent>
         </Card>

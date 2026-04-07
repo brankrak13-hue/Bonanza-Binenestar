@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { m, AnimatePresence } from 'framer-motion';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -205,23 +206,46 @@ export default function ReservarPage() {
         <div className="w-full max-w-xl mx-auto relative z-20">
           
           {/* STEP 1: VERIFY CODE */}
+          <AnimatePresence mode="wait">
           {step === 1 && (
-            <Card className="border-none shadow-2xl rounded-[2.5rem] bg-white overflow-hidden animate-in fade-in slide-in-from-bottom-8 duration-700">
+            <m.div
+              key="step1"
+              initial={{ opacity: 0, y: 40, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -20, scale: 0.97 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            >
+            <Card className="border-none shadow-2xl rounded-[2.5rem] bg-white overflow-hidden">
               <CardHeader className="text-center space-y-4 pb-10 pt-12 bg-primary/5">
-                <div className="mx-auto w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-lg animate-bounce">
+                <m.div
+                  className="mx-auto w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-lg"
+                  initial={{ scale: 0, rotate: -180 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.2 }}
+                  whileHover={{ scale: 1.15, rotate: 10 }}
+                >
                   <CalendarIcon className="w-10 h-10 text-primary" />
-                </div>
-                <div>
+                </m.div>
+                <m.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.35, duration: 0.5 }}
+                >
                   <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary mb-2">{t('reserve.subtitle')}</p>
                   <CardTitle className="font-headline text-4xl">{t('reserve.title')}</CardTitle>
                   <CardDescription className="text-gray-500 max-w-xs mx-auto mt-3">
                     {t('reserve.codeDesc')}
                   </CardDescription>
-                </div>
+                </m.div>
               </CardHeader>
               <CardContent className="p-10">
                 <form onSubmit={handleVerifyCode} className="space-y-8">
-                  <div className="space-y-2">
+                  <m.div
+                    className="space-y-2"
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5, duration: 0.4 }}
+                  >
                     <Label className="text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400 ml-1">{t('reserve.codePlaceholder')}</Label>
                     <Input 
                       placeholder="BNZ-XXXXXX" 
@@ -230,25 +254,41 @@ export default function ReservarPage() {
                       className="text-center text-2xl h-20 tracking-[0.25em] uppercase font-bold rounded-2xl border-2 border-primary/10 focus:border-primary/40 bg-secondary/5"
                       required
                     />
-                  </div>
-                  <HoverBorderGradient
-                    as="button"
+                  </m.div>
+                  <m.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.65, duration: 0.4 }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.97 }}
+                  >
+                  <button
                     type="submit"
                     disabled={loading}
-                    containerClassName="rounded-2xl w-full h-16"
-                    className="text-base shadow-xl"
+                    className="btn-primary rounded-2xl w-full h-16 text-sm font-bold tracking-[0.2em] uppercase transition-transform hover:scale-105 shadow-xl"
                     style={{ opacity: loading ? 0.7 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
                   >
                     {loading ? t('reserve.verifying') : 'Verificar Cita'}
-                  </HoverBorderGradient>
+                  </button>
+                  </m.div>
                 </form>
               </CardContent>
             </Card>
+            </m.div>
           )}
+          </AnimatePresence>
 
           {/* STEP 2: LOCATION SELECTION */}
+          <AnimatePresence mode="wait">
           {step === 2 && (
-            <Card className="border-none shadow-2xl rounded-[2.5rem] bg-white overflow-hidden animate-in fade-in slide-in-from-right-8 duration-500">
+            <m.div
+              key="step2"
+              initial={{ opacity: 0, x: 60 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -40 }}
+              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            >
+            <Card className="border-none shadow-2xl rounded-[2.5rem] bg-white overflow-hidden">
               <CardHeader className="text-center space-y-4 pb-10 pt-12 bg-primary/5">
                 <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-primary mb-1">PROCESO DE RESERVA</p>
                 <CardTitle className="font-headline text-3xl">{t('reserve.locationTitle')}</CardTitle>
@@ -294,11 +334,21 @@ export default function ReservarPage() {
                 </div>
               </CardContent>
             </Card>
+            </m.div>
           )}
+          </AnimatePresence>
 
           {/* STEP 3: DETAILS FORM */}
+          <AnimatePresence mode="wait">
           {step === 3 && (
-            <Card className="border-none shadow-2xl rounded-[2.5rem] bg-white overflow-hidden animate-in fade-in slide-in-from-right-8 duration-500">
+            <m.div
+              key="step3"
+              initial={{ opacity: 0, x: 60 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -40 }}
+              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            >
+            <Card className="border-none shadow-2xl rounded-[2.5rem] bg-white overflow-hidden">
               <CardHeader className="text-center space-y-2 pb-8 pt-12 bg-primary/5">
                 <CardTitle className="font-headline text-3xl">{t('reserve.detailsTitle')}</CardTitle>
                 <CardDescription>{t('reserve.detailsDesc')}</CardDescription>
@@ -408,11 +458,21 @@ export default function ReservarPage() {
                 </div>
               </CardContent>
             </Card>
+            </m.div>
           )}
+          </AnimatePresence>
 
           {/* STEP 4: CALENDAR & TIME */}
+          <AnimatePresence mode="wait">
           {step === 4 && (
-            <Card className="border-none shadow-2xl rounded-[2.5rem] bg-white overflow-hidden animate-in fade-in slide-in-from-right-8 duration-500">
+            <m.div
+              key="step4"
+              initial={{ opacity: 0, x: 60 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -40 }}
+              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            >
+            <Card className="border-none shadow-2xl rounded-[2.5rem] bg-white overflow-hidden">
               <CardHeader className="text-center space-y-2 bg-primary/5 border-b border-primary/10 pt-10">
                 <CardTitle className="font-headline text-3xl tracking-wide">{t('reserve.timeTitle')}</CardTitle>
                 <CardDescription className="max-w-xs mx-auto">
@@ -433,14 +493,24 @@ export default function ReservarPage() {
                 </div>
 
                 {selectedDate && (
-                  <div className="space-y-6 animate-in fade-in zoom-in-95 duration-500">
+                  <m.div
+                    className="space-y-6"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
+                  >
                     <h3 className="text-lg font-bold text-center text-gray-800 font-headline tracking-wide border-b border-gray-100 pb-3">
                       {format(selectedDate, "EEEE, dd 'de' MMMM", { locale: es })}
                     </h3>
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                      {getAvailableTimes(selectedDate).map(time => (
-                        <div 
+                      {getAvailableTimes(selectedDate).map((time, i) => (
+                        <m.div
                           key={time}
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: i * 0.04, duration: 0.25 }}
+                          whileHover={{ scale: 1.07 }}
+                          whileTap={{ scale: 0.95 }}
                           onClick={() => setSelectedTime(time)}
                           className={`
                             py-4 px-2 rounded-2xl text-center font-bold text-sm cursor-pointer transition-all border-2
@@ -450,10 +520,10 @@ export default function ReservarPage() {
                           `}
                         >
                           {time}
-                        </div>
+                        </m.div>
                       ))}
                     </div>
-                  </div>
+                  </m.div>
                 )}
 
                 <div className="flex space-x-4 pt-4">
@@ -471,16 +541,30 @@ export default function ReservarPage() {
                 </div>
               </CardContent>
             </Card>
+            </m.div>
           )}
+          </AnimatePresence>
 
           {/* STEP 5: SUCCESS */}
+          <AnimatePresence mode="wait">
           {step === 5 && (
-            <Card className="border-none shadow-[0_30px_100px_rgba(0,0,0,0.15)] rounded-[3rem] bg-white overflow-hidden text-center animate-in zoom-in-90 duration-700">
+            <m.div
+              key="step5"
+              initial={{ opacity: 0, scale: 0.85 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            >
+            <Card className="border-none shadow-[0_30px_100px_rgba(0,0,0,0.15)] rounded-[3rem] bg-white overflow-hidden text-center">
               <CardContent className="p-16 space-y-8">
-                <div className="w-32 h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 relative">
+                <m.div
+                  className="w-32 h-24 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 relative"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: 'spring', stiffness: 250, damping: 18, delay: 0.2 }}
+                >
                   <div className="absolute inset-0 bg-green-500/10 rounded-full animate-ping" />
                   <CheckCircle className="w-16 h-16 text-green-500 relative z-10" />
-                </div>
+                </m.div>
                 <div className="space-y-3">
                   <h2 className="text-4xl font-headline text-gray-900">{t('reserve.successTitle')}</h2>
                   <p className="text-gray-500 leading-relaxed max-w-sm mx-auto text-lg">
@@ -501,7 +585,9 @@ export default function ReservarPage() {
                 </div>
               </CardContent>
             </Card>
+            </m.div>
           )}
+          </AnimatePresence>
 
         </div>
       </div>
