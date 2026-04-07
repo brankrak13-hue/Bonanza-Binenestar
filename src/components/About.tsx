@@ -42,14 +42,55 @@ export default function About() {
           </div>
 
           <div className="space-y-8">
-            <div className="wave-text inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary/5 text-primary text-sm font-semibold tracking-[0.1em] uppercase border border-primary/20 font-headline italic">
-              {t('about.subtitle').split('').map((char: string, i: number) => (
-                <span key={i} style={{ animationDelay: `${i * 0.1}s` }}>{char === ' ' ? '\u00A0' : char}</span>
-              ))}
-            </div>
-            <h2 className="text-5xl lg:text-7xl font-bold text-gray-900 font-headline leading-tight">
+            <m.div 
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true, margin: "-20px" }}
+              className="inline-flex items-center px-8 py-3 rounded-full bg-primary/5 text-primary text-[10px] sm:text-xs font-black tracking-[0.3em] uppercase border border-primary/20 font-headline relative overflow-hidden group/badge backdrop-blur-sm shadow-lg"
+            >
+              {/* Shimmer Effect - Ahora más visible y rítmico */}
+              <m.div 
+                animate={{ 
+                  left: ['-100%', '200%'],
+                }}
+                transition={{ 
+                  duration: 2.5, 
+                  repeat: Infinity, 
+                  ease: "easeInOut",
+                  repeatDelay: 1
+                }}
+                className="absolute inset-0 z-0 bg-gradient-to-r from-transparent via-white/60 to-transparent skew-x-[-25deg] pointer-events-none"
+              />
+              
+              <div className="relative z-10 flex">
+                {t('about.subtitle').split('').map((char: string, i: number) => (
+                  <m.span 
+                    key={i} 
+                    variants={{
+                      initial: { opacity: 0, y: 15, scale: 0.8 },
+                      animate: { opacity: 1, y: 0, scale: 1 }
+                    }}
+                    transition={{ 
+                      duration: 0.5, 
+                      delay: i * 0.04, 
+                      ease: [0.215, 0.61, 0.355, 1] 
+                    }}
+                  >
+                    {char === ' ' ? '\u00A0' : char}
+                  </m.span>
+                ))}
+              </div>
+            </m.div>
+
+            <m.h2 
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              viewport={{ once: true }}
+              className="text-5xl lg:text-7xl font-bold text-gray-900 font-headline leading-[1.1] tracking-tight"
+            >
               {t('about.title')}
-            </h2>
+            </m.h2>
             
             <div className="space-y-10">
               <div className="relative pl-8 border-l-2 border-primary/20">

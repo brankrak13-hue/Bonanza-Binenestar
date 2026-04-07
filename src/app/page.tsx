@@ -9,6 +9,7 @@ import ProductShowcase from '@/components/ProductShowcase';
 import { getPlaceholderImage } from '@/lib/images';
 import { useLanguage } from '@/context/LanguageContext';
 import { Skeleton } from '@/components/ui/skeleton';
+import PromoPopup from '@/components/PromoPopup';
 
 // Carga dinámica de componentes pesados o que están debajo del pliegue
 const Benefits = dynamic(() => import('@/components/Benefits'), {
@@ -26,15 +27,9 @@ export default function Home() {
 
   return (
     <main id="home" className="min-h-screen bg-background">
+      <PromoPopup />
       <Header />
-      <HeroSection
-        title={t('hero.title')}
-        subtitle={t('hero.subtitle')}
-        description={t('hero.description')}
-        buttonText={t('hero.cta')}
-        buttonLink="#contact"
-        image={getPlaceholderImage('hero-wellness')}
-      />
+      <HeroSection />
       
       <Benefits className="relative z-10 bg-background border-y-0" />
       

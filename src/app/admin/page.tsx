@@ -19,7 +19,9 @@ import {
   ShieldAlert, 
   Banknote, 
   Clock,
-  CalendarDays
+  CalendarDays,
+  Megaphone,
+  Upload
 } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -53,8 +55,12 @@ export default function AdminDashboard() {
   const [imageOverrides, setImageOverrides] = useState<any[]>([]);
   const [priceOverrides, setPriceOverrides] = useState<any[]>([]);
   const [savingId, setSavingId] = useState<string | null>(null);
+  const [uploadingId, setUploadingId] = useState<string | null>(null);
   const [globalOrders, setGlobalOrders] = useState<any[]>([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
+  
+  // State to track if each image is in 'url' or 'file' mode
+  const [imageModes, setImageModes] = useState<Record<string, 'url' | 'file'>>({});
 
   useEffect(() => {
     if (isUserLoading) return;
@@ -76,7 +82,16 @@ export default function AdminDashboard() {
       // Fetch site images & prices
       const { data: imgData } = await supabase.from('site_images').select('id, url');
       const { data: priceData } = await supabase.from('site_prices').select('id, price');
-      if (imgData) setImageOverrides(imgData);
+      
+      if (imgData) {
+        setImageOverrides(imgData);
+        // Initialize modes based on whether the URL is from Supabase
+        const modes: Record<string, 'url' | 'file'> = {};
+        imgData.forEach(img => {
+            modes[img.id] = img.url.includes('supabase.co') ? 'file' : 'url';
+        });
+        setImageModes(modes);
+      }
       if (priceData) setPriceOverrides(priceData);
 
       // Fetch all orders (Stripe purchases)
@@ -120,6 +135,51 @@ export default function AdminDashboard() {
       toast({ variant: "destructive", title: "Error al guardar" });
     } finally {
       setSavingId(null);
+    }
+  };
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>, id: string) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setUploadingId(id);
+    try {
+      // Create a unique filename
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${id}-${Date.now()}.${fileExt}`;
+      const filePath = `images/${fileName}`;
+
+      // Upload to Supabase Storage
+      const { error: uploadError } = await supabase.storage
+        .from('site-assets')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      // Get Public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('site-assets')
+        .getPublicUrl(filePath);
+
+      // Save URL to the database
+      await handleUpdateImage(id, publicUrl);
+      
+      // Update local state to refresh UI immediately
+      setImageOverrides(prev => {
+        const exist = prev.find(p => p.id === id);
+        if (exist) return prev.map(p => p.id === id ? { ...p, url: publicUrl } : p);
+        return [...prev, { id, url: publicUrl }];
+      });
+      
+      // Ensure it stays in 'file' mode
+      setImageModes(prev => ({ ...prev, [id]: 'file' }));
+
+      toast({ title: t('admin.uploadSuccess') });
+    } catch (error) {
+      console.error('Error uploading:', error);
+      toast({ variant: "destructive", title: "Error al subir imagen" });
+    } finally {
+      setUploadingId(null);
     }
   };
 
@@ -181,7 +241,7 @@ export default function AdminDashboard() {
         </div>
 
         <Tabs defaultValue="images" className="w-full">
-          <TabsList className="grid w-full max-w-2xl grid-cols-3 mb-12 h-14 p-1 rounded-full bg-white/50 backdrop-blur shadow-sm border border-white/40">
+          <TabsList className="grid w-full max-w-2xl grid-cols-4 mb-12 h-14 p-1 rounded-full bg-white/50 backdrop-blur shadow-sm border border-white/40">
             <TabsTrigger value="images" className="rounded-full font-bold tracking-widest text-xs uppercase data-[state=active]:bg-primary data-[state=active]:text-white transition-all">
               <ImageIcon className="w-4 h-4 mr-2" />
               {t('admin.imagesTab')}
@@ -194,10 +254,14 @@ export default function AdminDashboard() {
               <CalendarDays className="w-4 h-4 mr-2" />
               RESERVAS
             </TabsTrigger>
+            <TabsTrigger value="promos" className="rounded-full font-bold tracking-widest text-xs uppercase data-[state=active]:bg-primary data-[state=active]:text-white transition-all">
+              <Megaphone className="w-4 h-4 mr-2" />
+              {t('admin.promoTab')}
+            </TabsTrigger>
           </TabsList>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 space-y-8">
               <TabsContent value="images" className="m-0 animate-in fade-in slide-in-from-left-4 duration-500">
                 <Card className="border-none shadow-xl rounded-[2.5rem] bg-white overflow-hidden">
                   <CardHeader className="bg-primary/5 pb-8">
@@ -211,28 +275,93 @@ export default function AdminDashboard() {
                     {placeholderImages.map((img) => {
                       const override = imageOverrides.find(o => o.id === img.id);
                       const currentUrl = override?.url || img.imageUrl;
+                      const isSupabase = currentUrl.includes('supabase.co');
+                      
+                      // Get mode for current image
+                      const currentMode = imageModes[img.id] || (isSupabase ? 'file' : 'url');
+
                       return (
-                        <div key={img.id} className="group">
-                          <div className="flex items-center justify-between mb-4">
-                            <h3 className="font-bold text-lg text-gray-800 capitalize tracking-tight">{img.id.replace(/-/g, ' ')}</h3>
-                            <a href={currentUrl} target="_blank" rel="noreferrer" className="text-primary hover:underline text-xs flex items-center gap-1 font-bold">
-                              <ExternalLink className="w-3 h-3" />
-                              Ver original
-                            </a>
-                          </div>
-                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 items-start">
-                            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-inner bg-secondary/20">
-                              <Image src={currentUrl} alt={img.description} fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
+                        <div key={img.id} className="group p-8 rounded-3xl bg-secondary/5 border border-transparent hover:border-primary/10 transition-all">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+                            <div>
+                                <h3 className="font-bold text-xl text-gray-800 capitalize tracking-tight">{img.id.replace(/-/g, ' ')}</h3>
+                                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{isSupabase ? '🔵 Archivo en la Nube' : '🌐 Enlace Externo'}</p>
                             </div>
-                            <div className="sm:col-span-2 space-y-4">
-                              <div className="space-y-2">
-                                <label className="text-[10px] uppercase tracking-widest font-bold text-gray-400">{t('admin.imageLabel')}</label>
-                                <Input defaultValue={currentUrl} placeholder="https://..." id={`input-img-${img.id}`} className="bg-secondary/10 border-transparent focus:border-primary/30 h-12 rounded-xl" />
+                            <div className="flex bg-white/60 p-1 rounded-xl border border-gray-200 shadow-inner">
+                                <Button 
+                                    variant="ghost" 
+                                    size="sm" 
+                                    onClick={() => setImageModes(prev => ({ ...prev, [img.id]: 'url' }))}
+                                    className={`rounded-lg px-4 h-9 text-[10px] font-bold tracking-widest transition-all duration-200 ${currentMode === 'url' ? 'bg-primary text-white shadow-sm scale-105' : 'text-gray-400 hover:text-gray-600'}`}
+                                >
+                                    URL
+                                </Button>
+                                <Button 
+                                    variant="ghost" 
+                                    size="sm" 
+                                    onClick={() => setImageModes(prev => ({ ...prev, [img.id]: 'file' }))}
+                                    className={`rounded-lg px-4 h-9 text-[10px] font-bold tracking-widest transition-all duration-200 ${currentMode === 'file' ? 'bg-primary text-white shadow-sm scale-105' : 'text-gray-400 hover:text-gray-600'}`}
+                                >
+                                    ARCHIVO
+                                </Button>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+                            <div className="md:col-span-4 lg:col-span-3">
+                                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border-4 border-white transform transition-transform group-hover:scale-[1.02]">
+                                    <Image src={currentUrl} alt={img.description} fill className="object-cover" unoptimized />
+                                </div>
+                            </div>
+
+                            <div className="md:col-span-8 lg:col-span-9 space-y-6">
+                              <div className="min-h-[100px] flex flex-col justify-center">
+                                {currentMode === 'url' ? (
+                                    <div className="space-y-3 animate-in fade-in slide-in-from-top-2 duration-300">
+                                        <div className="flex items-center justify-between">
+                                            <label className="text-[10px] uppercase tracking-widest font-bold text-primary">Nueva URL de Imagen</label>
+                                            <a href={currentUrl} target="_blank" rel="noreferrer" className="text-gray-400 hover:text-primary transition-colors">
+                                                <ExternalLink className="w-3.5 h-3.5" />
+                                            </a>
+                                        </div>
+                                        <Input 
+                                            key={currentUrl} 
+                                            defaultValue={currentUrl} 
+                                            placeholder="https://..." 
+                                            id={`input-img-${img.id}`} 
+                                            className="bg-white border-gray-100 focus:border-primary/40 h-11 rounded-xl text-sm font-medium shadow-sm transition-all" 
+                                        />
+                                    </div>
+                                ) : (
+                                    <div className="space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                                        <div className="flex items-center justify-between">
+                                            <label className="text-[10px] uppercase tracking-widest font-bold text-primary">Archivo Protegido</label>
+                                            <span className="bg-primary/10 px-2 py-0.5 rounded text-[8px] font-bold text-primary uppercase">Seguro</span>
+                                        </div>
+                                        <div className="bg-white/80 p-4 rounded-xl border-2 border-dashed border-primary/20 text-xs text-gray-400 font-mono overflow-hidden whitespace-nowrap text-ellipsis flex items-center gap-2">
+                                            <ImageIcon className="w-4 h-4 text-primary/40" />
+                                            <span>{isSupabase ? currentUrl.split('/').pop()?.substring(0, 40) + '...' : 'No se ha subido archivo'}</span>
+                                        </div>
+                                    </div>
+                                )}
                               </div>
-                              <Button className="w-full btn-primary h-12 rounded-xl text-xs" disabled={savingId === img.id} onClick={() => { const input = document.getElementById(`input-img-${img.id}`) as HTMLInputElement; if (input) handleUpdateImage(img.id, input.value); }}>
-                                {savingId === img.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
-                                {t('admin.save')}
-                              </Button>
+
+                              <div className="grid grid-cols-2 gap-4">
+                                {currentMode === 'url' ? (
+                                    <Button className="w-full btn-primary h-11 rounded-xl font-bold text-xs shadow-md" disabled={savingId === img.id || uploadingId === img.id} onClick={() => { const input = document.getElementById(`input-img-${img.id}`) as HTMLInputElement; if (input) handleUpdateImage(img.id, input.value); }}>
+                                        {savingId === img.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-3.5 h-3.5 mr-2" />}
+                                        {t('admin.save')}
+                                    </Button>
+                                ) : (
+                                    <div className="relative w-full">
+                                        <input type="file" id={`upload-${img.id}`} accept="image/*" className="hidden" onChange={(e) => handleFileUpload(e, img.id)} />
+                                        <Button variant="outline" className="w-full h-11 rounded-xl font-bold bg-white hover:bg-gray-50 border-gray-200 shadow-md flex items-center justify-center gap-2 group/btn text-xs" disabled={savingId === img.id || uploadingId === img.id} onClick={() => document.getElementById(`upload-${img.id}`)?.click()}>
+                                            {uploadingId === img.id ? <Loader2 className="w-4 h-4 animate-spin text-primary" /> : <Upload className="w-3.5 h-3.5 text-primary transition-transform group-hover/btn:-translate-y-1" />}
+                                            {uploadingId === img.id ? t('admin.uploading') : 'SUBIR DE PC'}
+                                        </Button>
+                                    </div>
+                                )}
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -267,9 +396,9 @@ export default function AdminDashboard() {
                           <div className="flex items-center gap-4">
                             <div className="relative">
                               <span className="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-gray-400">$</span>
-                              <Input type="number" defaultValue={currentPrice} id={`input-price-${service.id}`} className="w-32 bg-white border-transparent focus:border-primary/30 h-12 rounded-xl pl-8 font-bold text-primary" />
+                              <Input type="number" defaultValue={currentPrice} id={`input-price-${service.id}`} className="w-32 bg-white border-transparent focus:border-primary/30 h-10 rounded-xl pl-8 font-bold text-primary" />
                             </div>
-                            <Button size="icon" className="rounded-xl h-12 w-12 btn-primary" disabled={savingId === service.id} onClick={() => { const input = document.getElementById(`input-price-${service.id}`) as HTMLInputElement; if (input) handleUpdatePrice(service.id, input.value); }}>
+                            <Button size="icon" className="rounded-xl h-10 w-10 btn-primary" disabled={savingId === service.id} onClick={() => { const input = document.getElementById(`input-price-${service.id}`) as HTMLInputElement; if (input) handleUpdatePrice(service.id, input.value); }}>
                               {savingId === service.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                             </Button>
                           </div>
@@ -280,44 +409,109 @@ export default function AdminDashboard() {
                 </Card>
               </TabsContent>
 
-              <TabsContent value="orders" className="m-0 animate-in fade-in slide-in-from-left-4 duration-500">
+              <TabsContent value="promos" className="m-0 animate-in fade-in slide-in-from-left-4 duration-500">
                 <Card className="border-none shadow-xl rounded-[2.5rem] bg-white overflow-hidden">
                   <CardHeader className="bg-primary/5 pb-8">
                     <div className="flex items-center gap-3">
-                      <CalendarDays className="w-6 h-6 text-primary" />
-                      <CardTitle>Reservas y Pedidos</CardTitle>
+                      <Megaphone className="w-6 h-6 text-primary" />
+                      <CardTitle>{t('admin.promoTitle')}</CardTitle>
                     </div>
-                    <CardDescription>Visualiza todos los paquetes comprados y su estado de agenda.</CardDescription>
+                    <CardDescription>{t('admin.promoDesc')}</CardDescription>
                   </CardHeader>
-                  <CardContent className="p-8 space-y-6">
-                    {ordersLoading ? (
-                      <div className="flex justify-center p-8"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
-                    ) : globalOrders.length === 0 ? (
-                      <div className="text-center py-12 text-gray-500 font-bold">No hay ninguna compra registrada todavía.</div>
-                    ) : (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {globalOrders.map((o) => (
-                          <div key={o.id} className="bg-secondary/10 p-5 rounded-3xl border border-transparent hover:border-primary/20 transition-all">
-                            <div className="flex justify-between items-start mb-2">
-                              <p className="font-bold text-gray-800 text-sm truncate">{o.customer_email}</p>
-                              <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${o.reservation_date ? 'bg-primary/20 text-primary' : 'bg-gray-200 text-gray-500'}`}>
-                                {o.reservation_date ? 'Agendado' : 'Por Agendar'}
-                              </span>
+                  <CardContent className="p-8 space-y-10">
+                    <div className="flex flex-col sm:flex-row items-center justify-between p-8 rounded-3xl bg-secondary/10 border border-transparent hover:border-primary/20 transition-all gap-6">
+                      <div className="flex items-center gap-4">
+                        <div className="bg-white p-3 rounded-full shadow-sm"><Megaphone className="w-6 h-6 text-primary" /></div>
+                        <div>
+                          <h3 className="font-bold text-gray-800 tracking-tight">{t('admin.promoActive')}</h3>
+                          <p className="text-xs text-gray-500">Activa o desactiva el popup global de promociones</p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex bg-white/50 p-1.5 rounded-[1.2rem] border border-gray-200 shadow-sm backdrop-blur-sm">
+                        {(() => {
+                          const isActive = imageOverrides.find(o => o.id === 'promo-active')?.url === 'true';
+                          return (
+                            <>
+                              <Button 
+                                variant="ghost"
+                                className={`h-11 px-6 rounded-[0.9rem] font-bold text-[10px] tracking-widest uppercase transition-all duration-300 ${
+                                  !isActive 
+                                    ? 'bg-red-500 text-white shadow-lg scale-105 hover:bg-red-600' 
+                                    : 'text-gray-400 hover:text-gray-600'
+                                }`}
+                                onClick={() => {
+                                  if (isActive) {
+                                    handleUpdateImage('promo-active', 'false');
+                                    setImageOverrides(prev => prev.map(p => p.id === 'promo-active' ? { ...p, url: 'false' } : p));
+                                  }
+                                }}
+                                disabled={savingId === 'promo-active'}
+                              >
+                                APAGADO
+                              </Button>
+                              <Button 
+                                variant="ghost"
+                                className={`h-11 px-6 rounded-[0.9rem] font-bold text-[10px] tracking-widest uppercase transition-all duration-300 ${
+                                  isActive 
+                                    ? 'bg-green-500 text-white shadow-lg scale-105 hover:bg-green-600' 
+                                    : 'text-gray-400 hover:text-gray-600'
+                                }`}
+                                onClick={() => {
+                                  if (!isActive) {
+                                    handleUpdateImage('promo-active', 'true');
+                                    setImageOverrides(prev => prev.map(p => p.id === 'promo-active' ? { ...p, url: 'true' } : p));
+                                  }
+                                }}
+                                disabled={savingId === 'promo-active'}
+                              >
+                                ACTIVADO
+                              </Button>
+                            </>
+                          );
+                        })()}
+                      </div>
+                    </div>
+
+                    <div className="space-y-6 pt-6 border-t border-gray-100">
+                      <div className="flex items-center gap-3 mb-2">
+                        <ImageIcon className="w-5 h-5 text-primary" />
+                        <h3 className="font-bold text-gray-800 tracking-tight">{t('admin.promoImage')}</h3>
+                      </div>
+                      
+                      {(() => {
+                        const promoImg = imageOverrides.find(o => o.id === 'promo-popup');
+                        const currentUrl = promoImg?.url || 'https://images.unsplash.com/photo-1490750967868-88aa4486c946';
+                        const isSupabase = currentUrl.includes('supabase.co');
+                        return (
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 items-start p-6 rounded-3xl bg-secondary/5 border border-primary/10">
+                            <div className="relative aspect-square rounded-2xl overflow-hidden shadow-inner bg-secondary/20 border-2 border-white">
+                                <Image src={currentUrl} alt="Promo" fill className="object-cover" unoptimized />
                             </div>
-                            <p className="text-2xl font-bold font-headline mb-1">${o.total_amount} MXN</p>
-                            <div className="space-y-1 mb-4 mt-4 text-xs font-mono">
-                              <p className="text-gray-500">Código: <span className="font-bold text-gray-800 tracking-widest">{o.reservation_code || 'N/A'}</span></p>
-                              <p className="text-gray-500">Comprado: {new Date(o.order_date).toLocaleDateString()}</p>
-                              {o.reservation_date && (
-                                <p className="text-primary font-bold bg-primary/10 p-2 rounded-lg mt-2 text-center w-full block">
-                                  Cita: {new Date(o.reservation_date).toLocaleString()}
-                                </p>
-                              )}
+                            <div className="sm:col-span-2 space-y-4">
+                              <div className="space-y-2">
+                                <label className="text-[10px] uppercase tracking-widest font-bold text-primary">{isSupabase ? 'Archivo Subido a PC' : 'URL del Popup'}</label>
+                                <Input key={currentUrl} defaultValue={currentUrl} placeholder="https://..." id={`input-img-promo-popup`} className="bg-white border-transparent focus:border-primary/30 h-10 rounded-xl shadow-sm text-xs" />
+                              </div>
+                              <div className="grid grid-cols-2 gap-4">
+                                <Button className="w-full btn-primary h-10 rounded-xl font-bold shadow-md text-xs" disabled={savingId === 'promo-popup' || uploadingId === 'promo-popup'} onClick={() => { const input = document.getElementById(`input-img-promo-popup`) as HTMLInputElement; if (input) handleUpdateImage('promo-popup', input.value); }}>
+                                  {savingId === 'promo-popup' ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5 mr-2" />}
+                                  {t('admin.save')}
+                                </Button>
+                                
+                                <div className="relative">
+                                  <input type="file" id="upload-promo-popup" accept="image/*" className="hidden" onChange={(e) => handleFileUpload(e, 'promo-popup')} />
+                                  <Button variant="outline" className="w-full h-10 rounded-xl font-bold shadow-sm bg-white hover:bg-gray-50 border-gray-200 text-xs" disabled={savingId === 'promo-popup' || uploadingId === 'promo-popup'} onClick={() => document.getElementById('upload-promo-popup')?.click()}>
+                                    {uploadingId === 'promo-popup' ? <Loader2 className="w-3.5 h-3.5 animate-spin text-primary" /> : <Upload className="w-3.5 h-3.5 mr-2 text-primary" />}
+                                    {uploadingId === 'promo-popup' ? t('admin.uploading') : 'SUBIR DE PC'}
+                                  </Button>
+                                </div>
+                              </div>
                             </div>
                           </div>
-                        ))}
-                      </div>
-                    )}
+                        );
+                      })()}
+                    </div>
                   </CardContent>
                 </Card>
               </TabsContent>
