@@ -5,14 +5,17 @@ import { sendGiftCardEmail } from '../../../../lib/mail';
 import { GiftCardTemplateId } from '../../../../lib/gift-cards';
 
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-);
+export const dynamic = 'force-dynamic';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: '2025-01-27.acacia' as any,
 });
+
+// Lazy initialize Supabase to avoid build-time errors
+const getSupabaseAdmin = () => createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+);
 
 export async function POST(req: Request) {
   try {
@@ -57,7 +60,7 @@ export async function POST(req: Request) {
         reservation_date: null,
       };
 
-      const { error: dbError } = await supabaseAdmin.from('orders').insert(orderDetails);
+      const { error: dbError } = await getSupabaseAdmin().from('orders').insert(orderDetails);
       if (dbError) {
         console.error('Error en Supabase local (Test):', dbError);
       }

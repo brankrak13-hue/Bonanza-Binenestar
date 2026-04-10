@@ -5,14 +5,16 @@ import { createClient } from '@supabase/supabase-js';
 import { sendOrderConfirmation, sendGiftCardEmail } from '@/lib/mail';
 import { GiftCardTemplateId } from '@/lib/gift-cards';
 
+export const dynamic = 'force-dynamic';
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: '2025-01-27.acacia' as any,
 });
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
-// Use the service role key for server-side writes (bypasses RLS)
-const supabaseAdmin = createClient(
+// Lazy initialize Supabase to avoid build-time errors
+const getSupabaseAdmin = () => createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
@@ -60,7 +62,7 @@ export async function POST(req: Request) {
         reservation_date: null,
       };
 
-      const { error } = await supabaseAdmin.from('orders').insert(orderDetails);
+      const { error } = await getSupabaseAdmin().from('orders').insert(orderDetails);
 
       if (error) {
         console.error('Error guardando en Supabase:', error);
