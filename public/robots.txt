@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/
 
-Sitemap: https://bonanzabienestar.web.app/sitemap.xml
+Sitemap: https://www.bonanzabienestar.com/sitemap.xml

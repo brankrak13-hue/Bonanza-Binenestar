@@ -40,7 +40,7 @@ const nextConfig: NextConfig = {
   },
   images: {
     // Definimos las calidades permitidas para evitar advertencias en Next.js 15/16
-    qualities: [75, 85],
+    qualities: [75, 85, 90, 95, 100],
     remotePatterns: [
       {
         protocol: 'https',

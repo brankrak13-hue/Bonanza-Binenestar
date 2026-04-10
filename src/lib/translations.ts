@@ -48,9 +48,9 @@ export const translations: any = {
       copied: "¡Copiado!",
     },
     hero: {
-      title: "Eleva tu Bienestar",
-      subtitle: "BONANZA PAZ Y BIENESTAR",
-      description: "Descubre un santuario de paz interior a través de nuestros masajes faciales y terapias de sound healing.",
+      title: "Bonanza Masajes",
+      subtitle: "MASAJES EN PLAYA DEL CARMEN",
+      description: "Descubre un santuario de paz interior a través de nuestros masajes relajantes, terapias holísticas y sound healing en el corazón de Playa del Carmen.",
       cta: "Agenda tu Cita"
     },
     about: {

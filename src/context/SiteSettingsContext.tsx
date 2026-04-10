@@ -14,51 +14,52 @@ interface SiteSettingsContextType {
 
 const SiteSettingsContext = createContext<SiteSettingsContextType | undefined>(undefined);
 
-export function SiteSettingsProvider({ children }: { children: ReactNode }) {
-  // Pre-inicializar con defaults locales para evitar el delay de 410ms de Supabase
-  const defaultImagesMap = Object.fromEntries(placeholderImages.map(img => [img.id, img.imageUrl]));
-  const [imagesMap, setImagesMap] = useState<Record<string, string>>(defaultImagesMap);
-  const [pricesMap, setPricesMap] = useState<Record<string, number>>({});
-  const [isLoading, setIsLoading] = useState(true);
+interface SiteSettingsProviderProps {
+  children: ReactNode;
+  initialImages?: Record<string, string>;
+  initialPrices?: Record<string, number>;
+}
+
+export function SiteSettingsProvider({ children, initialImages, initialPrices }: SiteSettingsProviderProps) {
+  // Inicialización segura para hidratación: prioridad al servidor (props) -> fallback placeholders
+  const [imagesMap, setImagesMap] = useState<Record<string, string>>(() => {
+    const defaultMap = Object.fromEntries(placeholderImages.map(img => [img.id, img.imageUrl]));
+    return { ...defaultMap, ...(initialImages || {}) };
+  });
+
+  const [pricesMap, setPricesMap] = useState<Record<string, number>>(() => {
+    return initialPrices || {};
+  });
+
+  const [isLoading, setIsLoading] = useState(!initialImages);
 
   useEffect(() => {
-    // WIPE CACHE DE RASTROS ANTIGUOS (Piedras Unsplash)
-    let cachedImages = localStorage.getItem('bonanza_site_images');
-    const cachedPrices = localStorage.getItem('bonanza_site_prices');
-    
-    if (cachedImages) {
-        let imagesObj = JSON.parse(cachedImages);
-        const oldStonesUrl = 'photo-1595433261422-cd66de8368a3';
-        if (imagesObj['hero-wellness'] && imagesObj['hero-wellness'].includes(oldStonesUrl)) {
-            console.log('[SiteSettings] Detectada imagen antigua en caché. Limpiando rastro...');
-            delete imagesObj['hero-wellness'];
-            localStorage.setItem('bonanza_site_images', JSON.stringify(imagesObj));
-            cachedImages = JSON.stringify(imagesObj);
-        }
-        setImagesMap(imagesObj);
+    // Si no recibimos datos del servidor, intentar recuperar de localStorage para velocidad UI
+    if (!initialImages) {
+        const cachedImages = localStorage.getItem('bonanza_site_images');
+        const cachedPrices = localStorage.getItem('bonanza_site_prices');
+        if (cachedImages) setImagesMap(prev => ({ ...prev, ...JSON.parse(cachedImages) }));
+        if (cachedPrices) setPricesMap(JSON.parse(cachedPrices));
     }
-    if (cachedPrices) setPricesMap(JSON.parse(cachedPrices));
 
     const fetchSettings = async () => {
-      // Solo mostramos loading si no hay nada en caché
-      if (!cachedImages && !cachedPrices) setIsLoading(true);
-      
       try {
         const { data: imgData } = await supabase.from('site_images').select('id, url');
+
         const { data: priceData } = await supabase.from('site_prices').select('id, price');
 
         if (imgData) {
-          const map: Record<string, string> = { ...defaultImagesMap };
+          const defaultMap = Object.fromEntries(placeholderImages.map(img => [img.id, img.imageUrl]));
+          const map: Record<string, string> = { ...defaultMap };
           const badUrlPatterns = [
-            'photo-1595433261422-cd66de8368a3', // URL antigua de Unsplash
-            '.imgix.net',                        // URLs de imgix (PNG sin optimizar 700+ KiB)
+            'photo-1595433261422-cd66de8368a3', 
+            '.imgix.net',                        
           ];
           const newPremiumStones = 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=1200';
 
           for (const row of imgData) {
             const isBadHero = row.id === 'hero-wellness' && badUrlPatterns.some(p => row.url.includes(p));
             if (isBadHero) {
-              console.log('[SiteSettings] AUTO-HEAL: URL problemática detectada. Reparando DB...');
               await supabase.from('site_images').update({ url: newPremiumStones }).eq('id', 'hero-wellness');
               map['hero-wellness'] = newPremiumStones;
             } else {

@@ -63,6 +63,7 @@ export default function ProductShowcase({
                   fill
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
                   className="object-cover w-full h-full"
+                  quality={90}
                   data-ai-hint={currentImage.imageHint}
                 />
               </div>

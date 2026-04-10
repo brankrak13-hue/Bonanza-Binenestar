@@ -76,6 +76,7 @@ export default function PromoPopup() {
                 src={promoData.imageUrl}
                 alt="Promoción de Primavera"
                 fill
+                sizes="(max-width: 640px) 100vw, 512px"
                 className="object-cover"
                 priority
               />

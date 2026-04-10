@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 import { headers } from 'next/headers';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
-import { sendOrderConfirmation } from '@/lib/mail';
+import { sendOrderConfirmation, sendGiftCardEmail } from '@/lib/mail';
+import { GiftCardTemplateId } from '@/lib/gift-cards';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: '2025-01-27.acacia' as any,
@@ -44,7 +45,7 @@ export async function POST(req: Request) {
 
     try {
       // Generate unique reservation code
-      const reservationCode = 'BNZ-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+      const reservationCode = 'BNZA-' + Math.random().toString(36).substring(2, 8).toUpperCase();
 
       const orderDetails = {
         stripe_session_id: session.id,
@@ -69,7 +70,23 @@ export async function POST(req: Request) {
       console.log(`✅ Compra registrada con éxito. Código: ${reservationCode}`);
 
       if (customerEmail) {
-        await sendOrderConfirmation(customerEmail, { ...orderDetails, reservationCode });
+        if (session.metadata?.is_gift_card === 'true') {
+          // Send the specific gift card email
+          const targetEmail = session.metadata.recipientEmail || customerEmail;
+          console.log(`🎁 Sending gift card email to: ${targetEmail}`);
+          await sendGiftCardEmail(targetEmail, {
+            templateId: session.metadata.templateId as GiftCardTemplateId,
+            recipientName: session.metadata.recipientName,
+            senderName: session.metadata.senderName,
+            amount: session.metadata.amount,
+            message: session.metadata.message,
+            message2: session.metadata.message2,
+            reservationCode: reservationCode,
+          });
+        } else {
+          // Send the normal order confirmation email
+          await sendOrderConfirmation(customerEmail, { ...orderDetails, reservationCode });
+        }
       }
 
     } catch (error) {

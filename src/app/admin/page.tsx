@@ -21,10 +21,12 @@ import {
   Clock,
   CalendarDays,
   Megaphone,
-  Upload
+  Upload,
+  Gift
 } from 'lucide-react';
+import GiftCardCalibrator from '@/components/admin/GiftCardCalibrator';
 import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+import { BackgroundLines } from '@/components/ui/background-lines';
 import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
@@ -220,13 +222,12 @@ export default function AdminDashboard() {
             Ir a Acceso
           </Button>
         </div>
-        <Footer />
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-secondary/10">
+    <BackgroundLines className="min-h-screen">
       <Header />
       <div className="max-w-screen-xl mx-auto px-4 py-20">
         <div className="flex flex-col md:flex-row items-center justify-between mb-12 gap-6">
@@ -241,7 +242,7 @@ export default function AdminDashboard() {
         </div>
 
         <Tabs defaultValue="images" className="w-full">
-          <TabsList className="grid w-full max-w-2xl grid-cols-4 mb-12 h-14 p-1 rounded-full bg-white/50 backdrop-blur shadow-sm border border-white/40">
+          <TabsList className="grid w-full max-w-3xl grid-cols-5 mb-12 h-14 p-1 rounded-full bg-white/50 backdrop-blur shadow-sm border border-white/40">
             <TabsTrigger value="images" className="rounded-full font-bold tracking-widest text-xs uppercase data-[state=active]:bg-primary data-[state=active]:text-white transition-all">
               <ImageIcon className="w-4 h-4 mr-2" />
               {t('admin.imagesTab')}
@@ -249,6 +250,10 @@ export default function AdminDashboard() {
             <TabsTrigger value="prices" className="rounded-full font-bold tracking-widest text-xs uppercase data-[state=active]:bg-primary data-[state=active]:text-white transition-all">
               <Banknote className="w-4 h-4 mr-2" />
               {t('admin.pricesTab')}
+            </TabsTrigger>
+            <TabsTrigger value="cards" className="rounded-full font-bold tracking-widest text-xs uppercase data-[state=active]:bg-primary data-[state=active]:text-white transition-all">
+              <Gift className="w-4 h-4 mr-2" />
+              TARJETAS
             </TabsTrigger>
             <TabsTrigger value="orders" className="rounded-full font-bold tracking-widest text-xs uppercase data-[state=active]:bg-primary data-[state=active]:text-white transition-all">
               <CalendarDays className="w-4 h-4 mr-2" />
@@ -371,6 +376,21 @@ export default function AdminDashboard() {
                 </Card>
               </TabsContent>
 
+              <TabsContent value="cards" className="m-0 animate-in fade-in slide-in-from-left-4 duration-500">
+                <Card className="border-none shadow-xl rounded-[2.5rem] bg-white overflow-hidden">
+                  <CardHeader className="bg-primary/5 pb-8">
+                    <div className="flex items-center gap-3">
+                      <Gift className="w-6 h-6 text-primary" />
+                      <CardTitle>Calibración de Tarjetas</CardTitle>
+                    </div>
+                    <CardDescription>Ajusta las posiciones de texto de las tarjetas de regalo.</CardDescription>
+                  </CardHeader>
+                  <CardContent className="p-0">
+                    <GiftCardCalibrator />
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
               <TabsContent value="prices" className="m-0 animate-in fade-in slide-in-from-left-4 duration-500">
                 <Card className="border-none shadow-xl rounded-[2.5rem] bg-white overflow-hidden">
                   <CardHeader className="bg-primary/5 pb-8">
@@ -405,6 +425,71 @@ export default function AdminDashboard() {
                         </div>
                       );
                     })}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="orders" className="m-0 animate-in fade-in slide-in-from-left-4 duration-500">
+                <Card className="border-none shadow-xl rounded-[2.5rem] bg-white overflow-hidden">
+                  <CardHeader className="bg-primary/5 pb-8">
+                    <div className="flex items-center gap-3">
+                      <CalendarDays className="w-6 h-6 text-primary" />
+                      <CardTitle>Historial de Reservas</CardTitle>
+                    </div>
+                    <CardDescription>Todos los pedidos y reservas generadas a través de Bonanza.</CardDescription>
+                  </CardHeader>
+                  <CardContent className="p-8">
+                    {ordersLoading ? (
+                      <div className="py-16 flex justify-center"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
+                    ) : globalOrders.length === 0 ? (
+                      <div className="flex flex-col items-center justify-center py-16 text-center bg-gray-50 rounded-2xl">
+                        <CalendarDays className="w-12 h-12 text-muted-foreground mb-4 opacity-30" />
+                        <h3 className="text-lg font-bold mb-2">Sin reservas aún</h3>
+                        <p className="text-sm text-neutral-500">No se ha generado ninguna reservación todavía.</p>
+                      </div>
+                    ) : (
+                      <div className="overflow-x-auto rounded-2xl border border-gray-100 shadow-sm">
+                        <table className="w-full text-sm text-left">
+                          <thead className="bg-primary/5 text-primary text-xs uppercase font-bold tracking-wider">
+                            <tr>
+                              <th className="px-5 py-4">Código</th>
+                              <th className="px-5 py-4">Fecha</th>
+                              <th className="px-5 py-4">Email</th>
+                              <th className="px-5 py-4">Monto</th>
+                              <th className="px-5 py-4">Estado</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-gray-100">
+                            {globalOrders.map((order: any, i: number) => (
+                              <tr key={i} className="bg-white hover:bg-gray-50 transition-colors">
+                                <td className="px-5 py-4 font-mono font-bold text-xs text-primary">
+                                  {order.reservation_code || 'N/A'}
+                                </td>
+                                <td className="px-5 py-4 text-xs text-gray-500 whitespace-nowrap">
+                                  {new Date(order.order_date).toLocaleDateString('es-MX')}{' '}
+                                  {new Date(order.order_date).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' })}
+                                </td>
+                                <td className="px-5 py-4 text-xs">
+                                  {order.customer_email || 'Anónimo'}
+                                </td>
+                                <td className="px-5 py-4 font-bold">
+                                  {order.total_amount > 0 ? `$${order.total_amount} ${(order.currency || 'mxn').toUpperCase()}` : '—'}
+                                </td>
+                                <td className="px-5 py-4">
+                                  <span className={`px-2 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest ${
+                                    order.status === 'paid' ? 'bg-green-100 text-green-700' :
+                                    order.status === 'test' ? 'bg-yellow-100 text-yellow-700' :
+                                    'bg-orange-100 text-orange-700'
+                                  }`}>
+                                    {order.status || 'pendiente'}
+                                  </span>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               </TabsContent>
@@ -536,7 +621,6 @@ export default function AdminDashboard() {
           </div>
         </Tabs>
       </div>
-      <Footer />
-    </main>
+    </BackgroundLines>
   );
 }
